@@ -3314,20 +3314,16 @@ function detectarIntencion(texto){
     return "El asistente está en configuración. Intenta más tarde.";
   }
 
-  const palabrasUsuario = limpiarTexto(texto);
-  let mejor = null;
-  let scoreMax = 0;
+  const palabrasUsuario=limpiarTexto(texto);
+  let mejor=null, scoreMax=0;
 
   intents.forEach(intent=>{
-    let score = 0;
+    let score=0;
     intent.keywords.forEach(k=>{
-      const i = palabrasUsuario.indexOf(k);
-      if(i !== -1) score += (i === 0 ? 1 : i + 1);
+      const i=palabrasUsuario.indexOf(k);
+      if(i!==-1) score+=(i===0?1:i+1);
     });
-    if(score > scoreMax){
-      scoreMax = score;
-      mejor = intent;
-    }
+    if(score>scoreMax){ scoreMax=score; mejor=intent; }
   });
 
   return mejor
@@ -3337,43 +3333,40 @@ function detectarIntencion(texto){
 
 /* ========= CHAT ========= */
 function enviarMensaje(){
-  const input = document.getElementById("input");
-  const texto = input.value.trim();
+  const input=document.getElementById("input");
+  const texto=input.value.trim();
   if(!texto) return;
 
-  // mensaje del usuario
-  agregarMensaje(texto, "user");
-
-  // respuesta del bot
+  agregarMensaje(texto,"user");
   setTimeout(()=>{
     const respuesta = detectarIntencion(texto);
-    agregarMensaje(respuesta, "bot");
-  }, 300);
+    agregarMensaje(respuesta,"bot");
+  },300);
 
-  input.value = "";
+  input.value="";
 }
 
-/* ========= AGREGAR MENSAJE ========= */
-function agregarMensaje(texto, tipo){
-  const chat = document.getElementById("chat");
-  const msg = document.createElement("div");
-  msg.className = "message " + tipo;
+function agregarMensaje(texto,tipo){
+  const chat=document.getElementById("chat");
+  const msg=document.createElement("div");
+  msg.className="message "+tipo;
 
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.innerHTML = texto;
+  const bubble=document.createElement("div");
+  bubble.className="bubble";
+  bubble.innerHTML=texto;
 
   msg.appendChild(bubble);
   chat.appendChild(msg);
-
-  // 🔥 scroll al inicio del mensaje nuevo
-  chat.scrollTop = msg.offsetTop - 10;
+  chat.scrollTop=chat.scrollHeight;
 }
 
-/* ========= ENTER ========= */
-document.getElementById("input").addEventListener("keydown", e=>{
-  if(e.key === "Enter" && !e.shiftKey){
+document.getElementById("input").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){
     e.preventDefault();
     enviarMensaje();
   }
 });
+</script>
+
+</body>
+</html>
