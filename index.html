@@ -1,13 +1,3397 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Asistente Virtual UTEG</title>
+<meta charset="UTF-8">
+<title>Asistente Virtual UTEG</title>
+
+<style>
+/* ================== PALETA UTEG ================== */
+:root{
+  --uteg-azul:#003A8F;
+  --uteg-azul-claro:#0B5ED7;
+  --uteg-amarillo:#F5B400;
+  --uteg-fondo:#F4F6F9;
+  --uteg-texto:#0b1e3b;
+  --gris-claro:#f8fafd;
+}
+
+/* ================== BASE ================== */
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family:Inter, system-ui, Arial, sans-serif;
+  background:linear-gradient(180deg,#eef2f8,#ffffff);
+  color:var(--uteg-texto);
+  padding:40px 20px;
+}
+
+/* ================== CONTENEDOR APP ================== */
+#app{
+  max-width:960px;
+  margin:auto;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.12);
+  overflow:hidden;
+}
+
+/* ================== HEADER ================== */
+header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:26px 32px;
+  background:linear-gradient(90deg,var(--uteg-azul),var(--uteg-azul-claro));
+  color:#fff;
+}
+
+header .logo{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--uteg-azul);
+  font-weight:800;
+  font-size:20px;
+}
+
+header h1{
+  margin:0;
+  font-size:22px;
+  font-weight:600;
+}
+
+/* ================== MAIN ================== */
+main{
+  padding:36px;
+}
+
+/* ================== INPUT ================== */
+.input-box{
+  background:var(--gris-claro);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:inset 0 0 0 1px #e4e9f2;
+}
+
+textarea{
+  width:100%;
+  min-height:120px;
+  border:none;
+  outline:none;
+  resize:none;
+  background:transparent;
+  font-size:16px;
+  color:var(--uteg-texto);
+}
+
+/* ================== BOTÓN ================== */
+.actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:18px;
+}
+
+button{
+  background:var(--uteg-azul);
+  color:#fff;
+  border:none;
+  border-radius:999px;
+  padding:14px 40px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .25s ease;
+}
+
+button:hover{
+  background:var(--uteg-azul-claro);
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(11,94,215,.35);
+}
+
+/* ================== RESPUESTA ================== */
+#respuesta{
+  margin-top:30px;
+  padding:26px 28px;
+  border-radius:24px;
+  background:linear-gradient(180deg,#fdfefe,#f4f7fb);
+  position:relative;
+  box-shadow:0 18px 45px rgba(0,0,0,.08);
+  font-size:15.5px;
+  line-height:1.7;
+}
+
+#respuesta::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:7px;
+  height:100%;
+  background:var(--uteg-amarillo);
+  border-radius:24px 0 0 24px;
+}
+
+/* ================== TEXTO RESALTADO ================== */
+.resaltado{
+  color:var(--uteg-azul);
+  font-weight:700;
+}
+
+/* ================== FOOTER ================== */
+footer{
+  padding:18px 28px;
+  text-align:right;
+  font-size:12px;
+  color:#7b8ca8;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Asistente Virtual UTEG</h1>
-<p>Si ves esta página, GitHub Pages ya está funcionando.</p>
+<div id="app">
+  <header>
+    <div class="logo">U</div>
+    <h1>Asistente Virtual UTEG</h1>
+  </header>
+
+  <main>
+    <div class="input-box">
+      <textarea id="input" placeholder="Escribe tu pregunta..."></textarea>
+    </div>
+
+    <div class="actions">
+      <button onclick="responder()">Enviar</button>
+    </div>
+
+    <div id="respuesta">
+      Aquí aparecerá la respuesta del asistente.
+    </div>
+  </main>
+
+  <footer>
+    © UTEG · Asistente Virtual
+  </footer>
+</div>
+
+<script>
+/* ========= TU JS ORIGINAL (RESPETADO) ========= */
+
+function normalizarTexto(texto) {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+const stopwords = [
+  "el","la","los","las","de","del","al",
+  "que","cual","cuales","es","son",
+  "pasame","dime","numero","tiene"
+];
+
+function limpiarTexto(texto) {
+  return normalizarTexto(texto)
+    .split(" ")
+    .filter(p => p.length > 2 && !stopwords.includes(p));
+}
+
+/* ========= INTENTS ========= */
+/* 👇 PEGA AQUÍ TODOS TUS INTENTS 👇 */
+const intents = [
+{
+  id: "rvoe_bachillerato_general_por_competencias_americas_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","americas","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel americas, incorporado a la udg, es 003/2022."
+},
+{
+  id: "rvoe_bachillerato_general_tepatitlan_udg",
+  keywords: ["rvoe","bachillerato","general","tepatitlan","udg"],
+  response: "El rvoe del bachillerato general en el plantel tepatitlan, incorporado a la udg, es 157/2024."
+},
+{
+  id: "rvoe_bachillerato_general_por_competencias_campus_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","campus","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel campus, incorporado a la udg, es 004/2022."
+},
+{
+  id: "rvoe_bachillerato_general_por_competencias_olimpica_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","olimpica","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel olimpica, incorporado a la udg, es 005/2022."
+},
+{
+  id: "rvoe_bachillerato_general_por_competencias_rio_nilo_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","rio","nilo","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel rio nilo, incorporado a la udg, es 007/2022."
+},
+{
+  id: "rvoe_bachillerato_general_por_competencias_tlajomulco_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","tlajomulco","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel tlajomulco, incorporado a la udg, es 008/2022."
+},
+{
+  id: "rvoe_bachillerato_general_por_competencias_zapopan_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","zapopan","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel zapopan, incorporado a la udg, es 009/2022."
+},
+{
+  id: "rvoe_bachillerato_general_por_competencias_lazaro_cardenas_udg",
+  keywords: ["rvoe","bachillerato","general","competencias","lazaro","cardenas","udg"],
+  response: "El rvoe del bachillerato general por competencias en el plantel lazaro cardenas, incorporado a la udg, es 064/2022."
+},
+{
+  id: "rvoe_bachillerato_intensivo_semiescolarizado_americas_sej",
+  keywords: ["rvoe","bachillerato","intensivo","semiescolarizado","americas","sej"],
+  response: "El rvoe del bachillerato intensivo semiescolarizado en el plantel americas, incorporado a la sej, es msbi20161405."
+},
+{
+  id: "rvoe_bachillerato_intensivo_semiescolarizado_rio_nilo_sej",
+  keywords: ["rvoe","bachillerato","intensivo","semiescolarizado","rio","nilo","sej"],
+  response: "El rvoe del bachillerato intensivo semiescolarizado en el plantel rio nilo, incorporado a la sej, es msbi20181417."
+},
+{
+  id: "rvoe_bachillerato_intensivo_semiescolarizado_lazaro_cardenas_sej",
+  keywords: ["rvoe","bachillerato","intensivo","semiescolarizado","lazaro","cardenas","sej"],
+  response: "El rvoe del bachillerato intensivo semiescolarizado en el plantel lazaro cardenas, incorporado a la sej, es msbi20201404."
+},
+{
+  id: "rvoe_carrera_de_abogado_plan_24_udg",
+  keywords: ["rvoe","carrera","abogado","plan","24","udg"],
+  response: "El rvoe de la carrera de abogado plan 24, incorporado a la udg, es 078/2022."
+},
+{
+  id: "rvoe_carrera_de_abogado_campus_zapopan_udg",
+  keywords: ["rvoe","carrera","abogado","campus","zapopan","udg"],
+  response: "El rvoe de la carrera de abogado en el plantel campus zapopan, incorporado a la udg, es 079/2022."
+},
+{
+  id: "rvoe_carrera_de_abogado_americas_udg",
+  keywords: ["rvoe","carrera","abogado","americas","udg"],
+  response: "El rvoe de la carrera de abogado en el plantel americas, incorporado a la udg, es 149/2023."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_campus_udg",
+  keywords: ["rvoe","licenciatura","administracion","campus","udg"],
+  response: "El rvoe de la licenciatura en administracion en el plantel campus, incorporado a la udg, es 090/2022."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_zapopan_udg",
+  keywords: ["rvoe","licenciatura","administracion","zapopan","udg"],
+  response: "El rvoe de la licenciatura en administracion en el plantel zapopan, incorporado a la udg, es 092/2022."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_tlajomulco_udg",
+  keywords: ["rvoe","licenciatura","administracion","tlajomulco","udg"],
+  response: "El rvoe de la licenciatura en administracion en el plantel tlajomulco, incorporado a la udg, es 147/2023."
+},
+  {
+  id: "rvoe_licenciatura_en_mercadotecnia_campus_sep_23b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "mercadotecnia",
+    "campus",
+    "sep",
+    "23b"
+  ],
+  response: "El rvoe de la licenciatura en mercadotecnia en el plantel campus, incorporada a la sep, plan 23b modalidad 7x2, es 20230929."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_campus_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","campus","sep"],
+  response: "El rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel campus, incorporado a la sep, es 20230927."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_zapopan_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","zapopan","sep"],
+  response: "El rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel zapopan, incorporado a la sep, es 20230931."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_pedro_moreno_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","pedro","moreno","sep"],
+  response: "El rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel pedro moreno, incorporado a la sep, es 20232906."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_lazaro_cardenas_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","lazaro","cardenas","sep"],
+  response: "El rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel lazaro cardenas, incorporado a la sep, es 20232910."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_rio_nilo_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","rio","nilo","sep"],
+  response: "El rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel rio nilo, incorporado a la sep, es 20240208."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_tlajomulco_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","tlajomulco","sep"],
+  response: "El rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel tlajomulco, incorporado a la sep, es 20240213."
+},
+{
+  id: "rvoe_licenciatura_en_arquitectura_udg_americas",
+  keywords: ["rvoe","licenciatura","arquitectura","americas","udg"],
+  response: "El rvoe de la licenciatura en arquitectura en americas, incorporado a la udg, es 108/2022."
+},
+{
+  id: "rvoe_licenciatura_de_interiores_y_ambientacion_americas_sep",
+  keywords: ["rvoe","licenciatura","interiores","ambientacion","americas","sep"],
+  response: "El rvoe de la licenciatura de interiores y ambientacion en el plantel americas, incorporado a la sep, es 20233575."
+},
+{
+  id: "rvoe_licenciatura_en_ciencias_forenses_criminalistica_y_criminologia_campus_sep",
+  keywords: ["rvoe","licenciatura","ciencias","forenses","criminalistica","criminologia","campus","sep"],
+  response: "El rvoe de la licenciatura en ciencias forenses criminalistica y criminologia en el plantel campus, incorporado a la sep, es 20230810."
+},
+{
+  id: "rvoe_licenciatura_en_comercio_y_finanzas_internacionales_zapopan_sep",
+  keywords: ["rvoe","licenciatura","comercio","finanzas","internacionales","zapopan","sep"],
+  response: "El rvoe de la licenciatura en comercio y finanzas internacionales en el plantel zapopan, incorporado a la sep, es 20233612."
+},
+{
+  id: "rvoe_licenciatura_en_comercio_y_finanzas_internacionales_campus_sep",
+  keywords: ["rvoe","licenciatura","comercio","finanzas","internacionales","campus","sep"],
+  response: "El rvoe de la licenciatura en comercio y finanzas internacionales en el plantel campus, incorporado a la sep, es 20240162."
+},
+{
+  id: "rvoe_licenciatura_en_comercio_y_finanzas_internacionales_tlajomulco_sep",
+  keywords: ["rvoe","licenciatura","comercio","finanzas","internacionales","tlajomulco","sep"],
+  response: "El rvoe de la licenciatura en comercio y finanzas internacionales en el plantel tlajomulco, incorporado a la sep, es 20240244."
+},
+{
+  id: "rvoe_licenciatura_en_comercio_y_finanzas_internacionales_lazaro_cardenas_sep",
+  keywords: ["rvoe","licenciatura","comercio","finanzas","internacionales","lazaro","cardenas","sep"],
+  response: "El rvoe de la licenciatura en comercio y finanzas internacionales en el plantel lazaro cardenas, incorporado a la sep, es 20240599."
+},
+  {
+  id: "rvoe_licenciatura_en_contaduria_americas_sep",
+  keywords: ["rvoe","licenciatura","contaduria","americas","sep"],
+  response: "El rvoe de la licenciatura en contaduria en el plantel americas, incorporado a la sep, es 20230926."
+},
+{
+  id: "rvoe_licenciatura_en_contaduria_zapopan_sep",
+  keywords: ["rvoe","licenciatura","contaduria","zapopan","sep"],
+  response: "El rvoe de la licenciatura en contaduria en el plantel zapopan, incorporado a la sep, es 20230934."
+},
+{
+  id: "rvoe_licenciatura_en_contaduria_pedro_moreno_sep",
+  keywords: ["rvoe","licenciatura","contaduria","pedro","moreno","sep"],
+  response: "El rvoe de la licenciatura en contaduria en el plantel pedro moreno, incorporado a la sep, es 20232907."
+},
+{
+  id: "rvoe_licenciatura_en_contaduria_lazaro_cardenas_sep",
+  keywords: ["rvoe","licenciatura","contaduria","lazaro","cardenas","sep"],
+  response: "El rvoe de la licenciatura en contaduria en el plantel lazaro cardenas, incorporado a la sep, es 20232911."
+},
+{
+  id: "rvoe_licenciatura_en_contaduria_tlajomulco_sep",
+  keywords: ["rvoe","licenciatura","contaduria","tlajomulco","sep"],
+  response: "El rvoe de la licenciatura en Contaduria en el plantel Tlajomulco, incorporado a la sep, es 20240214."
+},
+{
+  id: "rvoe_licenciatura_en_contaduria_publica_campus_udg",
+  keywords: ["rvoe","licenciatura","contaduria","publica","campus","udg"],
+  response: "El rvoe de la licenciatura en Contaduria Pública en el plantel Campus, incorporado a la udg, es 091/2022."
+},
+  {
+  id: "rvoe_licenciatura_en_cultura_fisica_deportes_campus_udg",
+  keywords: ["rvoe","licenciatura","cultura","fisica","deportes","campus","udg"],
+  response: "El rvoe de la licenciatura en Cultura Física y Deportes en el plantel Campus, incorporado a la udg, es 121/2022."
+},
+  {
+  id: "rvoe_licenciatura_en_contaduria_publica_zapopan_udg",
+  keywords: ["rvoe","licenciatura","contaduria","publica","zapopan","udg"],
+  response: "el rvoe de la licenciatura en contaduria publica en el plantel zapopan, incorporado a la udg, es 093/2022."
+},
+  {
+  id: "rvoe_licenciatura_en_cirujano_dentista_campus_sep",
+  keywords: ["rvoe","licenciatura","cirujano","dentista","campus","sep"],
+  response: "el rvoe de la licenciatura en cirujano dentista en el plantel campus, incorporado a la sep, es 20251922."
+},
+{
+  id: "rvoe_licenciatura_en_derecho_campus_udg",
+  keywords: ["rvoe","licenciatura","derecho","campus","udg"],
+  response: "el rvoe de la licenciatura en derecho en el plantel campus, incorporado a la udg, es 078/2022."
+},
+{
+  id: "rvoe_licenciatura_en_desarrollo_de_software_olimpica_sep",
+  keywords: ["rvoe","licenciatura","desarrollo","software","olimpica","sep"],
+  response: "el rvoe de la licenciatura en desarrollo de software en el plantel olimpica, incorporado a la sep, es 20230924."
+},
+{
+  id: "rvoe_licenciatura_en_direccion_de_hoteles_campus_sep",
+  keywords: ["rvoe","licenciatura","direccion","hoteles","campus","sep"],
+  response: "el rvoe de la licenciatura en direccion de hoteles en el plantel campus, incorporado a la sep, es 20230945."
+},
+{
+  id: "rvoe_licenciatura_en_gestion_deportiva_campus_sep",
+  keywords: ["rvoe","licenciatura","gestion","deportiva","campus","sep"],
+  response: "el rvoe de la licenciatura en gestion deportiva en el plantel campus, incorporado a la sep, es 20230877."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_civil_campus_udg",
+  keywords: ["rvoe","licenciatura","ingenieria","civil","campus","udg"],
+  response: "el rvoe de la licenciatura en ingenieria civil en el plantel campus, incorporado a la udg, es 095/2022."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_en_ciencia_de_datos_campus_udg",
+  keywords: ["rvoe","licenciatura","ingenieria","ciencia","datos","campus","udg"],
+  response: "el rvoe de la licenciatura en ingenieria en ciencia de datos en el plantel campus, incorporado a la udg, es 098/2022."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_en_computacion_campus_udg",
+  keywords: ["rvoe","licenciatura","ingenieria","computacion","campus","udg"],
+  response: "el rvoe de la licenciatura en ingenieria en computacion en el plantel campus, incorporado a la udg, es 099/2022."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_en_sistemas_olimpica_sep",
+  keywords: ["rvoe","licenciatura","ingenieria","sistemas","olimpica","sep"],
+  response: "el rvoe de la licenciatura en ingenieria en sistemas en el plantel olimpica, incorporado a la sep, es 20240152."
+},
+  {
+  id: "rvoe_licenciatura_en_mercadotecnia_americas_sep",
+  keywords: ["rvoe","licenciatura","mercadotecnia","americas","sep"],
+  response: "el rvoe de la licenciatura en mercadotecnia en el plantel americas, incorporado a la sep, es 20230928."
+},
+{
+  id: "rvoe_licenciatura_en_mercadotecnia_zapopan_sep",
+  keywords: ["rvoe","licenciatura","mercadotecnia","zapopan","sep"],
+  response: "el rvoe de la licenciatura en mercadotecnia en el plantel zapopan, incorporado a la sep, es 20230935."
+},
+{
+  id: "rvoe_licenciatura_en_mercadotecnia_pedro_moreno_sep",
+  keywords: ["rvoe","licenciatura","mercadotecnia","pedro","moreno","sep"],
+  response: "el rvoe de la licenciatura en mercadotecnia en el plantel pedro moreno, incorporado a la sep, es 20232908."
+},
+{
+  id: "rvoe_licenciatura_en_mercadotecnia_lazaro_cardenas_sep",
+  keywords: ["rvoe","licenciatura","mercadotecnia","lazaro","cardenas","sep"],
+  response: "el rvoe de la licenciatura en mercadotecnia en el plantel lazaro cardenas, incorporado a la sep, es 20232912."
+},
+{
+  id: "rvoe_licenciatura_en_mercadotecnia_rio_nilo_sep",
+  keywords: ["rvoe","licenciatura","mercadotecnia","rio","nilo","sep"],
+  response: "el rvoe de la licenciatura en mercadotecnia en el plantel rio nilo, incorporado a la sep, es 20240210."
+},
+{
+  id: "rvoe_licenciatura_en_mercadotecnia_tlajomulco_sep",
+  keywords: ["rvoe","licenciatura","mercadotecnia","tlajomulco","sep"],
+  response: "el rvoe de la licenciatura en mercadotecnia en el plantel tlajomulco, incorporado a la sep, es 20240215."
+},
+{
+  id: "rvoe_licenciatura_en_negocios_digitales_campus_sep",
+  keywords: ["rvoe","licenciatura","negocios","digitales","campus","sep"],
+  response: "el rvoe de la licenciatura en negocios digitales en el plantel campus, incorporado a la sep, es 20233550."
+},
+{
+  id: "rvoe_licenciatura_en_negocios_digitales_zapopan_sep",
+  keywords: ["rvoe","licenciatura","negocios","digitales","zapopan","sep"],
+  response: "El rvoe de la licenciatura en Negocios Digitales en el plantel Zapopan, incorporado a la SEP, es 20233551."
+},
+{
+  id: "rvoe_licenciatura_en_negocios_internacionales_americas_sep",
+  keywords: ["rvoe","licenciatura","negocios","internacionales","americas","sep"],
+  response: "el rvoe de la licenciatura en negocios internacionales en el plantel americas, incorporado a la sep, es 20230929."
+},
+{
+  id: "rvoe_licenciatura_en_negocios_internacionales_zapopan_sep",
+  keywords: ["rvoe","licenciatura","negocios","internacionales","zapopan","sep"],
+  response: "el rvoe de la licenciatura en negocios internacionales en el plantel zapopan, incorporado a la sep, es 20230936."
+},
+  {
+  id: "rvoe_licenciatura_en_nutricion_campus_udg",
+  keywords: ["rvoe","licenciatura","nutricion","campus","udg"],
+  response: "el rvoe de la licenciatura en nutricion en el plantel campus, incorporado a la udg, es 122/2022."
+},
+{
+  id: "rvoe_licenciatura_en_pedagogia_campus_sep",
+  keywords: ["rvoe","licenciatura","pedagogia","campus","sep"],
+  response: "el rvoe de la licenciatura en pedagogia en el plantel campus, incorporado a la sep, es 20230930."
+},
+{
+  id: "rvoe_licenciatura_en_pedagogia_zapopan_sep",
+  keywords: ["rvoe","licenciatura","pedagogia","zapopan","sep"],
+  response: "El rvoe de la licenciatura en Pedagogía en el plantel Zapopan, incorporado a la SEP, es 20230935."
+},
+{
+  id: "rvoe_licenciatura_en_pedagogia_lazaro_cardenas_sep",
+  keywords: ["rvoe","licenciatura","pedagogia","lazaro","cardenas","sep"],
+  response: "El rvoe de la licenciatura en Pedagogía en el plantel Lázaro Cárdenas, incorporado a la SEP, es 20232914."
+},
+{
+  id: "rvoe_licenciatura_en_pedagogia_rio_nilo_sep",
+  keywords: ["rvoe","licenciatura","pedagogia","rio","nilo","sep"],
+  response: "El rvoe de la licenciatura en Pedagogía en el plantel Río Nilo, incorporado a la SEP, es 20240212."
+},
+{
+  id: "rvoe_licenciatura_en_pedagogia_tlajomulco_sep",
+  keywords: ["rvoe","licenciatura","pedagogia","tlajomulco","sep"],
+  response: "El rvoe de la licenciatura en Pedagogía en el plantel Tlajomulco, incorporado a la SEP, es 20240217."
+},
+{
+  id: "rvoe_licenciatura_en_psicologia_zapopan_udg",
+  keywords: ["rvoe","licenciatura","psicologia","zapopan","udg"],
+  response: "El rvoe de la licenciatura en Psicología en el plantel Zapopan, incorporado a la UdeG, es 123/2022."
+},
+{
+  id: "rvoe_licenciatura_en_psicologia_campus_udg",
+  keywords: ["rvoe","licenciatura","psicologia","campus","udg"],
+  response: "el rvoe de la licenciatura en psicologia en el plantel campus, incorporado a la udg, es 120/2022."
+},
+{
+  id: "rvoe_licenciatura_en_psicologia_tlajomulco_udg",
+  keywords: ["rvoe","licenciatura","psicologia","tlajomulco","udg"],
+  response: "el rvoe de la licenciatura en psicologia en el plantel tlajomulco, incorporado a la udg, es 124/2022."
+},
+{
+  id: "rvoe_licenciatura_en_publicidad_campus_sep",
+  keywords: ["rvoe","licenciatura","publicidad","campus","sep"],
+  response: "el rvoe de la licenciatura en publicidad en el plantel campus, incorporado a la sep, es 20233581."
+},
+{
+  id: "rvoe_licenciatura_en_quimico_farmaceutico_biologo_campus_udg",
+  keywords: ["rvoe","licenciatura","quimico","farmaceutico","biologo","campus","udg"],
+  response: "el rvoe de la licenciatura en quimico farmaceutico biologo en el plantel campus, incorporado a la udg, es 071/2022."
+},
+{
+  id: "rvoe_licenciatura_en_relaciones_internacionales_campus_sep",
+  keywords: ["rvoe","licenciatura","relaciones","internacionales","campus","sep"],
+  response: "el rvoe de la licenciatura en relaciones internacionales en el plantel campus, incorporado a la sep, es 20230923."
+},
+{
+  id: "rvoe_licenciatura_en_trabajo_social_pedro_moreno_udg",
+  keywords: ["rvoe","licenciatura","trabajo","social","pedro","moreno","udg"],
+  response: "el rvoe de la licenciatura en trabajo social en el plantel pedro moreno, incorporado a la udg, es 080/2022."
+},
+{
+  id: "rvoe_licenciatura_en_turismo_campus_sep",
+  keywords: ["rvoe","licenciatura","turismo","campus","sep"],
+  response: "el rvoe de la licenciatura en turismo en el plantel campus, incorporado a la sep, es 20230921."
+},
+{
+  id: "rvoe_maestria_en_alta_direccion_americas_sep",
+  keywords: ["rvoe","maestria","alta","direccion","americas","sep"],
+  response: "el rvoe de la maestria en alta direccion en el plantel americas, incorporado a la sep, es 20140276."
+},
+{
+  id: "rvoe_maestria_en_derecho_fiscal_campus_sep",
+  keywords: ["rvoe","maestria","derecho","fiscal","campus","sep"],
+  response: "el rvoe de la maestria en derecho fiscal en el plantel campus, incorporado a la sep, es 20230989."
+},
+{
+  id: "rvoe_maestria_en_derecho_laboral_campus_sep",
+  keywords: ["rvoe","maestria","derecho","laboral","campus","sep"],
+  response: "el rvoe de la maestria en derecho laboral en el plantel campus, incorporado a la sep, es 20230990."
+},
+{
+  id: "rvoe_maestria_en_desarrollo_organizacional_americas_sep",
+  keywords: ["rvoe","maestria","desarrollo","organizacional","americas","sep"],
+  response: "el rvoe de la maestria en desarrollo organizacional en el plantel americas, incorporado a la sep, es 20140274."
+},
+  {
+  id: "rvoe_licenciatura_en_ingenieria_agropecuaria_tlajomulco_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ingenieria",
+    "agropecuaria",
+    "tlajomulco",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en ingenieria agropecuaria en el plantel tlajomulco, incorporada a la sep, es 20252277."
+},
+  {
+  id: "rvoe_licenciatura_en_ingenieria_agropecuaria_tepatitlan_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ingenieria",
+    "agropecuaria",
+    "tepatitlan",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en ingenieria agropecuaria en el plantel tepatitlan, incorporada a la sep, es 20252359."
+},
+  {
+  id: "rvoe_licenciatura_en_ingenieria_en_mecatronica_olimpica_sep_24b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ingenieria",
+    "mecatronica",
+    "olimpica",
+    "sep",
+    "24b"
+  ],
+  response: "el rvoe de la licenciatura en ingenieria en mecatronica en el plantel olimpica, incorporada a la sep, plan 24b modalidad 7x2, es 20233582."
+},
+  {
+  id: "rvoe_licenciatura_en_diseno_grafico_americas_sep_24c",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "diseno",
+    "grafico",
+    "americas",
+    "sep",
+    "24c"
+  ],
+  response: "el rvoe de la licenciatura en diseno grafico en el plantel americas, incorporada a la sep, plan 24c modalidad 7x2, es 20230925."
+},
+{
+  id: "rvoe_licenciatura_de_modas_americas_udg_14b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "diseno",
+    "modas",
+    "americas",
+    "udg",
+    "14b"
+  ],
+  response: "el rvoe de la licenciatura en diseno de modas en el plantel americas, incorporada a la udg, programa 14b, es 111/2022."
+},
+  {
+  id: "rvoe_licenciatura_en_criminologia_zapopan_sep_25",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ciencias",
+    "forenses",
+    "criminologia",
+    "zapopan",
+    "sep",
+    "25",
+  ],
+  response: "el rvoe de la licenciatura en criminologia en el plantel zapopan, incorporada a la sep, plan 25 modalidad 7x2, es 20233567."
+},
+  {
+  id: "rvoe_licenciatura_en_derecho_zapopan_sep_23b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "derecho",
+    "zapopan",
+    "sep",
+    "23b"
+  ],
+  response: "el rvoe de la licenciatura en derecho en el plantel zapopan, incorporada a la sep, plan 23b modalidad 7x2, es 20230932."
+},
+  {
+  id: "rvoe_licenciatura_en_arquitectura_americas_sep_24c",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "arquitectura",
+    "americas",
+    "sep",
+    "24c"
+  ],
+  response: "el rvoe de la licenciatura en arquitectura en el plantel campus, incorporada a la sep, plan 24c modalidad 7x2, es 20233541."
+},
+  {
+  id: "rvoe_licenciatura_en_derecho_americas_sep_23b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "derecho",
+    "americas",
+    "sep",
+    "23b"
+  ],
+  response: "el rvoe de la licenciatura en derecho en el plantel americas, incorporada a la sep, plan 23b modalidad 7x2, es 20230932."
+},
+  {
+  id: "rvoe_licenciatura_en_diseno_de_animacion_americas_sep_24c",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "animacion",
+    "americas",
+    "sep",
+    "24c"
+  ],
+  response: "el rvoe de la licenciatura en diseno de animacion en el plantel americas, incorporada a la sep, plan 24c modalidad 7x2, es 20233578."
+},
+  {
+  id: "rvoe_licenciatura_en_gastronomia_y_gestion_restaurantera_camericas_sep_24b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "gastronomia",
+    "gestion",
+    "restaurantera",
+    "americas",
+    "sep",
+    "24b"
+  ],
+  response: "el rvoe de la licenciatura en gastronomia y gestion restaurantera en el plantel americas, incorporada a la sep, plan 24b, es 20233540."
+},
+{
+  id: "rvoe_licenciatura_en_gastronomia_y_gestion_restaurantera_pedro_moreno_sep_24b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "gastronomia",
+    "gestion",
+    "restaurantera",
+    "pedro moreno",
+    "sep",
+    "24b"
+  ],
+  response: "el rvoe de la licenciatura en gastronomia y gestion restaurantera en el plantel pedro moreno, incorporada a la sep, plan 24b, es 20240165."
+},
+{
+  id: "rvoe_licenciatura_en_gastronomia_y_gestion_restaurantera_rio_nilo_sep_24b",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "gastronomia",
+    "gestion",
+    "restaurantera",
+    "rio",
+    "nilo",
+    "sep",
+    "24b"
+  ],
+  response: "el rvoe de la licenciatura en gastronomia y gestion restaurantera en el plantel rio nilo, incorporada a la sep, plan 24b, es 20240206."
+},
+  {
+  id: "rvoe_licenciatura_en_cirujano_dentista_tepatitlan_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "cirujano",
+    "dentista",
+    "tepatitlan",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en cirujano dentista en el plantel tepatitlan, incorporada a la sep, es 20252352."
+},
+{
+  id: "rvoe_licenciatura_en_administracion_y_liderazgo_empresarial_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","administracion","liderazgo","empresarial","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en administracion y liderazgo empresarial en el plantel tepatitlan, incorporada a la sep, es 20252357."
+},
+{
+  id: "rvoe_licenciatura_en_arquitectura_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","arquitectura","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en arquitectura en el plantel tepatitlan, incorporada a la sep, es 20252354."
+},
+{
+  id: "rvoe_licenciatura_en_cirujano_dentista_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","cirujano","dentista","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en cirujano dentista en el plantel tepatitlan, incorporada a la sep, es 20252352."
+},
+{
+  id: "rvoe_licenciatura_en_contaduria_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","contaduria","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en contaduria en el plantel tepatitlan, incorporada a la sep, es 20252353."
+},
+{
+  id: "rvoe_licenciatura_en_derecho_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","derecho","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en derecho en el plantel tepatitlan, incorporada a la sep, es 20252385."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_agropecuaria_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","ingenieria","agropecuaria","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en ingenieria agropecuaria en el plantel tepatitlan, incorporada a la sep, es 20252359."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_industrial_en_produccion_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","ingenieria","industrial","produccion","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en ingenieria industrial en produccion en el plantel tepatitlan, incorporada a la sep, es 20252360."
+},
+{
+  id: "rvoe_licenciatura_en_negocios_internacionales_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","negocios","internacionales","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en negocios internacionales en el plantel tepatitlan, incorporada a la sep, es 20252356."
+},
+{
+  id: "rvoe_licenciatura_en_pedagogia_tepatitlan_sep",
+  keywords: ["rvoe","licenciatura","pedagogia","tepatitlan","sep"],
+  response: "el rvoe de la licenciatura en pedagogia en el plantel tepatitlan, incorporada a la sep, es 20252355."
+},
+{
+  id: "rvoe_maestria_en_derecho_aduanero_tepatitlan_sep",
+  keywords: ["rvoe","maestria","derecho","aduanero","tepatitlan","sep"],
+  response: "el rvoe de la maestria en derecho aduanero en el plantel tepatitlan, incorporada a la sep, es 20252358."
+},
+  {
+  id: "rvoe_licenciatura_en_direccion_de_hoteles_pedro_moreno_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "direccion",
+    "hoteles",
+    "pedro",
+    "moreno",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en direccion de hoteles en el plantel pedro moreno, incorporada a la sep, es 20251997."
+},
+{
+  id: "rvoe_licenciatura_en_gastronomia_y_gestion_restaurantera_pedro_moreno_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "gastronomia",
+    "gestion",
+    "restaurantera",
+    "pedro",
+    "moreno",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en gastronomia y gestion restaurantera en el plantel pedro moreno, incorporada a la sep, es 20252114."
+},
+  {
+  id: "rvoe_licenciatura_en_diseno_de_animacion_olimpica_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "diseno",
+    "animacion",
+    "olimpica",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en diseno de animacion en el plantel olimpica, incorporada a la sep, es 20252198."
+},
+{
+  id: "rvoe_licenciatura_en_diseno_grafico_olimpica_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "diseno",
+    "grafico",
+    "olimpica",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en diseno grafico en el plantel olimpica, incorporada a la sep, es 20252165."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_civil_olimpica_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ingenieria",
+    "civil",
+    "olimpica",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en ingenieria civil en el plantel olimpica, incorporada a la sep, es 20252184."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_en_ciencia_de_datos_olimpica_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ingenieria",
+    "ciencia",
+    "datos",
+    "olimpica",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en ingenieria en ciencia de datos en el plantel olimpica, incorporada a la sep, es 20252164."
+},
+{
+  id: "rvoe_licenciatura_en_ingenieria_en_sistemas_olimpica_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "ingenieria",
+    "sistemas",
+    "olimpica",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en ingenieria en sistemas en el plantel olimpica, incorporada a la sep, es 20252163."
+},
+{
+  id: "rvoe_licenciatura_en_negocios_internacionales_olimpica_sep",
+  keywords: [
+    "rvoe",
+    "licenciatura",
+    "negocios",
+    "internacionales",
+    "olimpica",
+    "sep"
+  ],
+  response: "el rvoe de la licenciatura en negocios internacionales en el plantel olimpica, incorporada a la sep, es 20252186."
+},
+  {
+  id: "que_es_modalidad_7x2",
+  keywords: ["modalidad","7x2","siete","dos"],
+  response: "La modalidad 7x2 es un modelo de estudio donde cursas solo dos materias durante siete semanas. las clases se concentran aproximadamente en 3 horas al dia, lo que permite avanzar mas rapido y es ideal para personas que trabajan o buscan terminar su carrera en menos tiempo."
+},
+{
+  id: "que_es_doble_titulacion",
+  keywords: [
+    "doble",
+    "titulacion",
+    "segunda",
+    "licenciatura",
+    "otra",
+    "carrera"
+  ],
+  response: `
+<b>¿QUÉ ES LA DOBLE TITULACIÓN?</b><br><br>
+
+La doble titulación es un beneficio académico que te permite obtener una segunda licenciatura aprovechando hasta el 60% de las materias cursadas en tu primera carrera.<br>
+Esto reduce de forma significativa el tiempo y el costo total de la segunda licenciatura.<br><br>
+
+<b>¿CÓMO FUNCIONA?</b><br>
+• Primero debes concluir y titularte de tu primera licenciatura.<br>
+• Posteriormente, solo cursas el 40% restante de la segunda carrera.<br>
+• La segunda licenciatura se cursa completamente en modalidad en línea.<br><br>
+
+<b>BENEFICIOS ACADÉMICOS Y ECONÓMICOS</b><br>
+• Si cuentas con una beca activa en la primera licenciatura, se respeta el mismo porcentaje en la segunda.<br>
+• Se aplica un descuento del 50% en el trámite de titulación de la segunda licenciatura, en cualquier modalidad.<br>
+• El servicio social realizado en la primera licenciatura aplica también para la segunda.<br><br>
+
+<b>REQUISITOS IMPORTANTES</b><br>
+• El beneficio debe contratarse antes de egresar.<br>
+• Es necesario contar con al menos el 50% de los créditos avanzados de la primera licenciatura.<br>
+• Una vez egresado, ya no es posible aplicar el beneficio de doble titulación.<br><br>
+
+<b>PORCENTAJES DE EQUIVALENCIA MÁS COMUNES.</b><br>
+• Administración y Liderazgo Empresarial + Contaduría: 58%.<br>
+• Administración y Liderazgo Empresarial + Mercadotecnia: 63%.<br>
+• Administración y Liderazgo Empresarial + Negocios Internacionales: 66%.<br>
+• Contaduría + Mercadotecnia: 63%.<br>
+• Ingeniería en Sistemas + Ingeniería Industrial en Producción: 52%.<br>
+• Contaduría + Negocios Internacionales: 63%.<br><br>
+
+La doble titulación es una opción ideal para ampliar tu perfil profesional, obtener dos títulos universitarios y mejorar tus oportunidades laborales en menos tiempo.
+`
+},
+  {
+  id: "que_es_titulacion_directa",
+  keywords: [
+    "titulacion",
+    "directa",
+    "titulo",
+    "tesis",
+    "ceneval",
+    "seminario"
+  ],
+  response: "La titulacion directa te permite obtener tu titulo profesional sin realizar tesis, tesina, ceneval ni seminario. solo necesitas acreditar todas las materias de tu plan de estudios y cumplir con los requisitos administrativos."
+},
+  {
+  id: "error_cobro_monto_menor_o_de_menos_en_la_ficha",
+  keywords: [
+    "error",
+    "cobro",
+    "monto",
+    "de menos",
+    "menor",
+    "ficha",
+    "pago"
+  ],
+  response: "Si por error se cobra en la terminal un monto menor al indicado en la ficha, se debe cobrar el importe restante en la misma ficha. Es necesario cambiar el metodo de pago, ya que el sistema no permite realizar dos cobros temporales con la misma tarjeta."
+},
+  {
+  id: "error_cobro_flex_online_terminal_plantel",
+  keywords: [
+    "error",
+    "cobro",
+    "flex",
+    "online",
+    "terminal",
+    "plantel",
+  ],
+  response: "Los pagos de uteg flex u online no se pueden cobrar en terminal. si por error se realizo el cobro, es necesario afrontar la situacion solicitando un reembolso en cajas. Posteriormente, el aspirante debe volver a realizar el pago del monto de inscripcion utilizando la misma ficha de pago."
+},
+  {
+  id: "referidos_recomendado_descuento_10_por_ciento",
+  keywords: [
+    "referido",
+    "recomendado",
+    "descuento",
+    "10",
+    "mensualidad"
+  ],
+  response: "Cuando se tiene un referido, se debe llenar el formato de recomendados. posteriormente, se solicita a manuel olmedo que envie un correo a lizbeth.gonzalez@lottuseducation.com para validacion. Una vez que se recibe el visto bueno, el formato se sube a cajas para que se aplique el descuento del 10% en la proxima mensualidad."
+},
+{
+  id: "revalidacion_y_equivalencia_estudios_proceso_control_escolar",
+  keywords: [
+    "revalidacion",
+    "equivalencia",
+    "revalidar materias",
+    "cero",
+    "cursar",
+    "ingresar",
+    "equivalencia de materias",
+    "certificado parcial",
+    "ingresar desde cero",
+    "cursar desde cero",
+    "materias cursadas antes",
+    "tramite de revalidacion",
+    "tramite de equivalencia"
+  ],
+  response: `
+<b>REVALIDACIÓN Y EQUIVALENCIA DE ESTUDIOS</b><br><br>
+
+Las revalidaciones y equivalencias de estudios se realizan de manera presencial en el área de Control Escolar.<br>
+Para iniciar cualquiera de estos procesos, el aspirante debe presentar un certificado parcial de estudios, el cual es el documento base para el análisis académico.<br><br>
+
+<b>ANÁLISIS ACADÉMICO</b><br>
+Con el certificado parcial, Control Escolar revisa las materias previamente cursadas y determina qué asignaturas pueden reconocerse conforme al plan de estudios vigente.<br>
+Este análisis es exclusivo de Control Escolar; el asesor no realiza dictámenes académicos y no puede prometer porcentajes ni número de materias antes de la resolución oficial.<br><br>
+
+<b>¿CUÁNDO APLICA LA REVALIDACIÓN?</b><br>
+La revalidación aplica cuando el aspirante proviene de un plan de estudios con el mismo RVOE.<br>
+En el caso de programas incorporados a la Universidad de Guadalajara, los RVOE son los mismos, por lo que la revalidación es obligatoria.<br>
+Cuando un aspirante ya cursó previamente estudios en un programa con incorporación UdeG, no es posible ingresar desde cero; se debe realizar forzosamente la revalidación y continuar a partir del avance ya cursado.<br><br>
+
+<b>¿CUÁNDO APLICA LA EQUIVALENCIA?</b><br>
+La equivalencia aplica cuando el plan de estudios o el RVOE es diferente.<br>
+Esto ocurre comúnmente en programas con incorporación SEP o cuando el aspirante proviene de otra institución.<br>
+En estos casos, el alumno puede solicitar la equivalencia de materias, donde se reconoce un porcentaje de lo previamente cursado, dependiendo de la compatibilidad entre programas, o bien puede optar por iniciar desde cero si así lo decide.<br><br>
+
+<b>DIFERENCIA ENTRE REVALIDACIÓN Y EQUIVALENCIA</b><br>
+La revalidación se utiliza cuando el RVOE es el mismo y las materias se reconocen tal como fueron cursadas.<br>
+La equivalencia se aplica cuando los planes de estudio o RVOE son distintos y el reconocimiento depende del análisis académico y del porcentaje de coincidencia entre programas.<br><br>
+
+<b>MENSAJE IMPORTANTE PARA EL ASPIRANTE</b><br>
+Ningún asesor puede asegurar cuántas materias se revalidarán o equivaldrán antes de que Control Escolar emita el dictamen correspondiente.<br>
+El resultado final siempre depende del análisis oficial del certificado parcial y del plan de estudios aplicable.
+`
+},
+{
+  id: "pago_no_reflejado_procedimiento",
+  keywords: [
+    "pago",
+    "no",
+    "refleja",
+    "reflejado",
+    "banco",
+    "terminal",
+    "liga"
+  ],
+  response: `
+<b>PAGO NO REFLEJADO – PROCEDIMIENTO</b><br><br>
+
+Cuando un pago no se refleja en el sistema, es indispensable considerar primero el tiempo de espera correspondiente según el método de pago utilizado.<br><br>
+
+<b>TIEMPOS DE ESPERA POR MÉTODO DE PAGO</b><br>
+• Pagos realizados en banco (practicaja o app bancaria): el tiempo de reflejo puede ser mayor a 72 horas.<br>
+• Pagos realizados en plantel o mediante liga de pago: el tiempo de reflejo es de hasta 24 horas.<br><br>
+
+<b>¿QUÉ HACER SI EL PAGO NO SE REFLEJA?</b><br>
+Si el pago no se ve reflejado después de haber transcurrido el tiempo correspondiente, se debe levantar un ticket de soporte.<br><br>
+
+<b>ENVÍO DE TICKET</b><br>
+• Correo principal: soportelottus@lottuseducation.com<br>
+• Copia obligatoria: evelyn.corona@lottuseducation.com<br><br>
+
+<b>INFORMACIÓN QUE DEBE ADJUNTARSE</b><br>
+• Evidencia del pago (ticket o comprobante).<br>
+• Datos completos del aspirante.<br>
+• Liga de la oportunidad en Salesforce.<br><br>
+
+El envío correcto y completo de la información permite identificar la causa del retraso y dar seguimiento oportuno al reflejo del pago.
+`
+},
+  {
+  id: "pago_inscripcion_con_adeudo",
+  keywords: [
+    "adeudo",
+    "pago",
+    "inscripcion",
+    "alumno",
+    "debe"
+  ],
+  response: "Si un alumno cuenta con un adeudo previo y realiza el pago de inscripcion, el monto se carga automaticamente al adeudo existente y no aplica reembolso. Es necesario que el alumno se presente en cajas para conocer el monto exacto de su adeudo y, en caso de solicitar algun convenio, agendar una cita con direccion para la revision del caso."
+},
+  {
+  id: "oportunidad_pagada_sin_gestionar_cita_asistio",
+  keywords: [
+    "oportunidad",
+    "pagado",
+    "gestionar",
+    "gestion",
+    "cita",
+    "estado",
+    "venta",
+    "meta"
+  ],
+  response: "Si una oportunidad se pasa a pagado sin haber gestionado la cita y sin cambiar el estado a 'asistio', no se habilita la venta compartida. Esto provoca que el asesor pierda la venta y que no se contabilice para el cumplimiento de sus metas."
+},
+ {
+  id: "cambio_carrera_plantel_ciclo_oportunidad_pagada",
+  keywords: [
+    "cambio",
+    "carrera",
+    "plantel",
+    "ciclo",
+    "pagado",
+    "inscrito",
+    "admitido"
+  ],
+  response: `
+<b>CAMBIO DE CARRERA, PLANTEL O CICLO CON OPORTUNIDAD PAGADA</b><br><br>
+
+Cuando un aspirante solicita un cambio de carrera, plantel o ciclo y la oportunidad ya se encuentra en estatus pagado, inscrito o admitido, es necesario seguir un procedimiento específico para asegurar que el cambio se realice de forma correcta.<br><br>
+
+<b>VALIDACIÓN DE DISPONIBILIDAD</b><br>
+El primer paso es confirmar que exista disponibilidad en la nueva carrera, plantel o ciclo solicitado por el aspirante.<br><br>
+
+<b>AJUSTE DE COSTOS Y DESCUENTOS</b><br>
+• Si el pago realizado inicialmente es menor al costo de la nueva licenciatura o plantel, el aspirante deberá cubrir la diferencia correspondiente.<br>
+• En caso de que el descuento aplicado originalmente ya no se encuentre vigente, se ajustará al descuento activo al momento de realizar la solicitud de cambio.<br>
+• El aspirante deberá cubrir el monto restante derivado del nuevo costo o del ajuste de descuento.<br><br>
+
+<b>ACEPTACIÓN DE CONDICIONES</b><br>
+Una vez que el aspirante acepta las condiciones de costo y descuento, se procede con la gestión administrativa del cambio.<br><br>
+
+<b>PROCESO ADMINISTRATIVO</b><br>
+• Se solicita al área de Vinculación la baja de la oportunidad actual.<br>
+• Vinculación se encarga de crear la nueva oportunidad con la información actualizada.<br>
+• Una vez concluido el proceso por parte de Vinculación, el asesor realiza el cambio correspondiente en Salesforce.<br><br>
+
+Este procedimiento garantiza que el cambio se realice de manera correcta, manteniendo la trazabilidad del pago y la información académica del aspirante.
+`
+},
+  {
+  id: "pago_transferencia_prohibido",
+  keywords: [
+    "transferencia",
+    "transferir",
+    "pago",
+    "pagar",
+    "bancario",
+    "spei",
+    "deposito",
+    "transferencia bancaria"
+  ],
+  response: "NO se aceptan pagos por transferencia. Por transferencia esta prohibido realizar pagos. Unicamente se permite el pago por aplicacion bancaria como 'pago de servicio', y solo aplica en bancos Santander y BBVA. No aplica para otros bancos."
+},
+ {
+  id: "como_funciona_departamento_recompra_uteg",
+  keywords: [
+    "recompra",
+    "exalumno",
+    "como funciona",
+    "reingreso",
+    "regresar",
+    "retomar",
+    "adeudo",
+    "adeudos",
+    "abandono",
+    "reactivar",
+    "baja",
+    "interrumpio",
+    "interrumpidos"
+  ],
+  response: `
+<b>DEPARTAMENTO DE RECOMPRA UTEG</b><br><br>
+
+El Departamento de Recompra es un área especializada de UTEG encargada de recuperar y reactivar a exalumnos que, por distintas circunstancias, interrumpieron sus estudios y desean reingresar a la institución.<br><br>
+
+<b>¿A QUIÉN VA DIRIGIDO?</b><br>
+Este departamento atiende a exalumnos que presentan alguna de las siguientes situaciones:<br>
+• Abandono académico.<br>
+• Interrupción administrativa.<br>
+• Falta de pago de periodos anteriores.<br>
+• Adeudos históricos.<br>
+• Situaciones personales, económicas o laborales que hayan provocado la baja o interrupción de estudios.<br><br>
+
+<b>OBJETIVO DEL DEPARTAMENTO DE RECOMPRA</b><br>
+El objetivo principal de Recompra es facilitar el regreso del alumno a la institución, ofreciendo soluciones flexibles y viables que permitan retomar sus estudios, sin dejar de considerar los compromisos financieros previos adquiridos por el exalumno.<br><br>
+
+<b>¿CÓMO APOYA RECOMPRA AL EXALUMNO?</b><br>
+• Analiza el historial académico y administrativo del exalumno.<br>
+• Revisa la situación de adeudos pendientes.<br>
+• Propone alternativas para la regularización y reactivación académica.<br>
+• Brinda acompañamiento durante el proceso de reingreso.<br><br>
+
+<b>RESPONSABLE Y CONTACTO</b><br>
+Para dar seguimiento a los casos de recompra y reingreso, el contacto responsable es:<br>
+manuel.aguilera@uteg.edu.mx
+`
+},
+  {
+  id: "documentos_inscripcion_aspirante",
+  keywords: [
+    "documentos",
+    "requisitos",
+    "inscripcion",
+    "inscribirse",
+    "papeles",
+    "que necesito",
+    "que piden",
+    "documentacion"
+  ],
+  response: "Para inscribirte en UTEG es necesario presentar la siguiente documentacion: 2 fotografias tamano infantil, en blanco y negro o a color, pueden ser de estudio o de farmacia, sin lentes. Acta de nacimiento y 1 copia. CURP y 1 copia. Certificado de estudios y 1 copia. Identificacion oficial vigente y 1 copia."
+},
+ {
+  id: "sondeo_alumno_apto_maestria",
+  keywords: [
+    "maestria",
+    "titularse",
+    "que necesita",
+    "apto",
+    "ingresar",
+    "ingreso",
+    "sondeo",
+    "perfil",
+    "titulacion",
+    "ya titulado",
+    "medio de titulacion",
+    "crecimiento academico"
+  ],
+  response: `
+<b>SONDEO DE ALUMNO APTO PARA MAESTRÍA</b><br><br>
+
+Para determinar si un alumno es apto para ingresar a una maestría, es fundamental realizar un sondeo correcto desde el primer contacto.<br>
+Este sondeo permite identificar el perfil del aspirante y ofrecer la opción académica adecuada de acuerdo con su situación actual.<br><br>
+
+<b>TIPOS DE ALUMNOS QUE INGRESAN A MAESTRÍA</b><br><br>
+
+<b>Maestría como medio de titulación</b><br>
+Dirigida a alumnos que aún no cuentan con título o acta de titulación de licenciatura.<br>
+En este caso, el alumno utiliza los créditos cursados en la maestría como parte de su proceso de titulación de la licenciatura.<br><br>
+
+<b>Maestría por crecimiento académico</b><br>
+Dirigida a alumnos que ya cuentan con título o acta de titulación.<br>
+El objetivo principal es el desarrollo profesional, el cumplimiento de requisitos laborales o el interés personal por continuar con su formación académica.<br><br>
+
+<b>PREGUNTA CLAVE PARA IDENTIFICAR EL PERFIL</b><br>
+Para realizar un sondeo adecuado, es indispensable formular la siguiente pregunta al aspirante:<br><br>
+
+“¿Buscas tu maestría como medio de titulación o ya cuentas con título?”<br><br>
+
+<b>IMPORTANCIA DEL SONDEO</b><br>
+Con base en la respuesta del alumno, se puede:<br>
+• Identificar correctamente su perfil académico.<br>
+• Ofrecer la opción de maestría adecuada.<br>
+• Resolver de forma clara y correcta las dudas relacionadas con el ingreso y el proceso de titulación.<br><br>
+
+<b>CONTACTO DE REFERENCIA</b><br>
+Para dudas específicas relacionadas con el ingreso a maestrías:<br>
+claudia.pereyra@uteg.edu.mx
+`
+},
+{
+  id: "laboratorios_por_plantel_uteg",
+  keywords: [
+    "laboratorios",
+    "plantel",
+    "practica",
+    "instalaciones",
+    "equipos",
+    "donde hacen practicas",
+    "areas",
+    "espacios",
+    "carreras"
+  ],
+  response: `
+<b>LABORATORIOS E INSTALACIONES POR PLANTEL UTEG</b><br><br>
+
+UTEG cuenta con laboratorios y espacios de práctica especializados que apoyan la formación profesional de cada carrera, los cuales varían según el plantel y el programa académico.<br>
+Estos espacios permiten a los alumnos desarrollar habilidades prácticas alineadas a su campo profesional.<br><br>
+
+<b>PLANTEL ZAPOPAN</b><br>
+• Psicología: laboratorios de evaluación psicológica y práctica clínica.<br>
+• Cirujano Dentista: clínicas y laboratorios dentales.<br>
+• Abogado: salas de juicios orales.<br><br>
+
+<b>PLANTEL AMÉRICAS</b><br>
+• Arquitectura: talleres de diseño y elaboración de maquetas.<br>
+• Diseño de Modas: talleres de costura y laboratorios textiles.<br>
+• Diseño Gráfico: laboratorios de cómputo con software creativo.<br>
+• Gastronomía y Gestión Restaurantera: cocinas didácticas y laboratorios gastronómicos.<br>
+• Diseño de Interiores: espacios de ideación, modelado y ambientación.<br><br>
+
+<b>PLANTEL PEDRO MORENO</b><br>
+• Gastronomía: laboratorios de cocina profesional.<br><br>
+
+<b>PLANTEL CAMPUS</b><br>
+• Nutrición: áreas de evaluación nutricional y laboratorio de alimentos.<br>
+• Químico Farmacéutico Biólogo: laboratorios de química y biociencias.<br>
+• Enfermería: simuladores clínicos y laboratorios de atención en salud.<br>
+• Cirujano Dentista: clínicas y laboratorios odontológicos de simulación.<br>
+• Cultura Física y Deportes: espacios deportivos especializados como domo deportivo, cancha de fútbol de pasto natural y sintético, alberca semiolímpica, cancha de voleibol de playa, cancha de basquetbol y laboratorio de análisis del deporte.<br>
+• Psicología: laboratorios de evaluación e intervención psicológica.<br><br>
+
+<b>PLANTEL OLÍMPICA</b><br>
+• Ingeniería Civil: laboratorios de materiales y estructuras.<br>
+• Ingeniería Industrial: talleres de procesos industriales.<br>
+• Ingeniería en Mecatrónica: laboratorios de automatización y robótica.<br>
+• Ingeniería en Sistemas: laboratorios de desarrollo de software y tecnologías de la información.<br><br>
+
+La disponibilidad de laboratorios y espacios de práctica depende del plantel y de la carrera cursada, y forma parte fundamental de la formación académica y profesional del alumno.
+`
+},
+{
+  id: "internacionalizacion_uteg_detallada",
+  keywords: [
+    "internacionalizacion",
+    "internacional",
+    "extranjero",
+    "study abroad",
+    "intercambio",
+    "global",
+    "doble titulo",
+    "practicas internacionales",
+    "movilidad",
+    "clases espejo"
+  ],
+  response: `
+<b>INTERNACIONALIZACIÓN EN UTEG</b><br><br>
+
+En UTEG, la internacionalización es el conjunto de estrategias académicas que permiten al estudiante contar con una formación con perspectiva global.<br>
+Esta visión integra experiencias internacionales, intercambio cultural y académico, así como el vínculo con instituciones de otros países.<br><br>
+
+La internacionalización no se limita únicamente a viajar al extranjero, sino que incorpora contenidos, proyectos y experiencias que preparan al alumno para desarrollarse en un entorno profesional globalizado.<br><br>
+
+<b>MODALIDADES DE INTERNACIONALIZACIÓN QUE OFRECE UTEG</b><br><br>
+
+• Clases espejo o Global Classroom: asignaturas compartidas con universidades extranjeras, donde alumnos y docentes interactúan de forma conjunta.<br>
+• Intercambio de materias virtual: permite cursar asignaturas con enfoque internacional de manera remota.<br>
+• Study Abroad: estancias académicas por semestre o año en el extranjero, bajo convenios institucionales.<br>
+• Webinars con profesores internacionales: sesiones académicas impartidas por docentes de universidades extranjeras.<br>
+• Campus de verano internacional: experiencias académicas de corta duración con enfoque internacional.<br>
+• Twin Projects: proyectos colaborativos desarrollados en conjunto con estudiantes de otros países.<br>
+• Prácticas internacionales: estancias profesionales realizadas en el extranjero.<br>
+• Dobles títulos internacionales: opción disponible cuando existe un convenio específico con instituciones extranjeras.<br>
+• Materias con enfoque internacional: asignaturas integradas al plan de estudios con contenido global.<br>
+• Seminarios internacionales de titulación: procesos de titulación con enfoque o aval internacional.<br><br>
+
+<b>RESPALDO Y ALIANZAS INTERNACIONALES</b><br>
+UTEG respalda estas opciones mediante alianzas estratégicas con instituciones educativas de distintos países, lo que permite ampliar las oportunidades académicas y profesionales de sus estudiantes.<br><br>
+
+<b>CONTACTO DE INTERNACIONALIZACIÓN</b><br>
+Para información detallada sobre programas, convenios y requisitos:<br>
+internacionalizacion@uteg.edu.mx
+`
+},
+{
+  id: "error_crear_lead_desde_cero",
+  keywords: [
+    "error",
+    "me sale un error",
+    "me aparece un error",
+    "salesforce",
+    "lead",
+    "crear",
+    "nuevo",
+    "no me deja",
+    "no puedo crear"
+  ],
+  response: `
+<b>ERROR AL CREAR UN LEAD DESDE CERO</b><br><br>
+
+Cuando al intentar crear un lead desde cero aparece un error en Salesforce, lo más probable es que el prospecto ya exista previamente en el sistema como un registro duplicado.<br><br>
+
+<b>¿POR QUÉ OCURRE ESTE ERROR?</b><br>
+Este escenario se presenta cuando el prospecto ya fue registrado con anterioridad y se encuentra activo dentro de la base de datos.<br>
+En muchos casos, el lead puede estar asignado al área de Contact Center, por lo que no es visible ni editable desde la vista del asesor comercial.<br><br>
+
+<b>CONTROL DE DUPLICADOS EN SALESFORCE</b><br>
+El sistema bloquea de manera automática la creación de nuevos leads duplicados con el objetivo de mantener la integridad y calidad de la base de datos.<br>
+Por esta razón, aunque el asesor intente crear un nuevo lead, Salesforce impide el registro si detecta coincidencias en la información del prospecto.<br><br>
+
+<b>¿QUÉ SE DEBE HACER EN ESTE CASO?</b><br>
+• Validar con el área de Contact Center o con el área correspondiente si el prospecto ya se encuentra registrado.<br>
+• Confirmar el estatus actual del lead dentro del sistema.<br>
+• Solicitar al coordinador la reasignación del lead en caso de que aplique.<br><br>
+
+Este procedimiento permite evitar duplicados, asegurar el correcto seguimiento del prospecto y mantener la trazabilidad de la información dentro de Salesforce.
+`
+},
+ {
+  id: "error_crear_lead_desde_cero",
+  keywords: [
+    "error",
+    "me sale un error",
+    "me aparece un error",
+    "salesforce",
+    "lead",
+    "cero",
+    "desde",
+    "crear",
+    "nuevo",
+    "no me deja",
+    "no puedo crear"
+  ],
+  response: `
+<b>ERROR AL CREAR UN LEAD DESDE CERO</b><br><br>
+
+Cuando al intentar crear un lead desde cero aparece un error en Salesforce, lo más probable es que el prospecto ya exista previamente en el sistema como un registro duplicado.<br><br>
+
+<b>¿POR QUÉ OCURRE ESTE ERROR?</b><br>
+Este escenario se presenta cuando el prospecto ya fue registrado con anterioridad y se encuentra activo dentro de la base de datos.<br>
+En muchos casos, el lead puede estar asignado al área de Contact Center, por lo que no es visible ni editable desde la vista del asesor comercial.<br><br>
+
+<b>CONTROL DE DUPLICADOS EN SALESFORCE</b><br>
+El sistema bloquea de manera automática la creación de nuevos leads duplicados con el objetivo de mantener la integridad y calidad de la base de datos.<br>
+Por esta razón, aunque el asesor intente crear un nuevo lead, Salesforce impide el registro si detecta coincidencias en la información del prospecto.<br><br>
+
+<b>¿QUÉ SE DEBE HACER EN ESTE CASO?</b><br>
+• Validar con el área de Contact Center o con el área correspondiente si el prospecto ya se encuentra registrado.<br>
+• Confirmar el estatus actual del lead dentro del sistema.<br>
+• Solicitar al coordinador la reasignación del lead en caso de que aplique.<br><br>
+
+Este procedimiento permite evitar duplicados, asegurar el correcto seguimiento del prospecto y mantener la trazabilidad de la información dentro de Salesforce.
+`
+},
+{
+  id: "becas_institucionales_convocatoria_2026_a_control_comercial",
+  keywords: [
+    "becas",
+    "convocatoria de becas",
+    "tramite de beca",
+    "renovacion de beca",
+    "tipos de beca",
+    "beca asesor",
+    "beca 20%",
+    "beca mercadotecnia",
+    "beca fundador",
+    "beca empresas",
+    "beca laboral",
+    "beca becario",
+    "beca deportiva",
+    "beca hermanos",
+    "beca familiar",
+    "beca fidelidad",
+    "descuento",
+    "descuentos",
+    "beca",
+    "descuento de inscripcion",
+    "promedio minimo beca",
+    "pagos puntuales beca"
+  ],
+  response: `
+<b>BECAS INSTITUCIONALES – CONVOCATORIA 2026-A</b><br><br>
+
+Las becas institucionales son una herramienta de cierre y control comercial.<br>
+No son un gancho de entrada ni un beneficio discrecional.<br><br>
+
+El asesor únicamente puede ofrecer las becas que se encuentren vigentes y publicadas en el formato autorizado de oferta y comercialización (F-MK-35), y exclusivamente en los turnos, programas y planteles ahí indicados.<br>
+Toda beca que no esté en el F-MK-35 vigente no es válida y no será respetada en cobro.<br><br>
+
+<b>BECA ESTÁNDAR DE ASESOR (20%)</b><br>
+• Puede ser otorgada únicamente por el asesor de inscripciones.<br>
+• Aplica solo para turnos vespertinos o nocturnos autorizados en el F-MK-35.<br>
+• Está enfocada al cierre inmediato, pago el mismo día o en un plazo de 48 a 72 horas, o como incentivo de asistencia a cita.<br>
+• No aplica en turno matutino ni en programas no autorizados.<br>
+• Debe registrarse en sistema como “Beca 20% asesor – turno autorizado según F-MK-35”.<br><br>
+
+<b>BECA FUNDADOR</b><br>
+• Aplica exclusivamente para programas nuevos o en etapa de lanzamiento o relanzamiento.<br>
+• Solo puede utilizarse cuando el programa aparezca como autorizado en el F-MK-35 o comunicado oficial.<br>
+• Generalmente está condicionada a inscripción pronta y entrega de documentación completa.<br>
+• Una vez que el programa sale de su etapa de lanzamiento, esta beca deja de aplicar sin excepción.<br><br>
+
+<b>DISCIPLINA OPERATIVA EN BECAS</b><br>
+• Primero se explica el programa y después se ofrece la beca.<br>
+• Toda beca debe estar condicionada a una acción concreta del aspirante.<br>
+• Toda beca otorgada debe quedar registrada; si no está registrada, no será respetada.<br>
+• Las becas no se combinan entre sí, salvo instrucción expresa vigente.<br>
+• El coordinador debe revisar diariamente las becas otorgadas.<br><br>
+
+<b>DESCUENTOS DE INSCRIPCIÓN</b><br>
+Los descuentos sobre inscripción no son discrecionales.<br>
+Solo pueden aplicarse cuando exista autorización expresa y vigente de Gerencia Comercial para un periodo, plantel y programa específicos.<br>
+Ningún asesor o coordinador puede autorizar descuentos sin comunicado oficial.<br><br>
+
+<b>CONVOCATORIA DE BECAS INSTITUCIONALES 2026-A</b><br>
+Aplica para licenciaturas cuatrimestrales, licenciaturas semestrales, bachillerato general y bachillerato semiescolarizado, tanto en trámite nuevo como en renovación.<br>
+El alumno debe revisar el manual correspondiente, dar seguimiento al trámite y mantener pagos puntuales durante el proceso.<br><br>
+
+<b>TIPOS DE BECAS INSTITUCIONALES</b><br>
+• Empresas o dependencias conveniadas.<br>
+• Segunda licenciatura (20%).<br>
+• Becario (100% condicionado a servicio laboral).<br>
+• Beca laboral y por interferencia laboral.<br>
+• Interferencia de hermanos o familiar.<br>
+• Beca deportiva de alto rendimiento.<br>
+• Beca fidelidad para egresados.<br>
+• Promoción de mercadotecnia.<br><br>
+
+<b>BECA DE PROMOCIÓN DE MERCADOTECNIA</b><br>
+• Apoyo del 20% en parcialidades.<br>
+• Única beca que puede ser otorgada directamente por el asesor como herramienta comercial.<br>
+• Aplica solo en turnos vespertinos o nocturnos y programas autorizados.<br>
+• Requiere promedio mínimo de 85 y pagos puntuales dentro del mes.<br>
+• El incumplimiento cancela la beca de forma inmediata y definitiva.<br><br>
+
+<b>RENOVACIÓN DE BECAS</b><br>
+Para renovar cualquier beca se requiere reinscripción, carga de materias, historial académico, promedio mínimo (80 general, 75 en ingenierías), pagos puntuales y no contar con referencias activas.<br><br>
+
+<b>NOTAS GENERALES</b><br>
+• Las becas no son acumulables.<br>
+• Solo se aplica la de mayor porcentaje.<br>
+• No se combinan con descuentos de ciclo completo ni pago por pago.<br>
+• El incumplimiento de las políticas ocasiona la cancelación definitiva de la beca.
+`
+},
+  {
+  id: "que_es_lottus_education",
+  keywords: [
+    "lottus",
+    "lottus education",
+    "grupo lottus",
+    "quien es lottus",
+    "que es lottus",
+    "historia lottus",
+    "marcas lottus",
+    "grupo educativo"
+  ],
+  response: `
+<b>¿QUÉ ES LOTTUS EDUCATION?</b><br><br>
+
+Lottus Education es un grupo educativo enfocado principalmente en el sector educativo en México.<br>
+Su objetivo es transformar la vida de los estudiantes a través de programas educativos accesibles y de calidad, que los hagan competentes en el mercado laboral y fortalezcan su crecimiento personal y profesional.<br><br>
+
+<b>ENFOQUE Y PROPÓSITO</b><br>
+Lottus Education busca ofrecer una experiencia educativa de alto impacto, orientada a la empleabilidad, el desarrollo de habilidades prácticas y la formación integral del estudiante.<br>
+Sus programas están diseñados para ampliar los horizontes académicos y profesionales de quienes forman parte de sus instituciones.<br><br>
+
+<b>OFERTA ACADÉMICA</b><br>
+El grupo ofrece programas educativos en los siguientes niveles:<br>
+• Preparatoria.<br>
+• Licenciatura.<br>
+• Posgrado.<br><br>
+
+Estos programas se imparten en modalidades presenciales y en línea, permitiendo mayor flexibilidad para distintos perfiles de estudiantes.<br><br>
+
+<b>INSTITUCIONES QUE FORMAN PARTE DE LOTTUS EDUCATION</b><br>
+Las marcas que pertenecen al grupo Lottus Education son:<br>
+• UTC Universidad Tres Culturas.<br>
+• ULA Universidad Latinoamericana.<br>
+• UANE Universidad Autónoma del Noreste.<br>
+• UTEG Universidad Tecnológica de Guadalajara.<br>
+• BEDU.<br>
+• Colegio Indoamericano.<br><br>
+
+A través de estas instituciones, Lottus Education consolida su presencia a nivel nacional y su compromiso con la educación de calidad.
+`
+},
+{
+  id: "planteles_uteg_zonas_referencias",
+  keywords: [
+    "planteles",
+    "zonas",
+    "ubicacion",
+    "referencias",
+    "donde esta",
+    "campus",
+    "sedes",
+  ],
+  response: `
+<b>PLANTELES UTEG: ZONAS Y REFERENCIAS</b><br><br>
+
+UTEG cuenta actualmente con 9 planteles ubicados estratégicamente en la Zona Metropolitana de Guadalajara y en el interior del estado de Jalisco.<br>
+Esta distribución permite a los estudiantes elegir el campus que mejor se adapte a su ubicación, tiempos de traslado y necesidades académicas.<br><br>
+
+<b>PLANTELES EN LA ZONA METROPOLITANA DE GUADALAJARA</b><br><br>
+
+<b>• Plantel Américas</b><br>
+Ubicado en la zona centro poniente de Guadalajara, cerca de Avenida Américas.<br>
+Cuenta con fácil acceso y diversas rutas de transporte público.<br><br>
+
+<b>• Plantel Zapopan</b><br>
+Se localiza en la zona de Zapopan Centro o zona poniente del municipio.<br>
+Es una opción accesible para estudiantes de Zapopan y colonias cercanas.<br><br>
+
+<b>• Plantel Campus</b><br>
+Situado en la zona centro sur de Guadalajara.<br>
+Es uno de los planteles con mayor actividad académica y administrativa.<br><br>
+
+<b>• Plantel Olímpica</b><br>
+Ubicado en la zona oriente de Guadalajara, cercano a la Unidad Deportiva Olímpica.<br>
+Funciona como referencia importante para estudiantes del oriente de la ciudad.<br><br>
+
+<b>• Plantel Pedro Moreno</b><br>
+Localizado en el centro de Guadalajara.<br>
+Destaca por su cercanía a avenidas principales y transporte público.<br><br>
+
+<b>• Plantel Río Nilo</b><br>
+Se encuentra en la zona oriente de Guadalajara, cerca de Avenida Río Nilo y límites con Tonalá.<br>
+Es una alternativa accesible para estudiantes del oriente de la ZMG.<br><br>
+
+<b>• Plantel Tlajomulco</b><br>
+Ubicado en el municipio de Tlajomulco de Zúñiga, al sur de la Zona Metropolitana de Guadalajara.<br>
+Atiende a estudiantes de la zona sur y alrededores.<br><br>
+
+<b>• Plantel Lázaro Cárdenas</b><br>
+Situado en la zona sur de Guadalajara, cerca de Avenida Lázaro Cárdenas.<br>
+Cuenta con buena conectividad vial desde distintos puntos de la ciudad.<br><br>
+
+<b>PLANTEL EN EL INTERIOR DEL ESTADO</b><br><br>
+
+<b>• Plantel Tepatitlán</b><br>
+Ubicado en el municipio de Tepatitlán de Morelos, en la región Altos de Jalisco.<br>
+Brinda atención a estudiantes de Tepatitlán y municipios cercanos.<br><br>
+
+Con esta red de planteles, UTEG fortalece su presencia en Jalisco y facilita el acceso a la educación en distintas zonas estratégicas.
+`
+},
+ {
+  id: "modalidades_estudio_uteg",
+  keywords: [
+    "modalidades",
+    "modalidad",
+  ],
+  response: `
+<b>MODALIDADES DE ESTUDIO EN UTEG</b><br><br>
+
+En UTEG existen tres modalidades de estudio diseñadas para adaptarse a distintos estilos de vida, necesidades y tiempos de los estudiantes: Presencial, Flex y Online.<br>
+Todas las modalidades cuentan con validez oficial y mantienen el mismo enfoque académico y de calidad educativa.<br><br>
+
+<b>MODALIDAD PRESENCIAL</b><br>
+Es la modalidad tradicional de estudio.<br>
+Incluye asistencia diaria al plantel, horarios fijos, contacto directo con docentes y uso constante de las instalaciones académicas.<br>
+El estudiante cuenta con acompañamiento continuo, seguimiento académico y una experiencia completa de vida escolar.<br>
+Es ideal para alumnos que buscan estructura, rutina definida y convivencia directa en el campus.<br><br>
+
+<b>MODALIDAD FLEX</b><br>
+Es una modalidad mixta que combina clases presenciales con actividades en línea.<br>
+Ofrece mayor flexibilidad de horarios sin perder el acompañamiento académico y el contacto con la institución.<br>
+Permite equilibrar el estudio con trabajo u otras responsabilidades personales.<br>
+Es ideal para personas que trabajan, tienen compromisos adicionales o requieren mayor flexibilidad en su agenda.<br><br>
+
+<b>MODALIDAD ONLINE</b><br>
+Es una modalidad 100% en línea, sin necesidad de asistir al plantel.<br>
+El alumno accede a una plataforma digital disponible 24/7, con contenidos, actividades y evaluaciones en línea.<br>
+Brinda máxima flexibilidad de horarios y ubicación.<br>
+Es ideal para estudiantes con horarios variables, trabajo de tiempo completo, o que viven fuera de la ciudad.<br><br>
+
+La elección de la modalidad depende del tiempo disponible del alumno, su estilo de aprendizaje, nivel de autonomía y necesidades personales.
+`
+},
+ {
+  id: "incorporaciones_sep_vs_udeg",
+  keywords: [
+    "incorporacion",
+    "incorporaciones",
+    "incorporado",
+    "diferencias",
+    "planes de estudio",
+    "validez",
+    "que es sep",
+    "que es udeg"
+  ],
+  response: `
+<b>INCORPORACIONES ACADÉMICAS EN UTEG: SEP VS UDEG</b><br><br>
+
+En UTEG existen dos tipos de incorporación oficial para sus programas académicos: incorporación SEP e incorporación UDEG.<br>
+Ambas cuentan con validez oficial y permiten obtener un título reconocido; la diferencia principal radica en el modelo académico, el ritmo de estudio y el perfil del alumno al que están dirigidos.<br><br>
+
+<b>INCORPORACIÓN SEP</b><br>
+La incorporación SEP corresponde a planes de estudio autorizados por la Secretaría de Educación Pública.<br>
+Estos programas se caracterizan por tener un enfoque más flexible y acelerado, pensado para alumnos que trabajan o que buscan concluir su carrera en menor tiempo.<br>
+Incluyen esquemas como modalidad 7x2, cuatrimestral o trimestral, lo que permite avanzar de forma continua durante el año.<br>
+Este tipo de incorporación brinda mayor adaptabilidad de horarios y ritmo de estudio.<br><br>
+
+<b>INCORPORACIÓN UDEG</b><br>
+La incorporación UDEG corresponde a planes de estudio avalados por la Universidad de Guadalajara.<br>
+Se basan en un modelo académico más tradicional, con estructura semestral y un enfoque alineado a los estándares de una universidad pública.<br>
+Estos programas mantienen un ritmo más regular, con formación teórica y académica más extensa.<br>
+Están dirigidos a alumnos que buscan una experiencia universitaria clásica y una estructura académica definida.<br><br>
+
+<b>DIFERENCIAS PRINCIPALES</b><br>
+La diferencia entre ambos tipos de incorporación no está en la validez oficial, ya que ambas son reconocidas.<br>
+Las principales diferencias se encuentran en el ritmo de estudio, la estructura del plan académico y el perfil del estudiante al que se orienta cada modelo.<br><br>
+
+La elección entre SEP o UDEG depende de las necesidades del alumno, su disponibilidad de tiempo, su estilo de aprendizaje y sus objetivos profesionales.
+`
+},
+ {
+  id: "rvoe_federal_vs_estatal",
+  keywords: [
+    "rvoe",
+    "federal",
+    "estatal",
+    "rvoe federal",
+    "rvoe estatal",
+    "diferencia rvoe",
+    "validez",
+  ],
+  response: `
+<b>RVOE FEDERAL Y RVOE ESTATAL: DIFERENCIAS Y VALIDEZ</b><br><br>
+
+El RVOE es el Reconocimiento de Validez Oficial de Estudios que autoriza legalmente un programa académico en México.<br>
+Este reconocimiento garantiza que los estudios cumplen con los lineamientos académicos establecidos por la autoridad educativa y que los títulos obtenidos tienen validez oficial.<br><br>
+
+Existen dos tipos de RVOE: RVOE federal y RVOE estatal.<br>
+Ambos permiten al estudiante continuar estudios, tramitar título y obtener cédula profesional.<br><br>
+
+<b>RVOE FEDERAL</b><br>
+El RVOE federal es otorgado directamente por la Secretaría de Educación Pública a nivel nacional.<br>
+La supervisión académica y administrativa del programa depende de la SEP federal.<br>
+Este tipo de RVOE aplica a programas que son evaluados y autorizados de manera centralizada.<br><br>
+
+<b>RVOE ESTATAL</b><br>
+El RVOE estatal es otorgado por la Secretaría de Educación del estado correspondiente.<br>
+La autorización se realiza bajo facultades delegadas por la SEP federal.<br>
+La supervisión y seguimiento del programa académico es responsabilidad de la autoridad educativa estatal.<br><br>
+
+<b>VALIDEZ OFICIAL</b><br>
+Tanto el RVOE federal como el RVOE estatal tienen validez oficial en todo México.<br>
+Ambos permiten la expedición de títulos y cédulas profesionales sin ninguna diferencia legal entre ellos.<br><br>
+
+La diferencia entre ambos tipos de RVOE radica únicamente en la autoridad que autoriza y supervisa el programa académico, no en la validez del título ni en el reconocimiento de los estudios.
+`
+},
+{
+  "id": "extension_universitaria_educacion_continua",
+  "keywords": [
+    "extension universitaria",
+    "educacion continua",
+    "cursos",
+    "diplomados",
+    "talleres",
+    "seminarios",
+    "certificaciones",
+  ],
+  "response": `
+<b>EXTENSIÓN UNIVERSITARIA Y EDUCACIÓN CONTINUA</b><br><br>
+
+La Extensión Universitaria es un programa de educación continua que ofrece cursos, diplomados, talleres, seminarios y certificaciones especializadas.<br>
+Está dirigida a estudiantes, egresados, profesionistas en activo y público en general que buscan actualizarse o fortalecer su perfil profesional.<br><br>
+
+Esta modalidad de formación se caracteriza por su flexibilidad y enfoque práctico, permitiendo adquirir conocimientos específicos o desarrollar habilidades concretas sin necesidad de cursar un programa académico formal como una licenciatura o un posgrado.<br><br>
+
+<b>ALCANCE Y OBJETIVO</b><br>
+La Extensión Universitaria no equivale a una licenciatura ni a un posgrado.<br>
+Funciona como un complemento académico y profesional enfocado en la especialización, actualización o certificación de conocimientos aplicables directamente al entorno laboral.<br><br>
+
+Su objetivo principal es mantener a las personas actualizadas frente a las tendencias, exigencias y cambios del mercado profesional, fortaleciendo su perfil laboral, ampliando competencias y respondiendo a necesidades específicas de cada sector.<br><br>
+
+<b>ÁREAS DE CONOCIMIENTO</b><br>
+Los programas de Extensión Universitaria se ofrecen en diversas áreas del conocimiento, entre las que se incluyen:<br>
+• Marketing y comunicación.<br>
+• Gerencia y negocios.<br>
+• Ingeniería y tecnología.<br>
+• Educación y pedagogía.<br>
+• Diseño, finanzas, derecho, deportes y otras áreas especializadas.<br><br>
+
+Algunos programas cuentan con enfoque o alcance internacional, ya sea por su contenido, certificaciones asociadas o alineación con estándares globales.<br><br>
+
+<b>DURACIÓN Y MODALIDAD</b><br>
+Los programas de extensión suelen tener una duración corta o media.<br>
+Se imparten bajo esquemas prácticos, con horarios accesibles y orientación a la aplicación inmediata del conocimiento.<br>
+La oferta académica puede variar por periodo y está sujeta a disponibilidad.<br><br>
+
+Para solicitar información detallada sobre la oferta vigente, requisitos, costos o modalidades de los programas de Extensión Universitaria, el contacto oficial es el correo electrónico: <b>extension@uteg.edu.mx</b>.
+`
+},
+{
+  id: "bolsa_de_trabajo_uteg",
+  keywords: [
+    "bolsa de trabajo",
+    "empleo",
+    "bolsa",
+    "trabajo",
+    "practicas",
+    "primer empleo",
+    "vacantes"
+  ],
+  response: `
+<b>BOLSA DE TRABAJO UTEG</b><br><br>
+
+La Bolsa de Trabajo UTEG es un servicio institucional de vinculación laboral que tiene como objetivo apoyar a estudiantes y egresados en su proceso de inserción al mercado laboral.<br>
+A través de este servicio, UTEG conecta a los alumnos con empresas reales que buscan talento universitario acorde a su perfil académico y profesional.<br><br>
+
+<b>OPORTUNIDADES QUE OFRECE</b><br>
+La Bolsa de Trabajo UTEG ofrece oportunidades de:<br>
+• Prácticas profesionales.<br>
+• Servicio social.<br>
+• Primer empleo.<br>
+• Empleo formal.<br>
+• Crecimiento y desarrollo profesional.<br><br>
+
+Es importante señalar que la Bolsa de Trabajo no garantiza un empleo automático, pero sí genera oportunidades reales alineadas a la formación académica del alumno.<br><br>
+
+<b>¿QUIÉNES PUEDEN UTILIZARLA?</b><br>
+Este servicio está disponible para alumnos activos, alumnos próximos a egresar y egresados de UTEG.<br><br>
+
+<b>PROCESO DE USO</b><br>
+El proceso para utilizar la Bolsa de Trabajo incluye:<br>
+• Registro en el sistema correspondiente.<br>
+• Carga y actualización del currículum vitae.<br>
+• Consulta de vacantes disponibles.<br>
+• Postulación directa a las vacantes de interés.<br>
+• Contacto directo con las empresas reclutadoras.<br><br>
+
+UTEG actúa únicamente como vinculador entre el alumno y las empresas, no como empleador.<br><br>
+
+<b>RECOMENDACIONES</b><br>
+Para aprovechar mejor la Bolsa de Trabajo, se recomienda mantener el CV actualizado, postularse de forma activa y dar seguimiento puntual a los procesos de selección.<br><br>
+
+Para información o postulación directa, el contacto institucional es el correo electrónico: <b>angeles.gonzalez@uteg.edu.mx</b>.
+`
+},
+  {
+  id: "calidad_profesores_uteg",
+  keywords: [
+    "profesores",
+    "maestros",
+    "docentes",
+    "calidad",
+    "nivel academico",
+    "experiencia",
+    "como son los maestros",
+  ],
+  response: `
+<b>CALIDAD DEL PROFESORADO EN UTEG</b><br><br>
+
+En UTEG, los profesores se distinguen por su alta calidad académica, experiencia profesional real y compromiso con el aprendizaje de los estudiantes.<br>
+El cuerpo docente está conformado por profesionistas con licenciatura concluida en su área de especialidad y, en muchos casos, con estudios de maestría, posgrado y certificaciones adicionales reconocidas.<br><br>
+
+<b>EXPERIENCIA PROFESIONAL Y ENFOQUE PRÁCTICO</b><br>
+Además de su formación académica, los docentes cuentan con experiencia profesional fuera del ámbito educativo.<br>
+Esto permite integrar la teoría con la práctica aplicada al contexto real del mercado laboral.<br>
+Durante las clases se incorporan casos reales, simulaciones, escenarios profesionales y ejemplos actuales de la industria.<br><br>
+
+<b>METODOLOGÍA DE ENSEÑANZA</b><br>
+Los profesores utilizan metodologías activas de aprendizaje, tales como:<br>
+• Aprendizaje basado en proyectos.<br>
+• Estudios de caso.<br>
+• Resolución de problemas.<br>
+• Trabajo colaborativo.<br><br>
+
+Estas metodologías reducen la brecha entre la formación académica y las exigencias laborales.<br><br>
+
+<b>ACOMPAÑAMIENTO AL ESTUDIANTE</b><br>
+El profesorado se caracteriza por brindar atención personalizada, disponibilidad para resolver dudas y seguimiento continuo al progreso académico.<br>
+La asesoría docente está orientada al desarrollo de competencias profesionales, no únicamente a la obtención de una calificación.<br><br>
+
+<b>EVALUACIÓN Y MEJORA CONTINUA</b><br>
+UTEG evalúa de manera constante el desempeño docente mediante opiniones estudiantiles, resultados de aprendizaje y retroalimentación académica.<br>
+Este proceso impulsa la mejora continua en didáctica, actualización disciplinar y calidad educativa.<br><br>
+
+<b>ACTUALIZACIÓN Y ÉTICA PROFESIONAL</b><br>
+La institución fomenta la actualización permanente del profesorado a través de cursos, talleres y procesos de innovación educativa.<br>
+Asimismo, promueve la integración de competencias digitales y herramientas tecnológicas actuales.<br><br>
+
+Todo el ejercicio docente se sustenta en una ética profesional sólida basada en el respeto, la honestidad, la responsabilidad y el trabajo colaborativo.<br><br>
+
+La calidad del profesorado se refleja en los resultados académicos, la inserción laboral de los egresados y el cumplimiento de estándares educativos, asegurando una formación relevante, aplicable y de alto impacto.
+`
+},
+{
+  id: "gestion_de_citas_uteg",
+  keywords: [
+    "gestion de citas",
+    "citas",
+    "cita",
+    "gestiona",
+    "como se gestionan las citas",
+    "confirmacion de citas",
+    "cita asistida",
+    "cita no asistida",
+    "venta compartida",
+  ],
+  response: `
+<b>GESTIÓN DE CITAS EN UTEG</b><br><br>
+
+La gestión de citas en UTEG sigue un proceso definido cuyo objetivo es asegurar un seguimiento correcto del aspirante y el reconocimiento adecuado de la venta.<br>
+Este proceso involucra tanto al equipo de Contact Center (CC) como al personal de plantel, y se gestiona a través de Salesforce.<br><br>
+
+<b>CREACIÓN Y ORIGEN DE LA CITA</b><br>
+El proceso inicia cuando el equipo de CC crea el evento o cita con base en el seguimiento previo realizado por medios digitales.<br>
+Este seguimiento puede ir desde un convencimiento ya trabajado hasta una cita donde el proceso se realizará completamente desde cero en el plantel.<br><br>
+
+En Salesforce, el asesor de CC debe dejar una radiografía clara y detallada del seguimiento realizado, permitiendo que el plantel conozca el contexto del aspirante y la forma correcta de abordar la cita.<br><br>
+
+Una vez creada, la cita se asigna con estatus “Sin gestión” y se canaliza al coordinador de plantel, quien decide su asignación conforme a criterios internos.<br><br>
+
+<b>CONTACTO Y CONFIRMACIÓN DE LA CITA</b><br>
+Una vez asignada la cita, el asesor de plantel debe comunicarse de inmediato con el aspirante.<br>
+El primer intento debe realizarse vía llamada telefónica y, en caso de no obtener respuesta, se debe continuar el contacto por WhatsApp.<br><br>
+
+Al obtener respuesta del aspirante, el asesor debe enviar el documento foliado de cita a plantel, cargar la evidencia correspondiente en Salesforce y actualizar el estatus de la cita según el resultado:<br>
+• <b>Confirmada:</b> cuando el aspirante acepta la cita.<br>
+• <b>En espera de confirmación:</b> cuando no se obtiene respuesta por ningún medio.<br>
+• <b>Cancelada:</b> cuando el aspirante indica que no acepta la cita, realizando previamente labor de convencimiento.<br><br>
+
+<b>DÍA DE LA CITA</b><br>
+El día de la cita, si el aspirante asiste al plantel, debe recibirse en piso de venta y la cita debe tipificarse como “Asistió” antes de iniciar la conversación.<br>
+Esta acción es indispensable, ya que permite que la venta se registre automáticamente como <b>Venta Compartida</b> en caso de concretarse la inscripción.<br><br>
+
+Si el aspirante no asiste, se deben esperar 30 minutos posteriores a la hora pactada.<br>
+Durante este periodo se debe intentar contactarlo para conocer el motivo de la inasistencia.<br>
+Si no se obtiene respuesta, la cita debe tipificarse como “No asistió”.<br><br>
+
+<b>SEGUIMIENTO POST CITA</b><br>
+Toda cita asistida que no se convierta en inscripción debe cerrar con un acuerdo claro y definido.<br>
+Estos acuerdos pueden incluir fecha de pago, reagenda de cita, envío de información a padres, validación académica o cambio de carrera.<br>
+No deben dejarse seguimientos abiertos o indefinidos como “luego te marco”.<br><br>
+
+El seguimiento debe respetar la fecha y hora pactadas.<br>
+Si no se obtiene respuesta, el asesor debe proponer una alternativa inmediata y continuar el contacto.<br><br>
+
+Las reagendas deben realizarse de manera estratégica, preferentemente dentro de las siguientes 48 horas y ajustando el canal de contacto cuando sea necesario.<br><br>
+
+En casos donde el aspirante requiera validación académica o mayor confianza, el asesor debe solicitar apoyo de Dirección Académica, coordinación o un asesor senior, sin abandonar el seguimiento.<br><br>
+
+<b>REGLAS SOBRE CITAS NO ASISTIDAS</b><br>
+Una cita tipificada como “No asistió” no puede regresar de etapa.<br>
+Si el aspirante decide continuar posteriormente, se debe solicitar un segundo evento al coordinador para su gestión con CC.<br><br>
+
+<b>VENTA COMPARTIDA</b><br>
+Las ventas compartidas forman parte del modelo comercial de UTEG y reconocen tanto al área que captó al aspirante como al plantel que cerró la inscripción.<br><br>
+
+Para que una venta sea reconocida como compartida, se deben cumplir las siguientes condiciones:<br>
+• El origen del aspirante debe ser real y sin modificaciones.<br>
+• La cita debe estar correctamente tipificada como “Asistió”.<br>
+• El pago debe cargarse correctamente en el sistema.<br><br>
+
+Si la cita no se tipifica correctamente y la oportunidad pasa a estado “Pagado” sin activar la Venta Compartida, el proceso no puede corregirse y la venta contará únicamente para el asesor de CC.<br><br>
+
+Cualquier alteración en el origen, falta de tipificación o cierre fuera de sistema puede provocar que la venta no sea reconocida como compartida.<br>
+Estos casos pueden ser revisados en auditorías comerciales.<br><br>
+
+<b>Está estrictamente prohibido cambiar el origen de un aspirante con el objetivo de apropiarse de una venta.</b>
+`
+},
+{
+  id: "medios_o_formas_de_pago_tiene_uteg",
+  keywords: [
+    "que medios de pago",
+    "medios de pago",
+    "metodos",
+    "formas de pago",
+    "que formas de pago",
+    "pago inscripcion",
+    "como pagar",
+    "tiene",
+    "pago",
+    "metodos",
+    "formas",
+    "formas de pago",
+    "metodos de pago",
+    "terminal",
+    "liga de pago",
+    "banco",
+    "app bancaria",
+    "oxxo",
+    "pago"
+  ],
+  response: `
+<b>MEDIOS Y FORMAS DE PAGO EN UTEG</b><br><br>
+
+El Centro Universitario UTEG acepta únicamente ciertos medios de pago para aspirantes de primer ingreso en el concepto de inscripción.<br>
+Es fundamental considerar cada medio y sus condiciones, ya que de ello depende que el pago se refleje correctamente y en tiempo para continuar con el proceso académico.<br><br>
+
+<b>TERMINAL PUNTO DE VENTA (TPV)</b><br>
+Este es el medio de pago más rápido y efectivo cuando el aspirante se encuentra físicamente en el plantel.<br>
+El pago se refleja de manera inmediata.<br>
+Aplica únicamente para programas presenciales UTEG.<br>
+No aplica para programas en modalidad Online ni Flex.<br><br>
+
+<b>LIGA DE PAGO</b><br>
+La liga de pago se utiliza cuando el aspirante no cuenta con tarjeta física en plantel o requiere realizar el pago de manera remota.<br>
+El pago se refleja de forma inmediata.<br>
+Aplica exclusivamente para programas presenciales UTEG.<br>
+No aplica para programas en modalidad Online ni Flex.<br><br>
+
+<b>PAGO EN BANCOS (REFERENCIA BANCARIA)</b><br>
+Este pago se realiza mediante practicaja, no en ventanilla bancaria.<br>
+La referencia bancaria generada corresponde al banco <b>Banca Mifel</b>, aun cuando el pago se realice desde aplicaciones bancarias o cajeros de otros bancos como Santander o BBVA.<br>
+El pago debe efectuarse como pago de servicio, ingresando correctamente el número de referencia y el convenio correspondiente.<br>
+Aplica para programas presenciales UTEG, Flex y Online.<br>
+El reflejo del pago puede tardar hasta 72 horas.<br><br>
+
+<b>PAGO POR APP BANCARIA</b><br>
+El pago se realiza desde la aplicación móvil del banco como pago de servicio.<br>
+La referencia utilizada corresponde igualmente a <b>Banca Mifel</b>.<br>
+Aplica para programas presenciales UTEG.<br>
+El reflejo del pago puede tardar hasta un máximo de 72 horas.<br>
+No aplica para programas Online ni Flex.<br><br>
+
+<b>PAGO EN OXXO</b><br>
+El pago en OXXO aplica para programas presenciales UTEG, Flex y Online.<br>
+El reflejo del pago puede tardar hasta 72 horas.<br>
+Es indispensable solicitar y conservar el voucher o ticket de pago para cualquier aclaración.<br><br>
+
+<b>CONSIDERACIONES IMPORTANTES</b><br>
+En todos los casos es obligatorio contar con el comprobante o ticket de pago como evidencia en Salesforce.<br>
+Se debe verificar que la referencia del ticket coincida exactamente con el número de referencia de la ficha de pago.<br>
+Si el pago no se refleja después de 72 horas, se debe accionar de inmediato para identificar la causa y evitar retrasos en el proceso de inscripción.
+`
+},
+  {
+  id: "area_de_vinculacion_uteg",
+  keywords: [
+    "vinculacion",
+    "area de vinculacion",
+    "que hace vinculacion",
+  ],
+  response: `
+<b>ÁREA DE VINCULACIÓN EN UTEG</b><br><br>
+
+El Área de Vinculación en UTEG es responsable de verificar vía telefónica la información registrada del alumno en Salesforce.<br>
+Su función principal es asegurar que los datos generales, académicos y de pagos sean correctos y estén completos antes de permitir el avance en el proceso académico.<br><br>
+
+<b>VALIDACIÓN DE INFORMACIÓN</b><br>
+Durante la llamada de validación, Vinculación confirma información personal, académica y administrativa del alumno.<br>
+Cuando toda la información y documentación cumple con los requisitos establecidos, el área procede a cambiar el estatus del alumno a <b>Admitido</b>.<br><br>
+
+Este estatus permite que el área de Asesores Educativos realice la carga de materias correspondientes y que el alumno inicie formalmente su vida académica.<br><br>
+
+<b>CASOS ESPECIALES: BIS Y LICENCIATURAS SEP</b><br>
+En el caso de alumnos BIS y Licenciaturas incorporadas a SEP, el proceso es distinto.<br>
+Estos alumnos no pasan por el área de Postventa.<br>
+La documentación se carga directamente en el portal ESPACIO.<br><br>
+
+El Área de Vinculación realiza las llamadas de validación y acompañamiento para confirmar que la documentación sea correcta y completa.<br>
+Una vez validada la información, Vinculación otorga directamente el estatus de <b>Admitido</b>.<br><br>
+
+<b>SEGUIMIENTO ACADÉMICO</b><br>
+Adicionalmente, el Área de Vinculación realiza seguimientos de Toma de Lista.<br>
+Este proceso tiene como objetivo confirmar que los alumnos se encuentren asistiendo a clases y se mantengan activos en aula durante el inicio de su ciclo académico.
+`
+},
+ {
+  id: "area_postventa_uteg",
+  keywords: [
+    "postventa",
+    "que hace",
+    "area de postventa",
+    "post venta",
+  ],
+  response: `
+<b>ÁREA DE POSTVENTA EN UTEG</b><br><br>
+
+El área de Postventa en UTEG es responsable de recibir, revisar y gestionar la documentación de los alumnos de Bachillerato y Licenciatura incorporados a UDG.<br>
+Su función principal es asegurar que los expedientes académicos estén completos y correctamente integrados para que el alumno pueda avanzar en su proceso institucional.<br><br>
+
+<b>GESTIÓN DE DOCUMENTACIÓN</b><br>
+Una vez que el alumno entrega su documentación, el área de Postventa se encarga de cargarla en el sistema SEDE.<br>
+Este proceso tiene como objetivo que el alumno alcance el estatus de <b>Validado</b>, confirmando que cumple con los requisitos documentales establecidos.<br><br>
+
+<b>VALIDACIÓN Y CANALIZACIÓN</b><br>
+Cuando el área de Postventa confirma que la documentación ha sido cargada y validada correctamente en el sistema, se notifica al área de Vinculación.<br>
+A partir de este punto, Vinculación realiza una llamada de validación final con el alumno.<br><br>
+
+Esta validación incluye la confirmación de datos generales, información académica y datos relacionados con pagos.<br><br>
+
+Con la validación completada por Vinculación, el alumno puede obtener el estatus de <b>Admitido</b> y continuar formalmente con su proceso académico dentro de la institución.
+`
+},
+ {
+  id: "reasignacion_leads_oportunidades",
+  keywords: [
+    "reasignacion",
+    "reasignar lead",
+    "reasignar oportunidad",
+    "cambio de asesor",
+    "reasignacion",
+    "solicitar",
+    "lead sin seguimiento",
+    "lead perdido",
+    "lead",
+    "leads",
+    "dato",
+    "solicitar reasignacion"
+  ],
+  response: `
+<b>REASIGNACIÓN DE LEADS Y OPORTUNIDADES</b><br><br>
+
+Una reasignación es el proceso mediante el cual se solicita que un lead y/o una oportunidad sea asignado a un asesor distinto al originalmente responsable.<br>
+Este procedimiento tiene como objetivo garantizar la correcta atención del aspirante y evitar la pérdida de oportunidades por falta de seguimiento.<br><br>
+
+<b>CONDICIONES PARA SOLICITAR UNA REASIGNACIÓN</b><br>
+La reasignación únicamente puede realizarse conforme al reglamento establecido por UTEG y debe ser solicitada al coordinador correspondiente.<br><br>
+
+La reasignación puede solicitarse en los siguientes casos:<br>
+• Cuando un lead no ha sido trabajado ni contactado durante un periodo mayor a 48 horas.<br>
+• Cuando no existen comentarios, notas o actividades registradas en el sistema que evidencien un seguimiento adecuado.<br>
+• Cuando no hay evidencia clara de gestión por parte del asesor asignado.<br>
+• Cuando el lead u oportunidad se encuentra en estatus <b>Perdido</b>, en cuyo caso puede reasignarse sin inconveniente.<br><br>
+
+<b>OBJETIVO DE LA REASIGNACIÓN</b><br>
+El objetivo principal de la reasignación es asegurar que el aspirante reciba atención oportuna, seguimiento adecuado y acompañamiento correcto durante su proceso de decisión.<br>
+Este mecanismo busca proteger la oportunidad comercial y mantener la calidad del servicio institucional.<br><br>
+
+Toda reasignación debe quedar debidamente documentada y autorizada conforme a los lineamientos internos, evitando reasignaciones arbitrarias o sin sustento operativo.
+`
+},
+ {
+  id: "rol_del_coordinador_inscripciones",
+  keywords: [
+    "rol del coordinador",
+    "coordinador",
+    "que hace",
+    "coordinador de inscripciones",
+    "funciones del coordinador",
+    "que hace el coordinador",
+    "apoyo del coordinador",
+    "coordinacion comercial"
+  ],
+  response: `
+<b>ROL DEL COORDINADOR(A) DE INSCRIPCIONES</b><br><br>
+
+El rol del Coordinador(a) del equipo de Inscripciones es asegurar una operación ordenada, medible y centrada tanto en la atención al aspirante como en el desempeño del equipo comercial.<br>
+Comprender con claridad este rol permite a los asesores identificar qué actividades pueden escalar o delegar, y garantiza que los casos críticos reciban una resolución adecuada.<br><br>
+
+<b>GESTIÓN COMERCIAL Y PROSPECCIÓN</b><br>
+El Coordinador es responsable, en conjunto con el área de Prospección, de asegurar la obtención y uso de bases de datos de calidad.<br>
+Debe mantenerse atento a los calendarios de prospección, evaluar la calidad de las bases, revisar el seguimiento realizado y promover el apoyo entre asesores para lograr un contacto efectivo con los aspirantes.<br><br>
+
+<b>SEGUIMIENTO DE PAGOS Y ESCALAMIENTOS</b><br>
+El Coordinador apoya en el escalamiento de pagos no reflejados, dando seguimiento al proceso de aclaración correspondiente.<br>
+En estos casos, debe copiar al asesor involucrado en el correo de seguimiento para asegurar trazabilidad y comunicación clara.<br><br>
+
+<b>METAS, OBJETIVOS Y COMUNICACIÓN</b><br>
+Es responsabilidad del Coordinador mantener al equipo informado y actualizado sobre las metas del mes y del ciclo.<br>
+Su comunicación está orientada al cumplimiento de objetivos, resultados comerciales y comisiones.<br><br>
+
+Asimismo, comunica de forma constante el estatus de los grupos en plantel mediante el formato <b>F-UB-01</b>, con el objetivo de alinear los esfuerzos comerciales y enfocar la operación en una sola estrategia.<br><br>
+
+<b>SUPERVISIÓN Y CALIDAD DE ATENCIÓN</b><br>
+El Coordinador monitorea llamadas, atención en piso y procesos de cierre para asegurar el cumplimiento de los parámetros establecidos.<br>
+Esto incluye la correcta atención de referidos, el manejo de objeciones y la ejecución de cierres efectivos.<br><br>
+
+<b>GESTIÓN OPERATIVA Y APOYO AL EQUIPO</b><br>
+Dentro de sus funciones se encuentra la gestión de solicitudes de reasignación, siempre que cumplan con los parámetros de asignación definidos por la institución.<br><br>
+
+Adicionalmente, el Coordinador mantiene informados de manera diaria a los asesores sobre situaciones relevantes, cambios operativos o temas clave que puedan impactar su desempeño.<br><br>
+
+El Coordinador de Inscripciones actúa como enlace entre el equipo comercial y las áreas institucionales, asegurando orden, seguimiento, comunicación efectiva y resultados sostenibles.
+`
+},
+ {
+  id: "estados_auxiliares_genesys",
+  keywords: [
+    "estados auxiliares",
+    "estados",
+    "que son",
+    "auxiliares",
+    "estados genesys",
+    "auxiliares genesys",
+    "como usar estados",
+    "genesys estados",
+    "disponible",
+    "en cola",
+    "ocupado",
+    "descanso",
+    "capacitacion",
+    "reunion"
+  ],
+  response: `
+<b>ESTADOS AUXILIARES EN GENESYS</b><br><br>
+
+Los estados auxiliares en Genesys son los estatus que indican en tiempo real qué está haciendo el asesor durante su jornada laboral.<br>
+Su correcta utilización es fundamental para el seguimiento diario de la operación, la medición de productividad y el cumplimiento de los KPI definidos por el área comercial.<br><br>
+
+Cada estado tiene una función específica y debe utilizarse de manera estricta y responsable, ya que Genesys monitorea y registra el tiempo efectivo en cada uno de ellos.<br><br>
+
+<b>ESTADOS Y SU USO CORRECTO</b><br><br>
+
+<b>Disponible</b><br>
+Este estado debe utilizarse únicamente al iniciar la jornada laboral, antes de comenzar las actividades operativas.<br>
+En este estado, el asesor no está disponible para realizar ni recibir llamadas.<br>
+No debe utilizarse durante la operación activa.<br><br>
+
+<b>En Cola</b><br>
+Es el estado principal de trabajo.<br>
+Indica que el asesor está activo y correctamente cargado en las filas de atención.<br>
+Permite realizar y recibir llamadas.<br>
+Todo el tiempo operativo de llamadas debe concentrarse en este estado.<br><br>
+
+<b>Ocupado</b><br>
+Debe utilizarse únicamente cuando el asesor realiza actividades laborales que no implican atención de llamadas.<br>
+Ejemplos: atención de citas en plantel, recorridos, apoyo a alumnos, gestiones presenciales o actividades administrativas autorizadas.<br><br>
+
+<b>Ausente</b><br>
+Este estado no se utiliza en planteles.<br><br>
+
+<b>Descanso</b><br>
+Se emplea exclusivamente para salidas cortas no relacionadas con actividades laborales.<br>
+Ejemplos: ir al baño o pausas breves.<br>
+No debe utilizarse para actividades de trabajo.<br><br>
+
+<b>Capacitación</b><br>
+Se utiliza cuando el asesor participa en sesiones formales de capacitación.<br>
+Aplica para capacitaciones impartidas por el área de Capacitación, el coordinador u otro departamento institucional.<br><br>
+
+<b>Reunión</b><br>
+Se usa únicamente cuando el asesor se encuentra en una reunión presencial o remota convocada por algún líder, coordinación o área institucional.<br>
+Debe tener siempre un fin laboral.<br><br>
+
+<b>MONITOREO Y MÉTRICAS</b><br>
+Genesys realiza monitoreos constantes para medir:<br>
+• Tiempo efectivo en cada estado por asesor.<br>
+• Tiempo ocioso.<br>
+• Número de llamadas realizadas.<br>
+• Tiempo real de conversación.<br><br>
+
+Por ejemplo, si al final del día se registran 150 llamadas y únicamente 10 minutos de tiempo efectivo hablando, la métrica indica que la mayoría de las llamadas fueron no contestadas.<br>
+Este análisis permite identificar la necesidad de incrementar el volumen de llamadas para mejorar la efectividad y el desempeño comercial.<br><br>
+
+El uso incorrecto de los estados auxiliares impacta directamente en los indicadores de desempeño y puede derivar en observaciones operativas o acciones correctivas.
+`
+},
+  {
+  id: "auto_answer_genesys",
+  keywords: [
+    "auto answer",
+    "autoanswer",
+    "como funciona",
+    "auto contestacion",
+    "auto",
+    "contesta solo",
+    "genesys auto answer",
+    "marcacion automatica",
+  ],
+  response: `
+<b>AUTO ANSWER EN GENESYS</b><br><br>
+
+El Auto Answer en Genesys es una función mediante la cual yo, Genesys, contesto la interacción automáticamente por ti, sin que tengas que presionar aceptar, levantar la llamada ni realizar ninguna acción manual.<br>
+En el momento en que entra una llamada o interacción, yo la acepto, te conecto y la conversación comienza de inmediato.<br><br>
+
+<b>¿CÓMO FUNCIONA EL AUTO ANSWER?</b><br>
+El flujo de Auto Answer funciona de la siguiente manera:<br><br>
+
+Primero, te colocas en el estado <b>Disponible</b>, lo que me indica que estás listo para recibir interacciones.<br><br>
+
+Después, entra una llamada proveniente de campañas automáticas, bots, marcación predictiva o flujos inbound configurados con Auto Answer.<br>
+En este punto no hay timbre, no hay botón de aceptar ni cuenta regresiva.<br><br>
+
+Finalmente, yo contesto la llamada por ti.<br>
+La interacción ya está conectada, el cliente ya te escucha y el tiempo de conversación comienza a correr inmediatamente.<br><br>
+
+<b>PUNTOS CLAVE PARA EL ASESOR</b><br>
+Cuando la llamada aparece en tu pantalla, ya es una conversación activa.<br>
+No existe tiempo de preparación, vista previa ni segundos para leer información antes de hablar.<br>
+Debes entrar directamente al speech desde el primer segundo.<br><br>
+
+Es muy importante que no hables con compañeros, no te mutes sin cuidado y no esperes a ver si el cliente contesta, ya que el cliente ya está en línea.<br><br>
+
+<b>¿PARA QUÉ SE UTILIZA EL AUTO ANSWER?</b><br>
+El Auto Answer está diseñado para maximizar el contacto efectivo.<br>
+Reduce segundos muertos, elimina tiempos de espera y evita que el cliente cuelgue mientras la llamada suena.<br><br>
+
+Se utiliza principalmente en:<br>
+• Campañas outbound automáticas.<br>
+• Bots que transfieren a agente.<br>
+• Marcación predictiva.<br>
+• Power dialing.<br><br>
+
+Es opcional en inbound tradicional y no aplica para llamadas manuales.<br><br>
+
+<b>BENEFICIOS OPERATIVOS</b><br>
+El Auto Answer incrementa la productividad al generar menos fricción en la operación.<br>
+Permite más conversaciones reales, menos rechazos por no aceptar llamadas y un mejor aprovechamiento del tiempo efectivo de los asesores.<br><br>
+
+<b>DIFERENCIA CONTRA LLAMADAS MANUALES</b><br>
+A diferencia de una llamada manual, el Auto Answer no hace sonar el teléfono, no requiere que aceptes la llamada y no genera espera para el cliente.<br>
+Por esta razón, es ideal para operaciones con bots y esquemas de marcación automática.<br><br>
+
+Usar correctamente el Auto Answer es clave para el desempeño individual y para el éxito de las campañas automatizadas.
+`
+},
+ {
+  id: "after_call_work_acw_genesys",
+  keywords: [
+    "acw",
+    "after call work",
+    "aftercallwork",
+    "genesys acw",
+  ],
+  response: `
+<b>AFTER CALL WORK (ACW) EN GENESYS</b><br><br>
+
+El After Call Work, conocido como <b>ACW</b>, es el estado obligatorio en el que yo, Genesys, te coloco automáticamente después de que termina una llamada.<br>
+Aunque la llamada ya finalizó y el cliente ya colgó, tu trabajo aún no termina.<br><br>
+
+<b>¿CÓMO FUNCIONA EL ACW?</b><br>
+El flujo del ACW funciona de la siguiente manera:<br><br>
+
+Primero, atiendes una llamada, ya sea inbound, outbound, proveniente de un bot, de marcación automática o de una llamada manual.<br><br>
+
+Cuando la llamada termina, ya sea porque el cliente cuelga o porque tú finalizas la interacción, no regresas al estado Disponible.<br>
+En ese momento yo te envío de forma automática al estado de <b>After Call Work</b>.<br><br>
+
+Mientras estás en ACW:<br>
+• No entran llamadas nuevas.<br>
+• Puedes trabajar la interacción sin interrupciones.<br>
+• Se comienza a medir el tiempo de ACW.<br><br>
+
+<b>¿PARA QUÉ SIRVE EL ACW?</b><br>
+El ACW existe para que puedas cerrar correctamente la interacción.<br>
+Durante este estado debes:<br>
+• Tipificar la llamada de forma correcta (motivo, resultado y estatus del prospecto).<br>
+• Capturar notas relevantes, comentarios del cliente y acuerdos establecidos.<br>
+• Registrar seguimientos o compromisos.<br>
+• Actualizar sistemas como CRM, formularios o plataformas académicas o comerciales.<br><br>
+
+Sin un uso correcto del ACW, la operación se vuelve desordenada y se pierde trazabilidad de la gestión realizada.<br><br>
+
+<b>DURACIÓN DEL ACW</b><br>
+El tiempo del ACW depende de la configuración de la cola o de la política establecida:<br><br>
+
+• <b>ACW ilimitado:</b> tú decides cuándo salir del estado, lo que implica el riesgo de que el asesor se quede atorado en ACW sin justificación.<br><br>
+
+• <b>ACW con temporizador:</b> yo te saco automáticamente del estado al terminar el tiempo configurado y te regreso a Disponible u otro estado definido.<br><br>
+
+<b>IMPACTO DEL ACW EN MÉTRICAS</b><br>
+El ACW impacta directamente los indicadores operativos.<br>
+Se mide como:<br>
+• Tiempo de ACW.<br>
+• Tiempo no disponible.<br>
+• Tiempo productivo indirecto.<br><br>
+
+Un ACW elevado reduce la productividad, disminuye la capacidad de atención, afecta dashboards y puede impactar SLA.<br>
+En términos simples: <b>un ACW excesivo significa menos llamadas atendidas</b>.<br><br>
+
+<b>ACW VS AFTER AUTO ANSWER</b><br>
+El ACW aplica a todas las llamadas y es el control operativo estándar.<br>
+El After Auto Answer es un caso específico que solo aplica a interacciones que entran mediante Auto Answer.<br>
+No deben confundirse, ya que cumplen funciones distintas dentro de la operación.<br><br>
+
+<b>ERRORES COMUNES EN ACW</b><br>
+Entre los errores más frecuentes se encuentran:<br>
+• Quedarse en ACW sin trabajar la interacción.<br>
+• Usar el ACW como descanso.<br>
+• No tipificar correctamente la llamada.<br>
+• Pensar que el ACW no afecta métricas.<br><br>
+
+Todo el tiempo que pasas en ACW se mide, se registra y es completamente visible en los reportes operativos.<br><br>
+
+El uso correcto del ACW es clave para mantener orden, productividad y calidad en la operación.
+`
+},
+ {
+  id: "campañas_y_bots_genesys",
+  keywords: [
+    "campañas genesys",
+    "bots genesys",
+    "campaña",
+    "que es una campaña",
+    "marcacion automatica",
+    "bot"
+  ],
+  response: `
+<b>CAMPAÑAS Y BOTS EN GENESYS</b><br><br>
+
+En Genesys, las campañas y los bots son los mecanismos que utilizo para generar, administrar y distribuir interacciones de forma automática, sin depender de que un asesor marque o conteste manualmente.<br>
+Yo inicio el contacto, yo filtro los resultados y solo envío a los asesores las interacciones que realmente son útiles.<br><br>
+
+<b>¿QUÉ ES UNA CAMPAÑA EN GENESYS?</b><br>
+Una campaña en Genesys es un motor de marcación automática.<br>
+Toma una base de datos de contactos y ejecuta llamadas o mensajes de forma masiva y controlada.<br><br>
+
+Dentro de una campaña, yo me encargo de:<br>
+• Marcar números automáticamente.<br>
+• Decidir cuándo y a quién marcar.<br>
+• Controlar el ritmo de marcación según la disponibilidad de asesores.<br>
+• Filtrar resultados como no contesta, buzón, ocupado o número inválido.<br>
+• Enviar a los asesores únicamente las interacciones efectivas.<br><br>
+
+<b>TIPOS DE CAMPAÑAS</b><br>
+Existen distintos tipos de campañas en Genesys:<br><br>
+
+<b>Preview</b><br>
+El asesor revisa el contacto antes de marcar y decide cuándo iniciar la llamada.<br><br>
+
+<b>Power</b><br>
+La marcación es automática, una llamada a la vez por asesor.<br>
+Es uno de los esquemas más utilizados en UTEG.<br><br>
+
+<b>Predictiva</b><br>
+Se realizan varias llamadas de forma anticipada, calculando la disponibilidad de los asesores.<br>
+Busca maximizar el tiempo efectivo de conversación.<br><br>
+
+<b>Campañas con Bot o IVR</b><br>
+Un asistente automático interactúa primero con el contacto antes de transferirlo a un asesor.<br><br>
+
+En UTEG, normalmente se utilizan campañas <b>Power</b>, <b>Predictiva</b> y campañas con <b>Bot</b>.<br><br>
+
+<b>¿QUÉ ES UN BOT EN GENESYS?</b><br>
+Un bot en Genesys es un asistente automático que interactúa con el contacto antes que el asesor.<br>
+Su función es filtrar, clasificar y validar al contacto.<br><br>
+
+Un bot puede:<br>
+• Saludar al contacto.<br>
+• Validar identidad o datos básicos.<br>
+• Hacer preguntas.<br>
+• Detectar intención e interés.<br>
+• Clasificar el resultado de la llamada.<br><br>
+
+Solo cuando el contacto cumple con las condiciones definidas, el bot lo transfiere a un asesor.<br><br>
+
+<b>FLUJO REAL DE UNA CAMPAÑA CON BOT</b><br>
+El flujo funciona de la siguiente manera:<br><br>
+
+Primero, yo marco automáticamente desde la base cargada, en volumen y sin intervención del asesor.<br><br>
+
+Si la persona contesta, el bot atiende, saluda, valida identidad y confirma interés.<br><br>
+
+Después realizo un filtrado automático donde identifico:<br>
+• Llamadas no contestadas.<br>
+• Buzón de voz.<br>
+• Números inválidos.<br>
+• Contactos sin interés.<br><br>
+
+Estas llamadas no se envían al asesor.<br><br>
+
+Solo cuando hay una persona real y un interés válido, la interacción se transfiere al agente.<br>
+En ese momento entran en juego el <b>Auto Answer</b>, el <b>After Call Work</b> y el flujo normal del asesor.<br><br>
+
+<b>¿POR QUÉ NO TODAS LAS LLAMADAS SE VEN EN EL DASHBOARD?</b><br>
+Por esta razón, no todas las llamadas se reflejan en el dashboard del agente.<br>
+Las campañas realizan muchos intentos que nunca llegan al asesor.<br>
+El dashboard del asesor solo muestra las interacciones efectivas que sí fueron ofrecidas.<br><br>
+
+<b>RESUMEN OPERATIVO</b><br>
+• La campaña es la que marca.<br>
+• El bot es quien filtra y valida.<br>
+• El asesor es quien cierra.<br><br>
+
+<b>ERRORES COMUNES DE PERCEPCIÓN</b><br>
+Algunos errores frecuentes incluyen pensar que:<br>
+• Genesys no está marcando.<br>
+• La base no funciona.<br>
+• No entran llamadas.<br><br>
+
+Cuando en realidad, la campaña sí está marcando y el bot sí está hablando, pero en ese momento no hay contactos efectivos disponibles para transferir al asesor.<br><br>
+
+Entender cómo funcionan las campañas y los bots es clave para interpretar correctamente la operación y los indicadores en Genesys.
+`
+},
+{
+  id: "evidencia_leads_oportunidades_salesforce",
+  keywords: [
+    "evidencia en salesforce",
+    "evidencia",
+    "lead",
+    "evidencia leads",
+    "evidencia lead",
+    "evidencia oportunidades",
+  ],
+  response: `
+<b>EVIDENCIA EN LEADS Y OPORTUNIDADES EN SALESFORCE</b><br><br>
+
+Todo lead y oportunidad en Salesforce debe contar con evidencia clara, completa y trazable para considerarse correctamente gestionado.<br>
+La evidencia es la base para validar el seguimiento realizado, proteger la cartera del asesor y garantizar la correcta medición de la operación comercial.<br><br>
+
+<b>NOTAS OBLIGATORIAS</b><br>
+Es obligatorio registrar notas en cada movimiento, contacto o acuerdo con el aspirante.<br>
+Las notas deben ser claras, breves y fechadas, e indicar de manera específica:<br>
+• Qué se acordó.<br>
+• Para cuándo se acordó.<br>
+• Bajo qué condición.<br><br>
+
+No se consideran válidas notas genéricas o ambiguas.<br><br>
+
+<b>REGISTRO DE INTERACCIONES</b><br>
+Todas las interacciones con el aspirante deben quedar registradas.<br>
+Las llamadas deben reflejarse siempre en Genesys.<br><br>
+
+En caso de contacto por WhatsApp u otro medio distinto a llamada, es obligatorio adjuntar una captura o evidencia en la sección de <b>Archivos</b> dentro de Salesforce.<br><br>
+
+<b>TAREAS Y SEGUIMIENTOS</b><br>
+Es obligatorio crear tareas para cada seguimiento.<br>
+Las tareas deben contar con:<br>
+• Fecha definida.<br>
+• Hora específica.<br>
+• Notificación activa.<br><br>
+
+No se permiten acuerdos abiertos ni frases como “luego te marco” o “más adelante lo vemos”.<br><br>
+
+<b>REQUISITOS PREVIOS A FICHA DE PAGO</b><br>
+Antes de emitir una ficha de pago o realizar un cobro, deben estar completos los campos críticos del aspirante, tales como:<br>
+• CURP.<br>
+• Contacto de emergencia.<br>
+• Dirección.<br><br>
+
+<b>FICHAS VENCIDAS Y REFERENCIAS</b><br>
+En caso de que una ficha de pago se encuentre vencida y se genere una nueva referencia, se debe indicar de forma clara al aspirante que no utilice la ficha anterior.<br>
+Si el aspirante paga con una ficha vencida, el pago no se reflejará en el sistema.<br><br>
+
+<b>CONSECUENCIAS POR FALTA DE EVIDENCIA</b><br>
+El incumplimiento de estas reglas puede generar consecuencias directas, tales como:<br>
+• Reasignación de la cartera por falta de gestión documentada.<br>
+• Pérdida del reconocimiento de venta compartida por mala tipificación, alteración de origen o secuencia incorrecta de cierre y pago.<br>
+• Observaciones en auditorías comerciales por uso incorrecto de etapas, becas no autorizadas o pagos sin evidencia.<br><br>
+
+Adicionalmente, puede provocar:<br>
+• Demoras en el proceso.<br>
+• Reclamos por pagos no reflejados.<br>
+• Menor conversión por falta de citas bien impulsadas y tareas con horario definido.<br><br>
+
+<b>GUÍA MÍNIMA INDISPENSABLE</b><br>
+Como regla operativa básica:<br>
+• Un prospecto sin información completa debe tener siempre nota y tarea.<br>
+• Al contar con información completa, el registro pasa a oportunidad y no debe regresar a prospecto.<br>
+• Un interesado debe tener fecha clara de decisión.<br>
+• Una segunda llamada o decisión debe reagendarse con día y hora.<br>
+• Las citas deben confirmarse y tipificarse correctamente.<br>
+• Las promesas de pago deben contar con ficha vigente, hora de pago y evidencia una vez realizado el pago.<br><br>
+
+En todo momento debe existir <b>nota, tarea y evidencia</b> en Genesys o en archivos adjuntos dentro de Salesforce.
+`
+},
+ {
+  id: "reglas_de_asignacion_leads_salesforce",
+  keywords: [
+    "reglas de asignacion",
+    "asignacion de leads",
+    "cuales son",
+    "reglas",
+    "asignacion",
+    "lead reasignable",
+    "disciplinas de asignacion"
+  ],
+  response: `
+<b>REGLAS DE ASIGNACIÓN DE LEADS EN SALESFORCE</b><br><br>
+
+Las reglas de asignación en Salesforce definen los tiempos, condiciones y disciplina operativa bajo los cuales un lead u oportunidad debe ser gestionado.<br>
+Su cumplimiento es obligatorio y tiene impacto directo en la permanencia del lead, la posibilidad de inscripción y el reconocimiento comercial.<br><br>
+
+<b>ETAPA: ASIGNADO</b><br>
+Cuando el lead es de asignación normal (no Prospección ni B2B), el asesor cuenta con un máximo de <b>3 horas</b> para trabajarlo.<br>
+Si este tiempo se cumple sin gestión documentada, el lead se vuelve <b>reasignable</b> dentro del mismo plantel o puede ser reasignado por CC si vuelve a ingresar por medios oficiales.<br><br>
+
+En el caso de leads provenientes de <b>Prospección o B2B</b>, el tiempo máximo de gestión es de <b>7 días naturales</b> a partir del cambio de etapa.<br>
+Vencido este plazo, el lead puede ser reasignado.<br><br>
+
+No atender el lead dentro de estos tiempos implica perder el caso y su posible inscripción.<br><br>
+
+<b>ETAPA: NO CONTACTADO</b><br>
+El trabajo en esta etapa debe ser inmediato.<br>
+Para justificar el cambio a estatus <b>Perdido</b>, se requieren:<br>
+• Al menos <b>15 intentos</b> registrados en Salesforce.<br>
+• Un mínimo de <b>3 intentos diarios</b>.<br><br>
+
+Si no se cumplen estos criterios, el lead puede ser reasignado por falta de gestión documentada.<br><br>
+
+<b>ETAPA: CONTACTADO</b><br>
+El tiempo máximo de gestión en esta etapa es de <b>48 horas hábiles</b>.<br>
+Este plazo se mide de fecha y hora a fecha y hora, sin contar domingos.<br><br>
+
+Durante este periodo deben cumplirse obligatoriamente:<br>
+• Al menos <b>18 intentos</b> registrados en Salesforce.<br>
+• Una <b>nota</b> con resumen claro de la interacción.<br>
+• El <b>estado correcto</b> dentro de la etapa.<br>
+• Una <b>tarea de seguimiento</b> con fecha, hora y notificación activa.<br>
+• Una <b>llamada registrada en Genesys</b> o evidencia de WhatsApp adjunta en Archivos.<br><br>
+
+La ausencia de cualquiera de estos elementos habilita la <b>reasignación automática</b> del lead al cumplirse las 48 horas.<br><br>
+
+<b>ETAPA: PERDIDO</b><br>
+El estatus Perdido se coloca de forma inmediata una vez cumplidos los intentos y criterios de las etapas previas.<br>
+No requiere intentos adicionales.<br>
+Los leads en estatus Perdido son reasignables.<br><br>
+
+<b>ETAPA: INSCRITO</b><br>
+Un lead en estatus Inscrito <b>ya no es reasignable</b>.<br>
+Solo puede cambiar de propietario mediante la resolución documentada de una disputa formal.<br><br>
+
+<b>PROMESAS DE PAGO</b><br>
+Cuando una promesa de pago vence y no se concreta, el lead se vuelve reasignable después de <b>24 horas</b>.<br>
+Las promesas de pago vigentes <b>no son reasignables</b>.<br><br>
+
+<b>CAUSAS PRINCIPALES DE REASIGNACIÓN</b><br>
+Las reasignaciones pueden ocurrir por:<br>
+• Dejar pasar los tiempos definidos por etapa.<br>
+• No cumplir con los intentos mínimos requeridos.<br>
+• No documentar la gestión con notas, tareas y evidencias.<br>
+• No registrar llamadas en Genesys.<br>
+• Dejar vencer fichas de pago.<br><br>
+
+<b>CONSECUENCIAS DE INCUMPLIR LAS REGLAS</b><br>
+El incumplimiento de estas reglas puede generar:<br>
+• Pérdida del lead y de la posible inscripción.<br>
+• Pérdida de comisión o venta compartida.<br>
+• Observaciones en auditorías comerciales por falta de disciplina operativa.<br>
+• Disminución en la tasa de conversión.<br>
+• Reasignación de cartera a asesores que sí cumplan con las ventanas y la documentación.<br><br>
+
+<b>CONSIDERACIÓN IMPORTANTE</b><br>
+Si un lead es reasignado con cierto número de intentos ya realizados, el nuevo propietario solo deberá completar los intentos restantes definidos por el Método Lottus, siempre que no se cambie la etapa o el estado.<br><br>
+
+<b>¿CÓMO EVITAR LA REASIGNACIÓN?</b><br>
+Para evitar la reasignación, el asesor debe:<br>
+• Cumplir con los intentos diarios y totales por etapa.<br>
+• Registrar notas claras y específicas en Salesforce.<br>
+• Programar tareas con notificación activa.<br>
+• Registrar llamadas en Genesys o adjuntar evidencia de WhatsApp.<br>
+• Mantenerse dentro del reloj definido para cada etapa, recordando que los domingos no cuentan para las ventanas de 24 y 48 horas.<br><br>
+
+El respeto a estas reglas garantiza orden operativo, protección de cartera y mejores resultados comerciales.
+`
+},
+  {
+  id: "solicitud_baja_alumno_uteg",
+  keywords: [
+    "baja",
+    "aspirante",
+    "solicitud de baja",
+    "solicitud",
+    "solicitar baja",
+    "que sucede",
+    "solicita",
+    "quiere",
+    "quiere darse de baja",
+    "baja alumno",
+    "darme de baja",
+    "cancelar inscripcion",
+  ],
+  response: `
+<b>SOLICITUD DE BAJA DE ALUMNO EN UTEG</b><br><br>
+
+Cuando un alumno solicita una baja, el primer paso es identificar si la solicitud se realiza <b>antes o después del cierre de inscripciones</b>, ya que el procedimiento y las implicaciones cambian según el momento en que se presente la solicitud.<br><br>
+
+<b>BAJA ANTES DEL CIERRE DE INSCRIPCIONES</b><br>
+Si la solicitud se realiza antes del cierre de inscripciones, el asesor debe escuchar y evaluar las razones por las cuales el alumno desea darse de baja.<br>
+Antes de autorizar el trámite, es obligatorio ofrecer alternativas que permitan la continuidad del alumno, tales como:<br>
+• Cambio de carrera.<br>
+• Cambio de plantel.<br>
+• Cambio de ciclo.<br><br>
+
+El objetivo de estas alternativas es brindar opciones viables que eviten la deserción y apoyen la permanencia del alumno dentro de la institución.<br><br>
+
+Si después de revisar estas opciones el alumno confirma que no puede continuar, se le debe explicar de manera clara que, al tratarse de una decisión personal, <b>no aplica ningún tipo de reembolso</b>.<br><br>
+
+En este escenario, la baja se tramita mediante el llenado del formato <b>F-AD-07</b>, siguiendo el procedimiento administrativo correspondiente.<br><br>
+
+<b>BAJA DESPUÉS DEL CIERRE DE INSCRIPCIONES</b><br>
+Cuando la solicitud de baja se realiza después del cierre de inscripciones, el trámite ya no se gestiona a nivel comercial.<br>
+En este caso, el proceso pasa directamente al <b>área académica</b>.<br><br>
+
+Es importante explicarle al alumno que, al contar ya con carga de materias activa, existen <b>cuentas por cobrar vigentes</b>.<br>
+Por esta razón, será necesario llegar a un acuerdo con <b>Dirección Administrativa</b> para poder gestionar la baja.<br><br>
+
+<b>COMUNICACIÓN Y ACOMPAÑAMIENTO</b><br>
+En todos los casos, el proceso de baja debe explicarse con claridad, respeto y empatía.<br>
+El alumno debe comprender plenamente las implicaciones administrativas y financieras de su decisión antes de continuar con el trámite.<br><br>
+
+Un manejo correcto de la solicitud de baja asegura orden institucional, transparencia en el proceso y una experiencia clara para el alumno.
+`
+},
+{
+  "id": "cierre_de_grupo_gestion_academica",
+  "keywords": [
+    "cierre de grupo",
+    "cierre",
+    "cierra",
+    "que pasa si el grupo se cierra",
+    "que pasa si un grupo se cierra",
+    "grupo no abrio",
+    "no se abrio el grupo",
+    "grupo cancelado",
+    "grupo no alcanzo minimo",
+    "no hubo cupo",
+    "no se alcanzo el minimo",
+    "grupo no aperturo",
+    "no inicia el grupo",
+    "grupo cerrado",
+    "que pasa si no abre el grupo"
+  ],
+  "response": `
+<b>CIERRE DE GRUPO: GESTIÓN ACADÉMICA Y ATENCIÓN AL ALUMNO</b><br><br>
+
+El cierre de grupo ocurre cuando no se alcanza el número mínimo de alumnos inscritos requerido para abrir formalmente un grupo académico.<br>
+Este mínimo no es una decisión discrecional, sino una exigencia establecida por las incorporaciones educativas correspondientes, las cuales determinan la matrícula mínima necesaria para garantizar viabilidad académica, cumplimiento normativo y calidad educativa.<br><br>
+
+<b>¿POR QUÉ EXISTE UN MÍNIMO DE ALUMNOS?</b><br>
+Las incorporaciones exigen un mínimo de alumnos para:<br>
+• Garantizar calidad educativa mediante grupos con estructura real de trabajo e interacción académica adecuada.<br>
+• Asegurar viabilidad académica, con asignación formal de docentes certificados, programación completa y seguimiento académico.<br>
+• Cumplir con la normativa oficial, ya que grupos demasiado pequeños pueden considerarse irregulares en auditorías y poner en riesgo la validez del programa.<br><br>
+
+<b>¿QUÉ SUCEDE CUANDO NO SE ALCANZA EL MÍNIMO?</b><br>
+Cuando un grupo no cumple con el mínimo requerido, se cierra administrativamente.<br>
+En este escenario:<br>
+• No se asignan docentes ni horarios.<br>
+• El ciclo no inicia en ese programa, turno o plantel.<br>
+• El grupo no puede aperturarse oficialmente, aun cuando existan alumnos interesados.<br><br>
+
+El alumno no pierde su derecho a estudiar, pero debe elegir una alternativa académica viable.<br><br>
+
+<b>ROL DEL ASESOR ANTE UN CIERRE DE GRUPO</b><br>
+El asesor debe:<br>
+• Explicar la situación con claridad y empatía.<br>
+• Evitar promesas de apertura que no dependan de la institución.<br>
+• Presentar únicamente opciones reales y confirmadas.<br>
+• Acompañar al alumno en su decisión.<br>
+• Cerrar una alternativa concreta y no dejar al alumno sin solución.<br><br>
+
+<b>ALTERNATIVAS ANTE EL CIERRE DE GRUPO</b><br>
+
+<b>Cambio de carrera</b><br>
+Se ofrece al alumno una carrera afín o similar que sí tenga grupo confirmado.<br>
+Cuando es posible, se conserva modalidad, turno y reconocimiento de avance académico.<br>
+Se recomienda cuando el alumno desea iniciar de inmediato y tiene un perfil vocacional flexible.<br><br>
+
+<b>Esperar al siguiente ciclo</b><br>
+El alumno puede reservar su lugar e iniciar en el próximo ciclo, cuando el programa vuelva a ofertarse.<br>
+Se recomienda cuando el alumno tiene claridad total en su elección y no tiene urgencia por iniciar.<br><br>
+
+<b>Cambio de plantel</b><br>
+Si el grupo no abrió en un plantel pero sí en otro, el alumno puede iniciar conservando carrera, modalidad e incorporación.<br>
+Es viable cuando el alumno tiene movilidad y desea comenzar sin perder el ciclo.<br><br>
+
+<b>Baja definitiva</b><br>
+Si el alumno decide no continuar bajo ninguna alternativa, se procesa la baja definitiva.<br>
+Debe revisarse el estatus administrativo y financiero y explicarse claramente las implicaciones académicas.<br>
+Esta opción debe manejarse siempre como la última alternativa.<br><br>
+
+<b>MENSAJES CLAVE PARA ASESORES</b><br>
+• No prometer aperturas sin confirmación oficial.<br>
+• Explicar que el mínimo es una exigencia de la incorporación, no una decisión comercial.<br>
+• Ofrecer soluciones, no solo comunicar el problema.<br>
+• Acompañar emocionalmente al alumno durante el proceso.<br>
+• Cerrar siempre una alternativa clara y documentada.<br><br>
+
+<b>CIERRE COMERCIAL RECOMENDADO</b><br>
+El mensaje final debe enfatizar que el alumno sí puede estudiar, aunque el grupo específico no haya abierto.<br>
+Existen opciones reales para no perder el ciclo ni el avance académico.<br><br>
+
+El cierre de grupo no representa un fracaso de venta, sino una situación normativa que debe atenderse con estrategia, empatía y enfoque en soluciones.<br><br>
+
+El documento oficial que debe llenarse y firmarse cuando el alumno toma una decisión es el formato <b>F-AD-07</b>.
+`
+},
+{
+  "id": "seguro_escolar_pago_y_condiciones",
+  "keywords": [
+    "seguro escolar",
+    "seguro",
+    "pago de seguro escolar",
+    "para que sirve el seguro escolar",
+    "seguro en trayectos",
+    "reinscripcion seguro",
+    "cambio de plantel seguro",
+    "costo seguro escolar"
+  ],
+  "response": `
+<b>SEGURO ESCOLAR: PAGO Y CONDICIONES</b><br><br>
+
+El seguro escolar es un concepto obligatorio que el alumno debe cubrir junto con el proceso de inscripción o reinscripción.<br>
+Este seguro tiene como finalidad brindar cobertura ante accidentes menores que puedan ocurrir dentro del plantel o durante los trayectos de traslado directamente relacionados con la actividad académica.<br><br>
+
+<b>VIGENCIA DEL SEGURO ESCOLAR</b><br>
+El seguro escolar tiene vigencia por ciclo académico.<br>
+Por esta razón, debe pagarse en cada ciclo junto con la reinscripción.<br>
+No es un pago único ni permanente, ya que la cobertura se renueva ciclo a ciclo para mantener protegido al alumno.<br><br>
+
+<b>SEGURO Y CAMBIO DE PLANTEL</b><br>
+En caso de que el alumno realice un cambio de plantel, el seguro escolar debe cubrirse nuevamente.<br>
+Esto se debe a que el registro del seguro se realiza con base en la dirección del plantel donde el alumno está inscrito.<br>
+Al cambiar de plantel, es necesario actualizar esta información, lo que obliga a generar un nuevo registro de seguro y, por lo tanto, un nuevo pago.<br><br>
+
+<b>COSTOS DEL SEGURO ESCOLAR</b><br>
+El costo del seguro escolar varía de acuerdo con el nivel académico:<br>
+• Licenciaturas semestrales: <b>$100 pesos</b> por ciclo.<br>
+• Licenciaturas cuatrimestrales: <b>$50 pesos</b> por ciclo.<br>
+• Bachilleratos: <b>$75 pesos</b> por ciclo.<br><br>
+
+<b>CONSIDERACIONES IMPORTANTES</b><br>
+El seguro escolar es independiente de otros conceptos académicos y administrativos.<br>
+Su pago es indispensable para completar correctamente los procesos de inscripción o reinscripción.<br>
+Sin este pago, el alumno no cuenta con cobertura activa ni puede concluir su trámite académico de manera regular.<br><br>
+
+El seguro escolar forma parte de los requisitos institucionales orientados a la protección y bienestar del alumno durante su formación académica.
+`
+},
+{
+  "id": "reinscripcion_obligatoria_costos_y_justificacion",
+  "keywords": [
+    "reinscripcion",
+    "pago de reinscripcion",
+    "reinscripcion cada ciclo",
+    "porque se paga reinscripcion",
+    "costo reinscripcion",
+    "reinscripcion obligatoria",
+  ],
+  "response": `
+<b>REINSCRIPCIÓN OBLIGATORIA: COSTOS Y JUSTIFICACIÓN</b><br><br>
+
+La reinscripción es un concepto obligatorio que debe cubrirse en cada ciclo académico.<br>
+Este pago no es un cobro arbitrario ni discrecional, sino un requisito institucional indispensable para que el alumno pueda continuar formalmente con sus estudios.<br><br>
+
+<b>¿QUÉ INCLUYE LA REINSCRIPCIÓN?</b><br>
+La reinscripción contempla principalmente costos asociados a:<br>
+• RVOE y validez oficial del programa.<br>
+• Gastos administrativos institucionales.<br>
+• Gastos de incorporación ante las autoridades educativas correspondientes.<br><br>
+
+Estos conceptos permiten mantener activa la validez oficial del programa académico, actualizar los registros del alumno y cumplir con las obligaciones normativas exigidas por las autoridades educativas.<br><br>
+
+<b>FUNCIÓN ACADÉMICA Y ADMINISTRATIVA</b><br>
+El pago de reinscripción permite:<br>
+• Actualizar el estatus académico del alumno en el sistema.<br>
+• Gestionar la carga de materias del nuevo ciclo.<br>
+• Habilitar servicios escolares y académicos.<br>
+• Asignar formalmente materias y docentes.<br>
+• Mantener la trayectoria escolar del alumno en regla y sin riesgos administrativos.<br><br>
+
+<b>OBLIGATORIEDAD DEL PAGO</b><br>
+El pago de reinscripción es obligatorio para poder continuar inscrito en el siguiente ciclo académico.<br>
+No existen descuentos, promociones ni excepciones para este concepto, ya que corresponde a costos fijos institucionales que deben cubrirse ciclo a ciclo.<br><br>
+
+La única modalidad que no realiza el pago de reinscripción es el <b>Bachillerato Semiescolarizado (BIS)</b>, debido a su esquema administrativo específico.<br><br>
+
+<b>MENSAJE PARA PADRES DE FAMILIA</b><br>
+Desde una perspectiva dirigida a padres de familia, la reinscripción garantiza que el alumno continúe estudiando dentro de un programa con validez oficial vigente.<br>
+Este pago asegura que el alumno esté correctamente incorporado ante las autoridades educativas, con registros académicos actualizados y bajo un marco normativo reconocido.<br><br>
+
+Asimismo, permite que el alumno cuente con servicios académicos activos, asignación formal de materias y docentes, y una trayectoria escolar continua y regular.<br><br>
+
+<b>IMPORTANCIA DE LA REINSCRIPCIÓN</b><br>
+La reinscripción no representa un costo adicional sin beneficio.<br>
+Es una medida de control académico y administrativo que protege la inversión educativa de la familia, garantiza la continuidad de los estudios y respalda la calidad y validez del programa cursado.<br><br>
+
+Sin el pago de reinscripción, el alumno no puede continuar el ciclo académico siguiente, ya que no se activa su estatus oficial dentro del sistema académico.
+`
+},
+{
+  id: "uteg_by_ula_que_es_y_como_funciona",
+  keywords: [
+    "uteg by ula",
+    "ula",
+    "by"
+  ],
+  response: `
+<b>UTEG BY ULA: ¿QUÉ ES Y CÓMO FUNCIONA?</b><br><br>
+
+UTEG by ULA es un modelo académico que surge de la colaboración entre UTEG y la Universidad Latinoamericana (ULA), ambas instituciones pertenecientes a Lottus Education.<br>
+Este esquema combina la atención administrativa y el acompañamiento institucional de UTEG con el modelo educativo, los planes de estudio y la estructura académica desarrollados por ULA.<br><br>
+
+En este modelo, el alumno realiza su proceso de inscripción a través de UTEG y recibe el acompañamiento académico y administrativo por parte de UTEG.<br>
+Sin embargo, los planes de estudio, contenidos académicos, estructura curricular, evaluaciones y lineamientos académicos están diseñados bajo el modelo educativo de ULA, garantizando calidad académica y validez oficial conforme a los programas autorizados.<br><br>
+
+<b>MODALIDADES DE ESTUDIO</b><br>
+Los programas UTEG by ULA se ofrecen principalmente en dos modalidades: <b>FLEX</b> y <b>ONLINE</b>.<br><br>
+
+<b>MODALIDAD FLEX</b><br>
+La modalidad FLEX está dirigida a alumnos que buscan una opción flexible, pero con una estructura académica definida y acompañamiento constante.<br>
+Generalmente se imparte bajo esquemas de asistencia programada, como modalidad sabatina o sesiones establecidas, combinando trabajo autónomo con actividades guiadas.<br><br>
+
+Los alumnos cuentan con acceso a plataformas académicas, evaluaciones periódicas, seguimiento académico y soporte institucional.<br>
+En esta modalidad pueden aplicar becas institucionales vigentes, sujetas a campañas autorizadas, cumplimiento de requisitos académicos, promedio mínimo y pagos puntuales.<br><br>
+
+<b>MODALIDAD ONLINE</b><br>
+La modalidad ONLINE está diseñada para alumnos que requieren máxima flexibilidad de horario y ubicación.<br>
+El proceso de enseñanza-aprendizaje se desarrolla completamente a través de plataformas digitales, con contenidos virtuales, actividades en línea y evaluaciones remotas.<br><br>
+
+Esta modalidad permite al alumno organizar su tiempo de estudio de manera autónoma, manteniendo el respaldo académico del modelo ULA y la gestión administrativa a través de UTEG.<br>
+En modalidad ONLINE también pueden aplicar becas institucionales vigentes, sujetas a campañas autorizadas y al cumplimiento de los requisitos establecidos.<br><br>
+
+<b>VALIDEZ Y BENEFICIOS DEL MODELO</b><br>
+En ambas modalidades, FLEX y ONLINE, el alumno obtiene su grado académico o certificación al concluir el programa, conforme al esquema autorizado y la normativa vigente.<br><br>
+
+UTEG by ULA combina la cercanía institucional, atención administrativa y acompañamiento de UTEG con la experiencia académica, el modelo educativo y la estructura curricular de ULA.<br>
+Este modelo permite ofrecer programas flexibles y en línea, con opciones de beca y respaldo institucional, adaptados a las necesidades actuales de los estudiantes.
+`
+},
+{
+  "id": "subir_documentos_sede_espacio_resumen",
+  "keywords": [
+    "subir documentos espacio",
+    "subir documentos sede",
+    "sede",
+    "espacio",
+    "cargar documentos espacio",
+    "sede uteg documentos",
+    "expediente digital uteg"
+  ],
+  "response": `
+<b>GUÍA RÁPIDA: CARGA DE DOCUMENTOS EN SEDE / ESPACIO</b><br><br>
+
+La carga de documentos forma parte del proceso obligatorio de inscripción y se realiza exclusivamente dentro del portal académico de UTEG.<br>
+Esta plataforma se llama <b>ESPACIO</b>, aunque algunos alumnos la identifican también como <b>SEDE</b>.<br><br>
+
+<b>¿DÓNDE SE SUBEN LOS DOCUMENTOS?</b><br>
+Los documentos se cargan directamente en la plataforma <b>ESPACIO</b>.<br>
+No se reciben documentos por correo electrónico ni a través del asesor.<br><br>
+
+<b>¿CÓMO INGRESA EL ALUMNO?</b><br>
+El alumno debe:<br>
+• Acceder al portal académico de UTEG.<br>
+• Iniciar sesión con su correo y contraseña institucional.<br><br>
+
+<b>¿EN QUÉ APARTADO SE CARGAN?</b><br>
+Dentro de ESPACIO, el alumno debe buscar alguno de los siguientes apartados, según su perfil y etapa:<br>
+• Expediente digital.<br>
+• Gestión de documentos.<br>
+• Finalizar inscripción.<br><br>
+
+<b>PROCESO BÁSICO DE CARGA</b><br>
+El proceso general consiste en:<br>
+• Seleccionar el trámite correspondiente.<br>
+• Adjuntar los documentos solicitados en formato PDF o JPG.<br>
+• Guardar y confirmar la carga correctamente.<br><br>
+
+<b>PUNTOS IMPORTANTES A CONSIDERAR</b><br>
+• Si el alumno no visualiza la opción para cargar documentos, puede ser necesario aceptar términos y condiciones o completar datos pendientes en el sistema.<br>
+• Si el plazo de carga venció, el sistema no permitirá subir documentos.<br>
+• En ese caso, el alumno debe solicitar la reapertura del expediente enviando un correo a <b>ticket@uteg.edu.mx</b>.<br><br>
+
+<b>MENSAJE CLAVE PARA EL ASESOR</b><br>
+La carga de documentos siempre se realiza en <b>ESPACIO</b>.<br>
+El asesor acompaña y orienta, pero <b>no recibe ni carga documentos por el alumno</b>.<br><br>
+
+Un correcto acompañamiento en este proceso evita retrasos en validación, estatus académico y arranque de clases.
+`
+},
+{
+  "id": "que_es_modelo_30_30_40",
+  "keywords": [
+    "modelo 30 30 40",
+    "modelo",
+    "30",
+    "40",
+    "30 30 40",
+    "30 30 40 uteg",
+    "evaluacion 30 30 40",
+    "como se califica 30 30 40"
+  ],
+  "response": `
+<b>MODELO DE EVALUACIÓN 30–30–40</b><br><br>
+
+El Modelo 30–30–40 es el esquema de evaluación utilizado en UTEG para medir el desempeño del alumno de manera integral en cada materia.<br>
+Este modelo no se basa únicamente en exámenes, sino en el desempeño constante, el dominio de los contenidos y la aplicación práctica del conocimiento.<br><br>
+
+<b>¿CÓMO SE DISTRIBUYE LA CALIFICACIÓN?</b><br>
+La evaluación final de cada materia se compone de tres bloques:<br><br>
+
+<b>30% Evaluación integral</b><br>
+Incluye asistencia, participación en clase y actividades continuas.<br>
+Evalúa el compromiso, la constancia y la responsabilidad del alumno durante el ciclo.<br><br>
+
+<b>30% Evaluación disciplinar</b><br>
+Corresponde a exámenes, tareas y evaluación de conocimientos teóricos.<br>
+Mide la comprensión de los contenidos académicos de la materia.<br><br>
+
+<b>40% Evaluación profesional</b><br>
+Se basa en proyectos, prácticas, casos reales o productos finales.<br>
+Evalúa la aplicación práctica del conocimiento y el desarrollo de competencias profesionales.<br><br>
+
+<b>OBJETIVO DEL MODELO 30–30–40</b><br>
+Este modelo busca:<br>
+• Evaluar al alumno de forma equilibrada y completa.<br>
+• Reconocer el esfuerzo y la constancia, no solo el resultado de un examen.<br>
+• Fomentar la participación activa durante el ciclo.<br>
+• Desarrollar habilidades prácticas y profesionales aplicables al entorno laboral.<br><br>
+
+<b>MENSAJE CLAVE PARA EL ASESOR</b><br>
+El modelo 30–30–40 premia al alumno constante, participativo y aplicado.<br>
+No basta con presentar exámenes; el desempeño diario y la entrega de proyectos tienen un peso determinante en la calificación final.<br><br>
+
+Este esquema permite una evaluación más justa y alineada con la formación profesional que UTEG busca brindar a sus estudiantes.
+`
+},
+ {
+  id: "periodos_actuales_2026_uteg",
+  keywords: [
+    "periodos",
+    "2026",
+    "cual es",
+    "periodo",
+    "mayo",
+    "septiembre",
+    "enero",
+    "fechas",
+    "ingreso",
+    "ciclo",
+    "inicio",
+  ],
+  response: `
+<b>PERIODOS DE INGRESO UTEG – CICLO 2026</b><br><br>
+
+Para el año 2026, UTEG maneja <b>tres periodos principales de ingreso</b>: Enero, Mayo y Septiembre.<br>
+Cada uno de estos periodos contempla diferentes esquemas académicos de acuerdo con la modalidad y duración del plan de estudios.<br><br>
+
+<b>PERIODO ENERO 2026</b><br>
+Durante el periodo de Enero 2026 se aperturan los siguientes ciclos:<br>
+• <b>202647</b> – Trimestral.<br>
+• <b>202635</b> – Cuatrimestral.<br>
+• <b>202620</b> – Semestral.<br><br>
+
+Este periodo está dirigido a alumnos que desean iniciar estudios al comienzo del año.<br><br>
+
+<b>PERIODO MAYO 2026</b><br>
+Para el periodo de Mayo 2026 se contemplan las siguientes aperturas:<br>
+• <b>202648</b> – Trimestral (inicio en abril).<br>
+• <b>202640</b> – Cuatrimestral.<br><br>
+
+Este periodo ofrece una opción intermedia para alumnos que no ingresaron en enero.<br><br>
+
+<b>PERIODO SEPTIEMBRE 2026</b><br>
+En el periodo de Septiembre 2026 se manejan los siguientes ciclos:<br>
+• <b>202745</b> – Trimestral (inicio en julio).<br>
+• <b>202746</b> – Trimestral (inicio en octubre).<br>
+• <b>202710</b> – Semestral.<br>
+• <b>202730</b> – Cuatrimestral.<br><br>
+
+Este periodo es uno de los ingresos más fuertes del año y permite iniciar estudios en la segunda mitad del ciclo anual.<br><br>
+
+<b>CONSIDERACIONES IMPORTANTES</b><br>
+La disponibilidad de periodos depende del programa académico, modalidad y plantel.<br>
+Es importante validar con el asesor educativo cuál es el periodo que aplica para cada aspirante.<br><br>
+
+Elegir correctamente el periodo de ingreso permite al alumno planear mejor su inicio académico y asegurar su lugar en el ciclo correspondiente.
+`
+},
+{
+  "id": "proceso_grado_superior_equivalencia",
+  "keywords": [
+    "grado superior",
+    "grado",
+    "superior",
+    "inscripcion grado superior",
+  ],
+  "response": `
+<b>PROCESO DE INGRESO POR GRADO SUPERIOR / EQUIVALENCIA</b><br><br>
+
+<b>¿QUÉ ES GRADO SUPERIOR?</b><br>
+El ingreso por Grado Superior es el esquema aplicado a aspirantes que ya cursaron estudios previos de nivel medio superior o superior y solicitan el reconocimiento de materias mediante equivalencia o revalidación, según corresponda.<br>
+Este proceso permite continuar estudios sin iniciar desde cero, siempre que se cumplan los criterios académicos establecidos.<br><br>
+
+<b>APROBACIÓN PREVIA DE CONTROL ESCOLAR</b><br>
+Antes de realizar cualquier alta en sistema, es indispensable que <b>Control Escolar revise y apruebe</b> la documentación del aspirante para el ingreso por Grado Superior.<br>
+Solo una vez confirmada esta aprobación, el proceso comercial puede continuar con normalidad.<br><br>
+
+<b>ALTA EN SISTEMA (SALESFORCE)</b><br>
+Con la aprobación de Control Escolar confirmada, el asesor puede:<br>
+• Realizar el alta del alumno en Salesforce de manera regular.<br>
+• Generar la ficha de inscripción correspondiente.<br>
+• Dar seguimiento al proceso administrativo como en cualquier otro ingreso autorizado.<br><br>
+
+<b>DATO OBLIGATORIO EN SALESFORCE</b><br>
+En el campo <b>“Tipo de estudiante”</b> se debe seleccionar obligatoriamente:<br>
+➡️ <b>Equivalencia / Grado Superior</b>.<br><br>
+
+Este dato es indispensable para que el estatus académico y administrativo del alumno quede correctamente identificado y evitar errores posteriores.<br><br>
+
+<b>BECAS Y DESCUENTOS</b><br>
+A los alumnos inscritos por Grado Superior <b>no se les ofrece ni se les aplica</b>:<br>
+• Descuentos en inscripción.<br>
+• Becas comerciales o institucionales.<br><br>
+
+Las becas y descuentos son exclusivos para alumnos de primer ingreso.<br><br>
+
+<b>IMPACTO EN METAS DEL ASESOR</b><br>
+Los alumnos inscritos por Grado Superior <b>sí abonan a la meta individual del asesor</b>, ya que representan un ingreso efectivo y un cierre válido dentro de la operación comercial.<br><br>
+
+<b>MENSAJE CLAVE PARA EL ASESOR</b><br>
+Grado Superior no es primer ingreso, pero <b>sí cuenta para tu meta</b>.<br>
+Registrar correctamente el tipo de estudiante evita errores en becas, cobros, estatus académico y reportes.
+`
+},
+{
+  id: "materias_optativas_licenciaturas_uteg_by_ula",
+  keywords: [
+    "materias optativas",
+    "optativas",
+  ],
+  response: `
+<b>MATERIAS OPTATIVAS EN LICENCIATURAS UTEG BY ULA</b><br><br>
+
+En las licenciaturas UTEG by ULA, las materias optativas forman parte del plan de estudios autorizado y aparecen de manera formal dentro de la estructura académica del programa.<br>
+Sin embargo, estas materias <b>no son elegidas directamente por el alumno</b>.<br>
+La asignación de las materias optativas es responsabilidad del <b>coordinador académico</b>.<br><br>
+
+<b>CRITERIOS PARA LA ASIGNACIÓN DE OPTATIVAS</b><br>
+La asignación de las materias optativas responde a un enfoque académico y operativo que busca garantizar la mejor formación posible para cada grupo.<br><br>
+
+El coordinador académico define las optativas considerando:<br>
+• Las necesidades académicas del grupo.<br>
+• El perfil profesional que se desea fortalecer.<br>
+• La coherencia con las competencias del programa.<br>
+• La correcta secuencia del aprendizaje dentro del plan de estudios.<br>
+• La disponibilidad docente y operativa.<br><br>
+
+<b>OBJETIVO DE ESTE ESQUEMA</b><br>
+Este modelo de asignación permite asegurar que todos los estudiantes cursen contenidos pertinentes, actualizados y alineados al campo laboral de la licenciatura.<br>
+Asimismo, evita desbalances en la carga académica y garantiza consistencia en la calidad del aprendizaje entre grupos.<br><br>
+
+<b>VALIDEZ ACADÉMICA</b><br>
+Aunque el alumno no elige la materia optativa de forma individual, todas las optativas asignadas:<br>
+• Forman parte del plan de estudios autorizado.<br>
+• Cumplen con los objetivos académicos del programa.<br>
+• Cuentan con validez académica oficial.<br><br>
+
+<b>MENSAJE CLAVE PARA EL ALUMNO</b><br>
+Las materias optativas están pensadas para fortalecer tu perfil profesional.<br>
+Su asignación responde a criterios académicos que buscan brindarte una formación equilibrada, actual y alineada al mercado laboral.
+`
+},
+{
+  id: "shop_uteg_tienda_oficial",
+  keywords: [
+    "shop uteg",
+    "shop",
+    "tienda uteg",
+    "tienda oficial uteg",
+    "libros uteg",
+    "uniformes uteg",
+    "materiales uteg",
+    "donde comprar libros",
+    "donde comprar uniformes",
+    "material academico",
+    "shop universidad",
+    "shop plantel",
+    "comprar libros uteg"
+  ],
+  response: `
+<b>SHOP UTEG: TIENDA OFICIAL</b><br><br>
+
+La Shop UTEG es la tienda oficial de la institución y el <b>único medio autorizado</b> para la compra de libros, uniformes y materiales académicos correspondientes a las licenciaturas y bachilleratos.<br>
+Todos los productos disponibles están alineados al plan de estudios y a los requerimientos académicos de cada programa.<br><br>
+
+<b>¿QUÉ SE PUEDE COMPRAR EN LA SHOP UTEG?</b><br>
+En la Shop UTEG se pueden adquirir:<br>
+• Libros oficiales de las materias.<br>
+• Uniformes institucionales.<br>
+• Materiales académicos requeridos por el programa.<br><br>
+
+<b>¿EN QUÉ PLANTEL SE PUEDE COMPRAR?</b><br>
+Los alumnos pueden realizar sus compras en la Shop UTEG de cualquier plantel, siempre y cuando dicho plantel cuente con la <b>misma licenciatura o bachillerato</b>.<br>
+Esto se debe a que los libros, materiales y uniformes dependen del programa académico específico.<br><br>
+
+<b>DISPONIBILIDAD DE PRODUCTOS</b><br>
+La disponibilidad puede variar según el programa, el plantel y el periodo académico.<br>
+Se recomienda verificar previamente la existencia de los artículos requeridos.<br><br>
+
+<hr>
+
+<b>BG / BG GASTRONOMÍA / BG PROULEX – PRECIOS SHOP UTEG</b><br><br>
+
+<b>LIBROS BG</b><br>
+• Paquete 1er semestre: <b>$2,075.00</b><br>
+• Paquete 2do semestre: <b>$1,840.00</b><br>
+• Paquete 3er semestre: <b>$1,700.00</b><br>
+• Paquete 4to semestre: <b>$2,100.00</b><br>
+• Paquete 5to semestre: <b>$2,100.00</b><br>
+• Paquete 6to semestre: <b>$1,850.00</b><br><br>
+
+• Libro de inglés: <b>$240.00</b><br>
+• Manuales BG PROULEX (2 libros por semestre): <b>$1,030.00</b><br><br>
+
+<b>UNIFORMES BG</b><br>
+• Playera UTEG: <b>$430.00</b><br>
+• Pants deportivo (2 pzas., 2° a 4° semestre): <b>$1,250.00</b><br>
+• Playera deportiva roja (2° a 4° semestre): <b>$410.00</b><br>
+• Bata de laboratorio: <b>$350.00</b><br><br>
+
+<b>BG CON DIPLOMADO EN GASTRONOMÍA – MATERIALES</b><br>
+• Gorro negro: <b>$260.00</b><br>
+• Limpión blanco (3° a 6° semestre): <b>$75.00</b><br><br>
+
+<b>BG CON DIPLOMADO EN GASTRONOMÍA – UNIFORMES</b><br>
+• Filipina roja (3° a 6° semestre): <b>$920.00</b><br>
+• Pantalón chef (3° a 6° semestre): <b>$630.00</b><br>
+• Mandil negro (3° a 6° semestre): <b>$300.00</b><br>
+• Zapatos Cuisine Permachef (opcionales): <b>$1,430.00</b><br><br>
+
+<hr>
+
+<b>LICENCIATURA EN GASTRONOMÍA – UNIFORMES</b><br>
+• Playera tipo polo (opcional): <b>$430.00</b><br>
+• Gorro Dignus blanco (1° a 9° cuatrimestre): <b>$305.00</b><br>
+• Pico (1° a 10° cuatrimestre): <b>$85.00</b><br>
+• Filipina blanca: <b>$920.00</b><br>
+• Pantalón chef: <b>$630.00</b><br>
+• Mandil blanco: <b>$300.00</b><br>
+• Corsario: <b>$160.00</b><br>
+• Limpión blanco: <b>$75.00</b><br>
+• Zapatos Cuisine Permachef (opcionales): <b>$1,430.00</b><br><br>
+
+<b>UNIFORME DE SERVICIO GASTRONOMÍA</b><br>
+• Chaleco negro: <b>$750.00</b><br>
+• Corbata negra: <b>$115.00</b><br>
+• Mandil negro: <b>$195.00</b><br><br>
+
+*Para primer año es necesario comprar el uniforme completo (7 piezas).<br><br>
+
+<hr>
+
+<b>BIS</b><br>
+• Playera polo azul (1° a 6° trimestre): <b>$430.00</b><br><br>
+
+<b>NUTRICIÓN</b><br>
+• Uniforme quirúrgico borgoña: <b>$830.00</b><br>
+• Bata blanca laboratorio (1er semestre): <b>$405.00</b><br>
+*Los manuales varían por semestre y se adquieren en Shop UTEG.<br><br>
+
+<b>ENFERMERÍA</b><br>
+• Playera polo azul: <b>$430.00</b><br>
+• Pantalón blanco XS–XL: <b>$570.00</b><br>
+• Pantalón blanco XXL–XXXL: <b>$620.00</b><br>
+• Uniforme quirúrgico verde esmeralda (2 pzas.): <b>$910.00</b><br>
+• Uniforme quirúrgico azul plumbago (2 pzas.): <b>$910.00</b><br>
+• Filipina blanca: <b>$710.00</b><br>
+• Bata blanca laboratorio: <b>$410.00</b><br>
+• Gorro de cirugía: <b>$85.00</b><br><br>
+
+<b>QFB</b><br>
+• Bata blanca laboratorio (1er semestre): <b>$410.00</b><br><br>
+
+<b>CIRUJANO DENTISTA</b><br>
+• Kit odontológico: <b>$1,780.00</b><br>
+• Uniforme quirúrgico rojo (2 pzas.): <b>$830.00</b><br>
+• Uniforme quirúrgico gris oxford / negro (2 pzas.): <b>$830.00</b><br>
+• Bata blanca laboratorio: <b>$405.00</b><br><br>
+
+<b>CULTURA FÍSICA Y DEPORTES</b><br>
+• Playera deportiva negra: <b>$430.00</b><br>
+• Traje de baño dama: <b>$480.00</b><br>
+• Traje de baño hombre: <b>$495.00</b><br>
+• Gorro: <b>$215.00</b><br><br>
+
+<b>CIENCIAS FORENSES</b><br>
+• Playera polo negra: <b>$420.00</b><br>
+• Bata laboratorio / traje bioseguridad (1er cuatrimestre).<br>
+• Taller externo balística – Club Cinegético (6° cuatrimestre).<br><br>
+
+<b>MENSAJE CLAVE PARA EL ALUMNO</b><br>
+La Shop UTEG es el canal oficial para adquirir libros, uniformes y materiales académicos.<br>
+Todos los insumos necesarios para tu programa se encuentran disponibles exclusivamente en la tienda institucional.
+`
+},
+{
+  id: "precios_uteg_by_ula_con_descuentos_online_flex_bachillerato",
+  keywords: [
+    "precios uteg by ula",
+    "costos",
+    "precios",
+    "flex",
+    "online",
+    "uane",
+    "descuentos"
+  ],
+  response: `
+<b>PRECIOS UTEG BY ULA</b><br><br>
+
+Los programas UTEG by ULA cuentan con precios fijos y descuentos promocionales que aplican principalmente durante el primer cuatrimestre.<br>
+En las modalidades Online, Flex y Bachillerato by UANE no se realiza ningún pago por concepto de inscripción.<br><br>
+
+<b>LICENCIATURAS ONLINE (UTEG by ULA)</b><br><br>
+
+Precio base por materia (esquemas 4x1 y 5x1): $4,244.<br><br>
+
+<b>Primer cuatrimestre – Promoción vigente:</b><br>
+• Primera materia: 83% de descuento, pago aproximado de $721.<br>
+• Segunda materia: 60% de descuento, pago de $1,698.<br>
+• Tercera materia: 60% de descuento, pago de $1,698.<br>
+• Cuarta materia: 60% de descuento, pago de $1,698.<br>
+• Quinta materia (solo esquema 5x1): 45% de descuento, pago de $2,334.<br><br>
+
+<b>A partir del segundo cuatrimestre:</b><br>
+Beca fija del 45% en todas las materias, con un pago aproximado de $2,334 por materia.<br><br>
+
+<b>LICENCIATURAS FLEX</b><br><br>
+
+<b>Flex 4x1</b><br>
+Precio base por materia: $6,375.<br><br>
+
+<b>Primer cuatrimestre:</b><br>
+• Primera materia: 86% de descuento, pago aproximado de $893.<br>
+• Segunda materia: 60% de descuento, pago de $2,550.<br>
+• Tercera materia: 60% de descuento, pago de $2,550.<br>
+• Cuarta materia: 60% de descuento, pago de $2,550.<br><br>
+
+<b>A partir del segundo cuatrimestre:</b><br>
+Beca fija del 45% en todas las materias, con un pago aproximado de $3,506 por materia.<br><br>
+
+<b>Flex 5x1</b><br>
+Precio base por materia: $5,375.<br><br>
+
+<b>Primer cuatrimestre:</b><br>
+• Primera materia: 86% de descuento, pago aproximado de $753.<br>
+• Segunda materia: 60% de descuento, pago de $2,150.<br>
+• Tercera materia: 60% de descuento, pago de $2,150.<br>
+• Cuarta materia: 60% de descuento, pago de $2,150.<br>
+• Quinta materia: 40% de descuento, pago de $3,225.<br><br>
+
+<b>A partir del segundo cuatrimestre:</b><br>
+Beca fija del 45% en todas las materias, con un pago aproximado de $2,956 por materia.<br><br>
+
+<b>BACHILLERATO BY UANE</b><br>
+Costo mensual fijo: $3,800.<br><br>
+
+No se paga inscripción. Las promociones y descuentos pueden actualizarse mensualmente y los porcentajes mayores aplican únicamente durante el primer cuatrimestre.
+`
+}
+
+
+];
+
+/* ========= MOTOR ========= */
+function detectarIntencion(textoUsuario) {
+  const palabrasUsuario = limpiarTexto(textoUsuario);
+
+  let mejor = null;
+  let scoreMax = 0;
+
+  intents.forEach(intent => {
+    let score = 0;
+
+    intent.keywords.forEach(k => {
+      const index = palabrasUsuario.indexOf(k);
+      if (index !== -1) {
+        score += (index === 0) ? 1 : (index + 1);
+      }
+    });
+
+    if (score >= 3) score += 2;
+
+    if (score > scoreMax) {
+      scoreMax = score;
+      mejor = intent;
+    }
+  });
+
+  return mejor
+    ? mejor.response
+    : "Puedo ayudarte con RVOE, becas, modalidades, periodos, inscripción o requisitos.";
+}
+
+function formatearRespuesta(texto) {
+  let t = texto;
+
+  t = t.replace(/([^.:]+):/g, "<strong>$1:</strong><br><br>");
+  t = t.replace(/;\s*/g, "<br>• ");
+  t = t.replace(/\s-\s/g, "<br>• ");
+  t = t.replace(/\.\s+/g, ".<br><br>");
+
+  const palabrasClave = [
+    "NO","UTEG","SEP","UDG","RVOE",
+    "beca","becas","plantel","planteles",
+    "documentos","requisitos","periodos",
+    "inscripcion","maestria","pago",
+    "transferencia","Santander","BBVA"
+  ];
+
+  palabrasClave.forEach(p => {
+    const regex = new RegExp(`\\b(${p})\\b`, "gi");
+    t = t.replace(regex, `<span class="resaltado">$1</span>`);
+  });
+
+  return t;
+}
+
+function responder() {
+  const texto = document.getElementById("input").value;
+  document.getElementById("respuesta").innerHTML =
+    formatearRespuesta(detectarIntencion(texto));
+}
+
+const input = document.getElementById("input");
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    responder();
+  }
+});
+</script>
 
 </body>
 </html>
