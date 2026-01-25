@@ -3337,13 +3337,21 @@ function enviarMensaje(){
   const texto=input.value.trim();
   if(!texto) return;
 
-  agregarMensaje(texto,"user");
-  setTimeout(()=>{
-    const respuesta = detectarIntencion(texto);
-    agregarMensaje(respuesta,"bot");
-  },300);
+ function agregarMensaje(texto, tipo){
+  const chat = document.getElementById("chat");
+  const msg = document.createElement("div");
+  msg.className = "message " + tipo;
 
-  input.value="";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = texto;
+
+  msg.appendChild(bubble);
+  chat.appendChild(msg);
+
+  // 🔥 SCROLL AL INICIO DEL MENSAJE
+  chat.scrollTop = msg.offsetTop - 10;
+
 }
 
 function agregarMensaje(texto,tipo){
@@ -3357,12 +3365,6 @@ function agregarMensaje(texto,tipo){
 
   msg.appendChild(bubble);
   chat.appendChild(msg);
-
-  // 👇 SCROLL AL INICIO DEL MENSAJE NUEVO
-  msg.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
 }
 
 document.getElementById("input").addEventListener("keydown",e=>{
