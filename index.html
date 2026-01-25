@@ -3346,26 +3346,30 @@ function enviarMensaje(){
   input.value="";
 }
 
-function agregarMensaje(texto,tipo){
-  const chat=document.getElementById("chat");
-  const msg=document.createElement("div");
-  msg.className="message "+tipo;
+function agregarMensaje(texto, tipo){
+  const chat = document.getElementById("chat");
+  const msg = document.createElement("div");
+  msg.className = "message " + tipo;
 
-  const bubble=document.createElement("div");
-  bubble.className="bubble";
-  bubble.innerHTML=texto;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = texto;
 
   msg.appendChild(bubble);
   chat.appendChild(msg);
-  chat.scrollTop=chat.scrollHeight;
-}
 
-document.getElementById("input").addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!e.shiftKey){
-    e.preventDefault();
-    enviarMensaje();
+  // ⏱️ Espera a que el navegador pinte el mensaje
+  requestAnimationFrame(() => {
+    chat.scrollTop = msg.offsetTop - 12;
+  });
+}
+  document.getElementById("input").addEventListener("keydown", function(e){
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault(); // evita salto de línea
+    enviarMensaje();    // envía el mensaje
   }
 });
+
 </script>
 
 </body>
