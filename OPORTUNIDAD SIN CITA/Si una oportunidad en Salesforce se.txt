@@ -1,0 +1,1 @@
+Si una oportunidad en Salesforce se pasa a pagado sin haber gestionado la cita y sin cambiar el estado a 'asistio', no se habilita la venta compartida. Esto provoca que el asesor pierda la venta y que no se contabilice para el cumplimiento de sus metas.

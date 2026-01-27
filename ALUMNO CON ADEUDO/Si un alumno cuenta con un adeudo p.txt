@@ -1,0 +1,1 @@
+Si un alumno cuenta con un adeudo previo y realiza el pago de inscripcion, el monto se carga automaticamente al adeudo existente y no aplica reembolso. Es necesario que el alumno se presente en cajas para conocer el monto exacto de su adeudo y, en caso de solicitar algun convenio, agendar una cita con direccion para la revision del caso.

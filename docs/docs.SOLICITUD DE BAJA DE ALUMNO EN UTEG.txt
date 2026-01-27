@@ -1,0 +1,50 @@
+INTENCION_PRINCIPAL:
+baja_alumno_uteg
+
+INTENCIONES_SECUNDARIAS:
+baja
+desercion
+gestion_academica
+administrativo
+
+PALABRAS_CLAVE:
+baja de alumno
+solicitud de baja
+darme de baja
+baja antes de cierre
+baja despues de cierre
+formato f-ad-07
+no aplica reembolso
+cuentas por cobrar
+direccion administrativa
+
+
+SOLICITUD DE BAJA DE ALUMNO EN UTEG
+
+Cuando un alumno solicita una baja, el primer paso es identificar si la solicitud se realiza antes o después del cierre de inscripciones, ya que el procedimiento y las implicaciones cambian según el momento en que se presente la solicitud.
+
+BAJA ANTES DEL CIERRE DE INSCRIPCIONES
+Si la solicitud se realiza antes del cierre de inscripciones, el asesor debe escuchar y evaluar las razones por las cuales el alumno desea darse de baja.
+Antes de autorizar el trámite, es obligatorio ofrecer alternativas que permitan la continuidad del alumno, tales como:
+• Cambio de carrera.
+• Cambio de plantel.
+• Cambio de ciclo.
+
+El objetivo de estas alternativas es brindar opciones viables que eviten la deserción y apoyen la permanencia del alumno dentro de la institución.
+
+Si después de revisar estas opciones el alumno confirma que no puede continuar, se le debe explicar de manera clara que, al tratarse de una decisión personal, no aplica ningún tipo de reembolso.
+
+En este escenario, la baja se tramita mediante el llenado del formato F-AD-07, siguiendo el procedimiento administrativo correspondiente.
+
+BAJA DESPUÉS DEL CIERRE DE INSCRIPCIONES
+Cuando la solicitud de baja se realiza después del cierre de inscripciones, el trámite ya no se gestiona a nivel comercial.
+En este caso, el proceso pasa directamente al área académica.
+
+Es importante explicarle al alumno que, al contar ya con carga de materias activa, existen cuentas por cobrar vigentes.
+Por esta razón, será necesario llegar a un acuerdo con Dirección Administrativa para poder gestionar la baja.
+
+COMUNICACIÓN Y ACOMPAÑAMIENTO
+En todos los casos, el proceso de baja debe explicarse con claridad, respeto y empatía.
+El alumno debe comprender plenamente las implicaciones administrativas y financieras de su decisión antes de continuar con el trámite.
+
+Un manejo correcto de la solicitud de baja asegura orden institucional, transparencia en el proceso y una experiencia clara para el alumno.

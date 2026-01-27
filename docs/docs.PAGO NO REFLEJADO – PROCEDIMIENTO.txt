@@ -1,0 +1,41 @@
+INTENCION_PRINCIPAL:
+pago_no_reflejado
+
+INTENCIONES_SECUNDARIAS:
+pagos
+soporte
+tickets
+
+PALABRAS_CLAVE:
+pago no reflejado
+no se refleja pago
+pago pendiente
+tiempo de reflejo
+72 horas
+24 horas
+levantar ticket
+soporte lottus
+comprobante de pago
+
+
+PAGO NO REFLEJADO – PROCEDIMIENTO
+
+Cuando un pago no se refleja en el sistema, es indispensable considerar primero el tiempo de espera correspondiente según el método de pago utilizado.
+
+TIEMPOS DE ESPERA POR MÉTODO DE PAGO
+• Pagos realizados en banco (practicaja o app bancaria): el tiempo de reflejo puede ser mayor a 72 horas.
+• Pagos realizados en plantel o mediante liga de pago: el tiempo de reflejo es de hasta 24 horas.
+
+¿QUÉ HACER SI EL PAGO NO SE REFLEJA?
+Si el pago no se ve reflejado después de haber transcurrido el tiempo correspondiente, se debe levantar un ticket de soporte.
+
+ENVÍO DE TICKET
+• Correo principal: soportelottus@lottuseducation.com
+• Copia obligatoria: evelyn.corona@lottuseducation.com
+
+INFORMACIÓN QUE DEBE ADJUNTARSE
+• Evidencia del pago (ticket o comprobante).
+• Datos completos del aspirante.
+• Liga de la oportunidad en Salesforce.
+
+El envío correcto y completo de la información permite identificar la causa del retraso y dar seguimiento oportuno al reflejo del pago.

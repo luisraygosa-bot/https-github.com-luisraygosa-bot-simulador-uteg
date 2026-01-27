@@ -1,0 +1,23 @@
+INTENCION_PRINCIPAL:
+cobro_de_menos_ficha
+
+INTENCIONES_SECUNDARIAS:
+pagos
+ficha
+terminal
+error_cobro
+
+PALABRAS_CLAVE:
+cobre de menos
+cobro incorrecto
+error en ficha
+monto menor
+importe faltante
+ficha mal cobrada
+terminal
+cobro restante
+
+
+Si por error se cobra en la terminal un monto menor al indicado en la ficha, se debe cobrar el importe restante en la misma ficha.
+
+Es necesario cambiar el metodo de pago, ya que el sistema no permite realizar dos cobros temporales con la misma tarjeta.

@@ -1,0 +1,60 @@
+GESTIÓN DE CITAS EN UTEG
+
+La gestión de citas en UTEG sigue un proceso definido cuyo objetivo es asegurar un seguimiento correcto del aspirante y el reconocimiento adecuado de la venta.
+Este proceso involucra tanto al equipo de Contact Center (CC) como al personal de plantel, y se gestiona a través de Salesforce.
+
+CREACIÓN Y ORIGEN DE LA CITA
+El proceso inicia cuando el equipo de CC crea el evento o cita con base en el seguimiento previo realizado por medios digitales.
+Este seguimiento puede ir desde un convencimiento ya trabajado hasta una cita donde el proceso se realizará completamente desde cero en el plantel.
+
+En Salesforce, el asesor de CC debe dejar una radiografía clara y detallada del seguimiento realizado, permitiendo que el plantel conozca el contexto del aspirante y la forma correcta de abordar la cita.
+
+Una vez creada, la cita se asigna con estatus “Sin gestión” y se canaliza al coordinador de plantel, quien decide su asignación conforme a criterios internos.
+
+CONTACTO Y CONFIRMACIÓN DE LA CITA
+Una vez asignada la cita, el asesor de plantel debe comunicarse de inmediato con el aspirante.
+El primer intento debe realizarse vía llamada telefónica y, en caso de no obtener respuesta, se debe continuar el contacto por WhatsApp.
+
+Al obtener respuesta del aspirante, el asesor debe enviar el documento foliado de cita a plantel, cargar la evidencia correspondiente en Salesforce y actualizar el estatus de la cita según el resultado:
+• Confirmada: cuando el aspirante acepta la cita.
+• En espera de confirmación: cuando no se obtiene respuesta por ningún medio.
+• Cancelada: cuando el aspirante indica que no acepta la cita, realizando previamente labor de convencimiento.
+
+DÍA DE LA CITA
+El día de la cita, si el aspirante asiste al plantel, debe recibirse en piso de venta y la cita debe tipificarse como “Asistió” antes de iniciar la conversación.
+Esta acción es indispensable, ya que permite que la venta se registre automáticamente como Venta Compartida en caso de concretarse la inscripción.
+
+Si el aspirante no asiste, se deben esperar 30 minutos posteriores a la hora pactada.
+Durante este periodo se debe intentar contactarlo para conocer el motivo de la inasistencia.
+Si no se obtiene respuesta, la cita debe tipificarse como “No asistió”.
+
+SEGUIMIENTO POST CITA
+Toda cita asistida que no se convierta en inscripción debe cerrar con un acuerdo claro y definido.
+Estos acuerdos pueden incluir fecha de pago, reagenda de cita, envío de información a padres, validación académica o cambio de carrera.
+No deben dejarse seguimientos abiertos o indefinidos como “luego te marco”.
+
+El seguimiento debe respetar la fecha y hora pactadas.
+Si no se obtiene respuesta, el asesor debe proponer una alternativa inmediata y continuar el contacto.
+
+Las reagendas deben realizarse de manera estratégica, preferentemente dentro de las siguientes 48 horas y ajustando el canal de contacto cuando sea necesario.
+
+En casos donde el aspirante requiera validación académica o mayor confianza, el asesor debe solicitar apoyo de Dirección Académica, coordinación o un asesor senior, sin abandonar el seguimiento.
+
+REGLAS SOBRE CITAS NO ASISTIDAS
+Una cita tipificada como “No asistió” no puede regresar de etapa.
+Si el aspirante decide continuar posteriormente, se debe solicitar un segundo evento al coordinador para su gestión con CC.
+
+VENTA COMPARTIDA
+Las ventas compartidas forman parte del modelo comercial de UTEG y reconocen tanto al área que captó al aspirante como al plantel que cerró la inscripción.
+
+Para que una venta sea reconocida como compartida, se deben cumplir las siguientes condiciones:
+• El origen del aspirante debe ser real y sin modificaciones.
+• La cita debe estar correctamente tipificada como “Asistió”.
+• El pago debe cargarse correctamente en el sistema.
+
+Si la cita no se tipifica correctamente y la oportunidad pasa a estado “Pagado” sin activar la Venta Compartida, el proceso no puede corregirse y la venta contará únicamente para el asesor de CC.
+
+Cualquier alteración en el origen, falta de tipificación o cierre fuera de sistema puede provocar que la venta no sea reconocida como compartida.
+Estos casos pueden ser revisados en auditorías comerciales.
+
+Está estrictamente prohibido cambiar el origen de un aspirante con el objetivo de apropiarse de una venta.

@@ -1,0 +1,46 @@
+INTENCION_PRINCIPAL:
+modalidades_estudio_uteg
+
+INTENCIONES_SECUNDARIAS:
+presencial
+flex
+online
+modelo_academico
+
+PALABRAS_CLAVE:
+modalidades de estudio
+modalidad presencial
+modalidad flex
+modalidad online
+presencial
+flex
+online
+formas de estudio
+horarios
+estudiar trabajando
+
+
+MODALIDADES DE ESTUDIO EN UTEG
+
+En UTEG existen tres modalidades de estudio diseñadas para adaptarse a distintos estilos de vida, necesidades y tiempos de los estudiantes: Presencial, Flex y Online.
+Todas las modalidades cuentan con validez oficial y mantienen el mismo enfoque académico y de calidad educativa.
+
+MODALIDAD PRESENCIAL
+Es la modalidad tradicional de estudio.
+Incluye asistencia diaria al plantel, horarios fijos, contacto directo con docentes y uso constante de las instalaciones académicas.
+El estudiante cuenta con acompañamiento continuo, seguimiento académico y una experiencia completa de vida escolar.
+Es ideal para alumnos que buscan estructura, rutina definida y convivencia directa en el campus.
+
+MODALIDAD FLEX
+Es una modalidad mixta que combina clases presenciales con actividades en línea.
+Ofrece mayor flexibilidad de horarios sin perder el acompañamiento académico y el contacto con la institución.
+Permite equilibrar el estudio con trabajo u otras responsabilidades personales.
+Es ideal para personas que trabajan, tienen compromisos adicionales o requieren mayor flexibilidad en su agenda.
+
+MODALIDAD ONLINE
+Es una modalidad 100% en línea, sin necesidad de asistir al plantel.
+El alumno accede a una plataforma digital disponible 24/7, con contenidos, actividades y evaluaciones en línea.
+Brinda máxima flexibilidad de horarios y ubicación.
+Es ideal para estudiantes con horarios variables, trabajo de tiempo completo, o que viven fuera de la ciudad.
+
+La elección de la modalidad depende del tiempo disponible del alumno, su estilo de aprendizaje, nivel de autonomía y necesidades personales.

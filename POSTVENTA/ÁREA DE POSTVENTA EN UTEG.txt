@@ -1,0 +1,16 @@
+ÁREA DE POSTVENTA EN UTEG
+
+El área de Postventa en UTEG es responsable de recibir, revisar y gestionar la documentación de los alumnos de Bachillerato y Licenciatura incorporados a UDG.
+Su función principal es asegurar que los expedientes académicos estén completos y correctamente integrados para que el alumno pueda avanzar en su proceso institucional.
+
+GESTIÓN DE DOCUMENTACIÓN
+Una vez que el alumno entrega su documentación, el área de Postventa se encarga de cargarla en el sistema SEDE.
+Este proceso tiene como objetivo que el alumno alcance el estatus de Validado, confirmando que cumple con los requisitos documentales establecidos.
+
+VALIDACIÓN Y CANALIZACIÓN
+Cuando el área de Postventa confirma que la documentación ha sido cargada y validada correctamente en el sistema, se notifica al área de Vinculación.
+A partir de este punto, Vinculación realiza una llamada de validación final con el alumno.
+
+Esta validación incluye la confirmación de datos generales, información académica y datos relacionados con pagos.
+
+Con la validación completada por Vinculación, el alumno puede obtener el estatus de Admitido y continuar formalmente con su proceso académico dentro de la institución.

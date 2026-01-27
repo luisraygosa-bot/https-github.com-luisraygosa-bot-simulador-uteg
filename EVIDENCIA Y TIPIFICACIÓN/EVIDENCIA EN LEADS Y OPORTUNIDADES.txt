@@ -1,0 +1,60 @@
+EVIDENCIA EN LEADS Y OPORTUNIDADES EN SALESFORCE
+
+Todo lead y oportunidad en Salesforce debe contar con evidencia clara, completa y trazable para considerarse correctamente gestionado.
+La evidencia es la base para validar el seguimiento realizado, proteger la cartera del asesor y garantizar la correcta medición de la operación comercial.
+
+NOTAS OBLIGATORIAS
+Es obligatorio registrar notas en cada movimiento, contacto o acuerdo con el aspirante.
+Las notas deben ser claras, breves y fechadas, e indicar de manera específica:
+• Qué se acordó.
+• Para cuándo se acordó.
+• Bajo qué condición.
+
+No se consideran válidas notas genéricas o ambiguas.
+
+REGISTRO DE INTERACCIONES
+Todas las interacciones con el aspirante deben quedar registradas.
+Las llamadas deben reflejarse siempre en Genesys.
+
+En caso de contacto por WhatsApp u otro medio distinto a llamada, es obligatorio adjuntar una captura o evidencia en la sección de Archivos dentro de Salesforce.
+
+TAREAS Y SEGUIMIENTOS
+Es obligatorio crear tareas para cada seguimiento.
+Las tareas deben contar con:
+• Fecha definida.
+• Hora específica.
+• Notificación activa.
+
+No se permiten acuerdos abiertos ni frases como “luego te marco” o “más adelante lo vemos”.
+
+REQUISITOS PREVIOS A FICHA DE PAGO
+Antes de emitir una ficha de pago o realizar un cobro, deben estar completos los campos críticos del aspirante, tales como:
+• CURP.
+• Contacto de emergencia.
+• Dirección.
+
+FICHAS VENCIDAS Y REFERENCIAS
+En caso de que una ficha de pago se encuentre vencida y se genere una nueva referencia, se debe indicar de forma clara al aspirante que no utilice la ficha anterior.
+Si el aspirante paga con una ficha vencida, el pago no se reflejará en el sistema.
+
+CONSECUENCIAS POR FALTA DE EVIDENCIA
+El incumplimiento de estas reglas puede generar consecuencias directas, tales como:
+• Reasignación de la cartera por falta de gestión documentada.
+• Pérdida del reconocimiento de venta compartida por mala tipificación, alteración de origen o secuencia incorrecta de cierre y pago.
+• Observaciones en auditorías comerciales por uso incorrecto de etapas, becas no autorizadas o pagos sin evidencia.
+
+Adicionalmente, puede provocar:
+• Demoras en el proceso.
+• Reclamos por pagos no reflejados.
+• Menor conversión por falta de citas bien impulsadas y tareas con horario definido.
+
+GUÍA MÍNIMA INDISPENSABLE
+Como regla operativa básica:
+• Un prospecto sin información completa debe tener siempre nota y tarea.
+• Al contar con información completa, el registro pasa a oportunidad y no debe regresar a prospecto.
+• Un interesado debe tener fecha clara de decisión.
+• Una segunda llamada o decisión debe reagendarse con día y hora.
+• Las citas deben confirmarse y tipificarse correctamente.
+• Las promesas de pago deben contar con ficha vigente, hora de pago y evidencia una vez realizado el pago.
+
+En todo momento debe existir nota, tarea y evidencia en Genesys o en archivos adjuntos dentro de Salesforce.

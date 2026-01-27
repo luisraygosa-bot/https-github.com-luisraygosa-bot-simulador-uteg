@@ -1,0 +1,76 @@
+REGLAS DE ASIGNACIÓN DE LEADS EN SALESFORCE
+
+Las reglas de asignación en Salesforce definen los tiempos, condiciones y disciplina operativa bajo los cuales un lead u oportunidad debe ser gestionado.
+Su cumplimiento es obligatorio y tiene impacto directo en la permanencia del lead, la posibilidad de inscripción y el reconocimiento comercial.
+
+ETAPA: ASIGNADO
+Cuando el lead es de asignación normal (no Prospección ni B2B), el asesor cuenta con un máximo de 3 horas para trabajarlo.
+Si este tiempo se cumple sin gestión documentada, el lead se vuelve reasignable dentro del mismo plantel o puede ser reasignado por CC si vuelve a ingresar por medios oficiales.
+
+En el caso de leads provenientes de Prospección o B2B, el tiempo máximo de gestión es de 7 días naturales a partir del cambio de etapa.
+Vencido este plazo, el lead puede ser reasignado.
+
+No atender el lead dentro de estos tiempos implica perder el caso y su posible inscripción.
+
+ETAPA: NO CONTACTADO
+El trabajo en esta etapa debe ser inmediato.
+Para justificar el cambio a estatus Perdido, se requieren:
+• Al menos 15 intentos registrados en Salesforce.
+• Un mínimo de 3 intentos diarios.
+
+Si no se cumplen estos criterios, el lead puede ser reasignado por falta de gestión documentada.
+
+ETAPA: CONTACTADO
+El tiempo máximo de gestión en esta etapa es de 48 horas hábiles.
+Este plazo se mide de fecha y hora a fecha y hora, sin contar domingos.
+
+Durante este periodo deben cumplirse obligatoriamente:
+• Al menos 18 intentos registrados en Salesforce.
+• Una nota con resumen claro de la interacción.
+• El estado correcto dentro de la etapa.
+• Una tarea de seguimiento con fecha, hora y notificación activa.
+• Una llamada registrada en Genesys o evidencia de WhatsApp adjunta en Archivos.
+
+La ausencia de cualquiera de estos elementos habilita la reasignación automática del lead al cumplirse las 48 horas.
+
+ETAPA: PERDIDO
+El estatus Perdido se coloca de forma inmediata una vez cumplidos los intentos y criterios de las etapas previas.
+No requiere intentos adicionales.
+Los leads en estatus Perdido son reasignables.
+
+ETAPA: INSCRITO
+Un lead en estatus Inscrito ya no es reasignable.
+Solo puede cambiar de propietario mediante la resolución documentada de una disputa formal.
+
+PROMESAS DE PAGO
+Cuando una promesa de pago vence y no se concreta, el lead se vuelve reasignable después de 24 horas.
+Las promesas de pago vigentes no son reasignables.
+
+CAUSAS PRINCIPALES DE REASIGNACIÓN
+Las reasignaciones pueden ocurrir por:
+• Dejar pasar los tiempos definidos por etapa.
+• No cumplir con los intentos mínimos requeridos.
+• No documentar la gestión con notas, tareas y evidencias.
+• No registrar llamadas en Genesys.
+• Dejar vencer fichas de pago.
+
+CONSECUENCIAS DE INCUMPLIR LAS REGLAS
+El incumplimiento de estas reglas puede generar:
+• Pérdida del lead y de la posible inscripción.
+• Pérdida de comisión o venta compartida.
+• Observaciones en auditorías comerciales por falta de disciplina operativa.
+• Disminución en la tasa de conversión.
+• Reasignación de cartera a asesores que sí cumplan con las ventanas y la documentación.
+
+CONSIDERACIÓN IMPORTANTE
+Si un lead es reasignado con cierto número de intentos ya realizados, el nuevo propietario solo deberá completar los intentos restantes definidos por el Método Lottus, siempre que no se cambie la etapa o el estado.
+
+¿CÓMO EVITAR LA REASIGNACIÓN?
+Para evitar la reasignación, el asesor debe:
+• Cumplir con los intentos diarios y totales por etapa.
+• Registrar notas claras y específicas en Salesforce.
+• Programar tareas con notificación activa.
+• Registrar llamadas en Genesys o adjuntar evidencia de WhatsApp.
+• Mantenerse dentro del reloj definido para cada etapa, recordando que los domingos no cuentan para las ventanas de 24 y 48 horas.
+
+El respeto a estas reglas garantiza orden operativo, protección de cartera y mejores resultados comerciales.

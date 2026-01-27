@@ -1,0 +1,20 @@
+INTENCION_PRINCIPAL:
+pagos_flex_online
+
+INTENCIONES_SECUNDARIAS:
+pagos
+terminal
+reembolsos
+
+PALABRAS_CLAVE:
+pagos flex
+pagos online
+no se puede cobrar en terminal
+terminal
+cobro incorrecto
+reembolso
+cajas
+ficha de pago
+
+
+Los pagos de uteg flex u online no se pueden cobrar en terminal. si por error se realizo el cobro, es necesario afrontar la situacion solicitando un reembolso en cajas. Posteriormente, el aspirante debe volver a realizar el pago del monto de inscripcion utilizando la misma ficha de pago.

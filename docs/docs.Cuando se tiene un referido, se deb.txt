@@ -1,0 +1,18 @@
+INTENCION_PRINCIPAL:
+referidos_uteg
+
+INTENCIONES_SECUNDARIAS:
+descuento
+recomendados
+mensualidad
+
+PALABRAS_CLAVE:
+referido
+referidos
+formato recomendados
+descuento 10
+recomendacion
+beneficio referido
+validacion referido
+
+Cuando se tiene un referido, se debe llenar el formato de recomendados. posteriormente, se solicita a manuel olmedo que envie un correo a lizbeth.gonzalez@lottuseducation.com para validacion. Una vez que se recibe el visto bueno, el formato se sube a cajas para que se aplique el descuento del 10% en la proxima mensualidad.

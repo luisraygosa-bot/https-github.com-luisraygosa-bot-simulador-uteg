@@ -1,0 +1,22 @@
+
+CAMBIO DE CARRERA, PLANTEL O CICLO CON OPORTUNIDAD PAGADA
+
+Cuando un aspirante solicita un cambio de carrera, plantel o ciclo y la oportunidad ya se encuentra en estatus pagado, inscrito o admitido, es necesario seguir un procedimiento específico para asegurar que el cambio se realice de forma correcta.
+
+VALIDACIÓN DE DISPONIBILIDAD
+El primer paso es confirmar que exista disponibilidad en la nueva carrera, plantel o ciclo solicitado por el aspirante.
+
+AJUSTE DE COSTOS Y DESCUENTOS
+• Si el pago realizado inicialmente es menor al costo de la nueva licenciatura o plantel, el aspirante deberá cubrir la diferencia correspondiente.
+• En caso de que el descuento aplicado originalmente ya no se encuentre vigente, se ajustará al descuento activo al momento de realizar la solicitud de cambio.
+• El aspirante deberá cubrir el monto restante derivado del nuevo costo o del ajuste de descuento.
+
+ACEPTACIÓN DE CONDICIONES
+Una vez que el aspirante acepta las condiciones de costo y descuento, se procede con la gestión administrativa del cambio.
+
+PROCESO ADMINISTRATIVO
+• Se solicita al área de Vinculación la baja de la oportunidad actual.
+• Vinculación se encarga de crear la nueva oportunidad con la información actualizada.
+• Una vez concluido el proceso por parte de Vinculación, el asesor realiza el cambio correspondiente en Salesforce.
+
+Este procedimiento garantiza que el cambio se realice de manera correcta, manteniendo la trazabilidad del pago y la información académica del aspirante.

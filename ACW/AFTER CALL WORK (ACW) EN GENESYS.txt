@@ -1,0 +1,60 @@
+AFTER CALL WORK (ACW) EN GENESYS
+
+El After Call Work, conocido como ACW, es el estado obligatorio en el que yo, Genesys, te coloco automáticamente después de que termina una llamada.
+Aunque la llamada ya finalizó y el cliente ya colgó, tu trabajo aún no termina.
+
+¿CÓMO FUNCIONA EL ACW?
+El flujo del ACW funciona de la siguiente manera:
+
+Primero, atiendes una llamada, ya sea inbound, outbound, proveniente de un bot, de marcación automática o de una llamada manual.
+
+Cuando la llamada termina, ya sea porque el cliente cuelga o porque tú finalizas la interacción, no regresas al estado Disponible.
+En ese momento yo te envío de forma automática al estado de After Call Work.
+
+Mientras estás en ACW:
+• No entran llamadas nuevas.
+• Puedes trabajar la interacción sin interrupciones.
+• Se comienza a medir el tiempo de ACW.
+
+¿PARA QUÉ SIRVE EL ACW?
+El ACW existe para que puedas cerrar correctamente la interacción.
+Durante este estado debes:
+• Tipificar la llamada de forma correcta (motivo, resultado y estatus del prospecto).
+• Capturar notas relevantes, comentarios del cliente y acuerdos establecidos.
+• Registrar seguimientos o compromisos.
+• Actualizar sistemas como CRM, formularios o plataformas académicas o comerciales.
+
+Sin un uso correcto del ACW, la operación se vuelve desordenada y se pierde trazabilidad de la gestión realizada.
+
+DURACIÓN DEL ACW
+El tiempo del ACW depende de la configuración de la cola o de la política establecida:
+
+• ACW ilimitado: tú decides cuándo salir del estado, lo que implica el riesgo de que el asesor se quede atorado en ACW sin justificación.
+
+• ACW con temporizador: yo te saco automáticamente del estado al terminar el tiempo configurado y te regreso a Disponible u otro estado definido.
+
+IMPACTO DEL ACW EN MÉTRICAS
+El ACW impacta directamente los indicadores operativos.
+Se mide como:
+• Tiempo de ACW.
+• Tiempo no disponible.
+• Tiempo productivo indirecto.
+
+Un ACW elevado reduce la productividad, disminuye la capacidad de atención, afecta dashboards y puede impactar SLA.
+En términos simples: un ACW excesivo significa menos llamadas atendidas.
+
+ACW VS AFTER AUTO ANSWER
+El ACW aplica a todas las llamadas y es el control operativo estándar.
+El After Auto Answer es un caso específico que solo aplica a interacciones que entran mediante Auto Answer.
+No deben confundirse, ya que cumplen funciones distintas dentro de la operación.
+
+ERRORES COMUNES EN ACW
+Entre los errores más frecuentes se encuentran:
+• Quedarse en ACW sin trabajar la interacción.
+• Usar el ACW como descanso.
+• No tipificar correctamente la llamada.
+• Pensar que el ACW no afecta métricas.
+
+Todo el tiempo que pasas en ACW se mide, se registra y es completamente visible en los reportes operativos.
+
+El uso correcto del ACW es clave para mantener orden, productividad y calidad en la operación.

@@ -1,0 +1,85 @@
+CAMPAÑAS Y BOTS EN GENESYS
+
+En Genesys, las campañas y los bots son los mecanismos que utilizo para generar, administrar y distribuir interacciones de forma automática, sin depender de que un asesor marque o conteste manualmente.
+Yo inicio el contacto, yo filtro los resultados y solo envío a los asesores las interacciones que realmente son útiles.
+
+¿QUÉ ES UNA CAMPAÑA EN GENESYS?
+Una campaña en Genesys es un motor de marcación automática.
+Toma una base de datos de contactos y ejecuta llamadas o mensajes de forma masiva y controlada.
+
+Dentro de una campaña, yo me encargo de:
+• Marcar números automáticamente.
+• Decidir cuándo y a quién marcar.
+• Controlar el ritmo de marcación según la disponibilidad de asesores.
+• Filtrar resultados como no contesta, buzón, ocupado o número inválido.
+• Enviar a los asesores únicamente las interacciones efectivas.
+
+TIPOS DE CAMPAÑAS
+Existen distintos tipos de campañas en Genesys:
+
+Preview
+El asesor revisa el contacto antes de marcar y decide cuándo iniciar la llamada.
+
+Power
+La marcación es automática, una llamada a la vez por asesor.
+Es uno de los esquemas más utilizados en UTEG.
+
+Predictiva
+Se realizan varias llamadas de forma anticipada, calculando la disponibilidad de los asesores.
+Busca maximizar el tiempo efectivo de conversación.
+
+Campañas con Bot o IVR
+Un asistente automático interactúa primero con el contacto antes de transferirlo a un asesor.
+
+En UTEG, normalmente se utilizan campañas Power, Predictiva y campañas con Bot.
+
+¿QUÉ ES UN BOT EN GENESYS?
+Un bot en Genesys es un asistente automático que interactúa con el contacto antes que el asesor.
+Su función es filtrar, clasificar y validar al contacto.
+
+Un bot puede:
+• Saludar al contacto.
+• Validar identidad o datos básicos.
+• Hacer preguntas.
+• Detectar intención e interés.
+• Clasificar el resultado de la llamada.
+
+Solo cuando el contacto cumple con las condiciones definidas, el bot lo transfiere a un asesor.
+
+FLUJO REAL DE UNA CAMPAÑA CON BOT
+El flujo funciona de la siguiente manera:
+
+Primero, yo marco automáticamente desde la base cargada, en volumen y sin intervención del asesor.
+
+Si la persona contesta, el bot atiende, saluda, valida identidad y confirma interés.
+
+Después realizo un filtrado automático donde identifico:
+• Llamadas no contestadas.
+• Buzón de voz.
+• Números inválidos.
+• Contactos sin interés.
+
+Estas llamadas no se envían al asesor.
+
+Solo cuando hay una persona real y un interés válido, la interacción se transfiere al agente.
+En ese momento entran en juego el Auto Answer, el After Call Work y el flujo normal del asesor.
+
+¿POR QUÉ NO TODAS LAS LLAMADAS SE VEN EN EL DASHBOARD?
+Por esta razón, no todas las llamadas se reflejan en el dashboard del agente.
+Las campañas realizan muchos intentos que nunca llegan al asesor.
+El dashboard del asesor solo muestra las interacciones efectivas que sí fueron ofrecidas.
+
+RESUMEN OPERATIVO
+• La campaña es la que marca.
+• El bot es quien filtra y valida.
+• El asesor es quien cierra.
+
+ERRORES COMUNES DE PERCEPCIÓN
+Algunos errores frecuentes incluyen pensar que:
+• Genesys no está marcando.
+• La base no funciona.
+• No entran llamadas.
+
+Cuando en realidad, la campaña sí está marcando y el bot sí está hablando, pero en ese momento no hay contactos efectivos disponibles para transferir al asesor.
+
+Entender cómo funcionan las campañas y los bots es clave para interpretar correctamente la operación y los indicadores en Genesys.

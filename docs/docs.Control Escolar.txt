@@ -1,0 +1,47 @@
+INTENCION_PRINCIPAL:
+control_escolar
+
+INTENCIONES_SECUNDARIAS:
+validacion
+documentos
+estatus_academico
+
+PALABRAS_CLAVE:
+control escolar
+validacion academica
+validacion por control escolar
+estatus academico
+registro academico
+datos academicos
+no es comercial
+revision expedientes
+
+
+Control Escolar es el área responsable de validar, registrar y mantener la información académica y administrativa de los alumnos dentro del sistema institucional.
+
+Su intervención ocurre cuando un proceso requiere validación formal, consistencia documental o impacto en el estatus académico del alumno.
+
+Control Escolar interactúa con la información generada desde Salesforce, pero no opera el seguimiento comercial.
+
+Las funciones de Control Escolar incluyen:
+
+- Revisión y validación de documentos académicos cargados por el alumno o asociados al expediente.
+- Confirmación de que la información personal y académica sea congruente entre sistemas.
+- Registro y actualización de estatus académicos.
+- Autorización o rechazo de procesos que requieren control administrativo.
+- Atención de incidencias relacionadas con datos académicos, inscripciones y registros formales.
+
+Control Escolar no gestiona prospectos ni oportunidades.
+Su trabajo se relaciona con registros que ya tienen un proceso avanzado o cerrado.
+
+Dentro del contexto del sistema, Control Escolar:
+- No crea leads
+- No realiza actividades comerciales
+- No gestiona campañas
+- No define descuentos
+- No realiza cobros
+
+Su rol es validar que lo registrado cumpla con los criterios institucionales para que el alumno pueda continuar en el sistema.
+
+Cualquier ajuste, corrección o regularización que afecte datos académicos suele requerir revisión o intervención de Control Escolar.
+

@@ -1,0 +1,38 @@
+INTENCION_PRINCIPAL:
+error_crear_lead_salesforce
+
+INTENCIONES_SECUNDARIAS:
+salesforce
+leads
+duplicados
+contact_center
+
+PALABRAS_CLAVE:
+error crear lead
+no puedo crear lead
+lead duplicado
+prospecto ya existe
+registro duplicado
+salesforce no deja crear
+lead ya existe
+lead en contact center
+
+
+ERROR AL CREAR UN LEAD DESDE CERO
+
+Cuando al intentar crear un lead desde cero aparece un error en Salesforce, lo más probable es que el prospecto ya exista previamente en el sistema como un registro duplicado.
+
+¿POR QUÉ OCURRE ESTE ERROR?
+Este escenario se presenta cuando el prospecto ya fue registrado con anterioridad y se encuentra activo dentro de la base de datos.
+En muchos casos, el lead puede estar asignado al área de Contact Center, por lo que no es visible ni editable desde la vista del asesor comercial.
+
+CONTROL DE DUPLICADOS EN SALESFORCE
+El sistema bloquea de manera automática la creación de nuevos leads duplicados con el objetivo de mantener la integridad y calidad de la base de datos.
+Por esta razón, aunque el asesor intente crear un nuevo lead, Salesforce impide el registro si detecta coincidencias en la información del prospecto.
+
+¿QUÉ SE DEBE HACER EN ESTE CASO?
+• Validar con el área de Contact Center o con el área correspondiente si el prospecto ya se encuentra registrado.
+• Confirmar el estatus actual del lead dentro del sistema.
+• Solicitar al coordinador la reasignación del lead en caso de que aplique.
+
+Este procedimiento permite evitar duplicados, asegurar el correcto seguimiento del prospecto y mantener la trazabilidad de la información dentro de Salesforce.

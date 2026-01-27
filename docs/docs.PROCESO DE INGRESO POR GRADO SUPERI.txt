@@ -1,0 +1,56 @@
+INTENCION_PRINCIPAL:
+grado_superior_equivalencia
+
+INTENCIONES_SECUNDARIAS:
+equivalencia
+revalidacion
+control_escolar
+salesforce
+
+PALABRAS_CLAVE:
+grado superior
+equivalencia
+revalidacion
+ingreso por equivalencia
+tipo de estudiante
+no aplica beca
+no descuento
+control escolar aprueba
+cuenta para meta
+
+
+PROCESO DE INGRESO POR GRADO SUPERIOR / EQUIVALENCIA
+
+¿QUÉ ES GRADO SUPERIOR?
+El ingreso por Grado Superior es el esquema aplicado a aspirantes que ya cursaron estudios previos de nivel medio superior o superior y solicitan el reconocimiento de materias mediante equivalencia o revalidación, según corresponda.
+Este proceso permite continuar estudios sin iniciar desde cero, siempre que se cumplan los criterios académicos establecidos.
+
+APROBACIÓN PREVIA DE CONTROL ESCOLAR
+Antes de realizar cualquier alta en sistema, es indispensable que Control Escolar revise y apruebe la documentación del aspirante para el ingreso por Grado Superior.
+Solo una vez confirmada esta aprobación, el proceso comercial puede continuar con normalidad.
+
+ALTA EN SISTEMA (SALESFORCE)
+Con la aprobación de Control Escolar confirmada, el asesor puede:
+• Realizar el alta del alumno en Salesforce de manera regular.
+• Generar la ficha de inscripción correspondiente.
+• Dar seguimiento al proceso administrativo como en cualquier otro ingreso autorizado.
+
+DATO OBLIGATORIO EN SALESFORCE
+En el campo “Tipo de estudiante” se debe seleccionar obligatoriamente:
+➡️ Equivalencia / Grado Superior.
+
+Este dato es indispensable para que el estatus académico y administrativo del alumno quede correctamente identificado y evitar errores posteriores.
+
+BECAS Y DESCUENTOS
+A los alumnos inscritos por Grado Superior no se les ofrece ni se les aplica:
+• Descuentos en inscripción.
+• Becas comerciales o institucionales.
+
+Las becas y descuentos son exclusivos para alumnos de primer ingreso.
+
+IMPACTO EN METAS DEL ASESOR
+Los alumnos inscritos por Grado Superior sí abonan a la meta individual del asesor, ya que representan un ingreso efectivo y un cierre válido dentro de la operación comercial.
+
+MENSAJE CLAVE PARA EL ASESOR
+Grado Superior no es primer ingreso, pero sí cuenta para tu meta.
+Registrar correctamente el tipo de estudiante evita errores en becas, cobros, estatus académico y reportes.

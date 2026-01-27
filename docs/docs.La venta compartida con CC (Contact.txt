@@ -1,0 +1,26 @@
+INTENCION_PRINCIPAL:
+venta_compartida_cc
+
+INTENCIONES_SECUNDARIAS:
+contact_center
+ventas
+salesforce
+citas
+
+PALABRAS_CLAVE:
+venta compartida
+venta compartida con contact center
+cierre con cc
+venta con cc
+origen digital
+cierre compartido
+seguimiento conjunto
+
+
+La venta compartida con CC (Contact Center) es un esquema de atención y cierre en el que el asesor comercial y el Contact Center colaboran sobre el mismo prospecto para lograr su inscripción. 
+
+En este modelo, ambas áreas participan de manera coordinada en el seguimiento del aspirante, ya sea en distintos momentos o de forma complementaria, con el objetivo de no perder oportunidades de venta y garantizar una atención continua. Generalmente, el proceso funciona de la siguiente manera: el Contact Center realiza el primer contacto o un seguimiento inicial del prospecto; posteriormente, el asesor comercial puede reforzar la atención resolviendo dudas específicas, explicando a detalle el programa académico y acompañando al aspirante durante su proceso de inscripción. Tanto el asesor como el CC pueden interactuar con el mismo registro del prospecto dentro del sistema, respetando el historial de contactos, el estatus y las gestiones previas. 
+
+El cierre de la inscripción puede realizarse por cualquiera de las dos partes, dependiendo del momento y del canal por el cual el aspirante decida continuar. El objetivo principal de la venta compartida es evitar que un prospecto se pierda por falta de seguimiento, aprovechar distintos canales de contacto como llamadas, mensajes o asesoría directa, y aumentar la tasa de conversión a inscripción. Es importante considerar que la venta compartida no duplica esfuerzos, sino que los complementa. Para que funcione correctamente, debe existir un registro claro de actividades, actualización constante del estatus del prospecto y comunicación efectiva entre el asesor y el Contact Center, evitando información duplicada o contradictoria. 
+
+La venta compartida con CC no sustituye el trabajo del asesor; por el contrario, es una herramienta de apoyo que asegura que el aspirante siempre tenga seguimiento y acompañamiento oportuno durante su proceso de decisión.

@@ -1,0 +1,61 @@
+INTENCION_PRINCIPAL:
+medios_pago_uteg
+
+INTENCIONES_SECUNDARIAS:
+pagos
+inscripcion
+ficha
+
+PALABRAS_CLAVE:
+formas de pago
+medios de pago
+terminal
+tpv
+liga de pago
+referencia bancaria
+banca mifel
+pago oxxo
+pago app bancaria
+ticket de pago
+
+
+MEDIOS Y FORMAS DE PAGO EN UTEG
+
+El Centro Universitario UTEG acepta únicamente ciertos medios de pago para aspirantes de primer ingreso en el concepto de inscripción.
+Es fundamental considerar cada medio y sus condiciones, ya que de ello depende que el pago se refleje correctamente y en tiempo para continuar con el proceso académico.
+
+TERMINAL PUNTO DE VENTA (TPV)
+Este es el medio de pago más rápido y efectivo cuando el aspirante se encuentra físicamente en el plantel.
+El pago se refleja de manera inmediata.
+Aplica únicamente para programas presenciales UTEG.
+No aplica para programas en modalidad Online ni Flex.
+
+LIGA DE PAGO
+La liga de pago se utiliza cuando el aspirante no cuenta con tarjeta física en plantel o requiere realizar el pago de manera remota.
+El pago se refleja de forma inmediata.
+Aplica exclusivamente para programas presenciales UTEG.
+No aplica para programas en modalidad Online ni Flex.
+
+PAGO EN BANCOS (REFERENCIA BANCARIA)
+Este pago se realiza mediante practicaja, no en ventanilla bancaria.
+La referencia bancaria generada corresponde al banco Banca Mifel, aun cuando el pago se realice desde aplicaciones bancarias o cajeros de otros bancos como Santander o BBVA.
+El pago debe efectuarse como pago de servicio, ingresando correctamente el número de referencia y el convenio correspondiente.
+Aplica para programas presenciales UTEG, Flex y Online.
+El reflejo del pago puede tardar hasta 72 horas.
+
+PAGO POR APP BANCARIA
+El pago se realiza desde la aplicación móvil del banco como pago de servicio.
+La referencia utilizada corresponde igualmente a Banca Mifel.
+Aplica para programas presenciales UTEG.
+El reflejo del pago puede tardar hasta un máximo de 72 horas.
+No aplica para programas Online ni Flex.
+
+PAGO EN OXXO
+El pago en OXXO aplica para programas presenciales UTEG, Flex y Online.
+El reflejo del pago puede tardar hasta 72 horas.
+Es indispensable solicitar y conservar el voucher o ticket de pago para cualquier aclaración.
+
+CONSIDERACIONES IMPORTANTES
+En todos los casos es obligatorio contar con el comprobante o ticket de pago como evidencia en Salesforce.
+Se debe verificar que la referencia del ticket coincida exactamente con el número de referencia de la ficha de pago.
+Si el pago no se refleja después de 72 horas, se debe accionar de inmediato para identificar la causa y evitar retrasos en el proceso de inscripción.

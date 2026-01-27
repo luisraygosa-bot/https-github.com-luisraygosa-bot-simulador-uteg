@@ -1,0 +1,51 @@
+ESTADOS AUXILIARES EN GENESYS
+
+Los estados auxiliares en Genesys son los estatus que indican en tiempo real qué está haciendo el asesor durante su jornada laboral.
+Su correcta utilización es fundamental para el seguimiento diario de la operación, la medición de productividad y el cumplimiento de los KPI definidos por el área comercial.
+
+Cada estado tiene una función específica y debe utilizarse de manera estricta y responsable, ya que Genesys monitorea y registra el tiempo efectivo en cada uno de ellos.
+
+ESTADOS Y SU USO CORRECTO
+
+Disponible
+Este estado debe utilizarse únicamente al iniciar la jornada laboral, antes de comenzar las actividades operativas.
+En este estado, el asesor no está disponible para realizar ni recibir llamadas.
+No debe utilizarse durante la operación activa.
+
+En Cola
+Es el estado principal de trabajo.
+Indica que el asesor está activo y correctamente cargado en las filas de atención.
+Permite realizar y recibir llamadas.
+Todo el tiempo operativo de llamadas debe concentrarse en este estado.
+
+Ocupado
+Debe utilizarse únicamente cuando el asesor realiza actividades laborales que no implican atención de llamadas.
+Ejemplos: atención de citas en plantel, recorridos, apoyo a alumnos, gestiones presenciales o actividades administrativas autorizadas.
+
+Ausente
+Este estado no se utiliza en planteles.
+
+Descanso
+Se emplea exclusivamente para salidas cortas no relacionadas con actividades laborales.
+Ejemplos: ir al baño o pausas breves.
+No debe utilizarse para actividades de trabajo.
+
+Capacitación
+Se utiliza cuando el asesor participa en sesiones formales de capacitación.
+Aplica para capacitaciones impartidas por el área de Capacitación, el coordinador u otro departamento institucional.
+
+Reunión
+Se usa únicamente cuando el asesor se encuentra en una reunión presencial o remota convocada por algún líder, coordinación o área institucional.
+Debe tener siempre un fin laboral.
+
+MONITOREO Y MÉTRICAS
+Genesys realiza monitoreos constantes para medir:
+• Tiempo efectivo en cada estado por asesor.
+• Tiempo ocioso.
+• Número de llamadas realizadas.
+• Tiempo real de conversación.
+
+Por ejemplo, si al final del día se registran 150 llamadas y únicamente 10 minutos de tiempo efectivo hablando, la métrica indica que la mayoría de las llamadas fueron no contestadas.
+Este análisis permite identificar la necesidad de incrementar el volumen de llamadas para mejorar la efectividad y el desempeño comercial.
+
+El uso incorrecto de los estados auxiliares impacta directamente en los indicadores de desempeño y puede derivar en observaciones operativas o acciones correctivas.

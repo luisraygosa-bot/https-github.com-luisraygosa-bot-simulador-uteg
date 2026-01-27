@@ -1,0 +1,44 @@
+AUTO ANSWER EN GENESYS
+
+El Auto Answer en Genesys es una función mediante la cual yo, Genesys, contesto la interacción automáticamente por ti, sin que tengas que presionar aceptar, levantar la llamada ni realizar ninguna acción manual.
+En el momento en que entra una llamada o interacción, yo la acepto, te conecto y la conversación comienza de inmediato.
+
+¿CÓMO FUNCIONA EL AUTO ANSWER?
+El flujo de Auto Answer funciona de la siguiente manera:
+
+Primero, te colocas en el estado Disponible, lo que me indica que estás listo para recibir interacciones.
+
+Después, entra una llamada proveniente de campañas automáticas, bots, marcación predictiva o flujos inbound configurados con Auto Answer.
+En este punto no hay timbre, no hay botón de aceptar ni cuenta regresiva.
+
+Finalmente, yo contesto la llamada por ti.
+La interacción ya está conectada, el cliente ya te escucha y el tiempo de conversación comienza a correr inmediatamente.
+
+PUNTOS CLAVE PARA EL ASESOR
+Cuando la llamada aparece en tu pantalla, ya es una conversación activa.
+No existe tiempo de preparación, vista previa ni segundos para leer información antes de hablar.
+Debes entrar directamente al speech desde el primer segundo.
+
+Es muy importante que no hables con compañeros, no te mutes sin cuidado y no esperes a ver si el cliente contesta, ya que el cliente ya está en línea.
+
+¿PARA QUÉ SE UTILIZA EL AUTO ANSWER?
+El Auto Answer está diseñado para maximizar el contacto efectivo.
+Reduce segundos muertos, elimina tiempos de espera y evita que el cliente cuelgue mientras la llamada suena.
+
+Se utiliza principalmente en:
+• Campañas outbound automáticas.
+• Bots que transfieren a agente.
+• Marcación predictiva.
+• Power dialing.
+
+Es opcional en inbound tradicional y no aplica para llamadas manuales.
+
+BENEFICIOS OPERATIVOS
+El Auto Answer incrementa la productividad al generar menos fricción en la operación.
+Permite más conversaciones reales, menos rechazos por no aceptar llamadas y un mejor aprovechamiento del tiempo efectivo de los asesores.
+
+DIFERENCIA CONTRA LLAMADAS MANUALES
+A diferencia de una llamada manual, el Auto Answer no hace sonar el teléfono, no requiere que aceptes la llamada y no genera espera para el cliente.
+Por esta razón, es ideal para operaciones con bots y esquemas de marcación automática.
+
+Usar correctamente el Auto Answer es clave para el desempeño individual y para el éxito de las campañas automatizadas.

@@ -1,0 +1,91 @@
+INTENCION_PRINCIPAL:
+contact_center_lottus
+
+INTENCIONES_SECUNDARIAS:
+base_digital
+citas
+genesys
+leads_digitales
+
+PALABRAS_CLAVE:
+contact center
+base digital
+origen digital
+leads digitales
+formularios
+marketing digital
+generacion de citas
+primer contacto
+no cierra ventas
+
+
+Un Contact Center es un área especializada en la gestión inicial de contactos que provienen de canales digitales.
+
+Su función principal es atender, filtrar y organizar grandes volúmenes de registros generados por medios digitales antes de que lleguen a los asesores.
+
+El Contact Center actúa como un primer punto de contacto y clasificación dentro del proceso comercial.
+
+---
+
+En el contexto de Lottus, el Contact Center gestiona la base de origen digital.
+
+La base de origen digital está compuesta por registros que provienen de:
+- Formularios en línea
+- Plataformas digitales
+- Campañas de marketing digital
+- Medios electrónicos de captación
+
+Estos registros ingresan al sistema sin un asesor asignado inicialmente.
+
+---
+
+El Contact Center trabaja directamente sobre esta base digital.
+
+Sus actividades se centran en:
+- Contactar a los registros digitales
+- Validar información de contacto
+- Confirmar el interés del prospecto
+- Clasificar el registro según su avance
+- Generar citas para atención posterior
+
+El Contact Center no realiza seguimiento comercial profundo ni cierre.
+
+---
+
+Una de las funciones principales del Contact Center es la generación de citas.
+
+Las citas representan un punto de transición entre:
+- La atención inicial del Contact Center
+- La gestión personalizada del asesor
+
+Cuando una cita es generada, el registro queda listo para ser atendido por un asesor asignado.
+
+---
+
+El Contact Center no gestiona procesos completos de inscripción.
+
+No realiza:
+- Seguimiento prolongado
+- Gestión de oportunidades
+- Procesos de pago
+- Inscripciones
+- Postventa
+
+Su intervención se limita a la etapa inicial del contacto.
+
+---
+
+Dentro del sistema, el Contact Center:
+- Trabaja registros de origen digital
+- Interactúa antes de que el asesor tome el caso
+- Facilita la organización de la base
+- Reduce carga operativa del asesor
+
+El Contact Center funciona como un filtro operativo que permite que los asesores reciban registros con información validada y una cita generada.
+
+---
+
+La relación entre Contact Center y asesores es secuencial.
+
+Primero interviene el Contact Center sobre la base digital.
+Posteriormente, el asesor continúa el proceso a partir de la cita generada.

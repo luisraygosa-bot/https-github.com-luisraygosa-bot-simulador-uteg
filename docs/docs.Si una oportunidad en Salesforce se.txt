@@ -1,0 +1,19 @@
+INTENCION_PRINCIPAL:
+oportunidad_pagada_sin_cita
+
+INTENCIONES_SECUNDARIAS:
+salesforce
+venta_compartida
+citas
+
+PALABRAS_CLAVE:
+oportunidad pagada
+pagado sin cita
+no asistio
+no se habilita venta compartida
+pierde la venta
+estado asistio
+error en salesforce
+metas comerciales
+
+Si una oportunidad en Salesforce se pasa a pagado sin haber gestionado la cita y sin cambiar el estado a 'asistio', no se habilita la venta compartida. Esto provoca que el asesor pierda la venta y que no se contabilice para el cumplimiento de sus metas.

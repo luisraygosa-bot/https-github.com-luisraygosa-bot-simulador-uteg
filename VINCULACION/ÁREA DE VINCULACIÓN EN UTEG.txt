@@ -1,0 +1,22 @@
+ÁREA DE VINCULACIÓN EN UTEG
+
+El Área de Vinculación en UTEG es responsable de verificar vía telefónica la información registrada del alumno en Salesforce.
+Su función principal es asegurar que los datos generales, académicos y de pagos sean correctos y estén completos antes de permitir el avance en el proceso académico.
+
+VALIDACIÓN DE INFORMACIÓN
+Durante la llamada de validación, Vinculación confirma información personal, académica y administrativa del alumno.
+Cuando toda la información y documentación cumple con los requisitos establecidos, el área procede a cambiar el estatus del alumno a Admitido.
+
+Este estatus permite que el área de Asesores Educativos realice la carga de materias correspondientes y que el alumno inicie formalmente su vida académica.
+
+CASOS ESPECIALES: BIS Y LICENCIATURAS SEP
+En el caso de alumnos BIS y Licenciaturas incorporadas a SEP, el proceso es distinto.
+Estos alumnos no pasan por el área de Postventa.
+La documentación se carga directamente en el portal ESPACIO.
+
+El Área de Vinculación realiza las llamadas de validación y acompañamiento para confirmar que la documentación sea correcta y completa.
+Una vez validada la información, Vinculación otorga directamente el estatus de Admitido.
+
+SEGUIMIENTO ACADÉMICO
+Adicionalmente, el Área de Vinculación realiza seguimientos de Toma de Lista.
+Este proceso tiene como objetivo confirmar que los alumnos se encuentren asistiendo a clases y se mantengan activos en aula durante el inicio de su ciclo académico.

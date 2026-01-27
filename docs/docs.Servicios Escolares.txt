@@ -1,0 +1,56 @@
+INTENCION_PRINCIPAL:
+servicios_escolares
+
+INTENCIONES_SECUNDARIAS:
+tramites
+administrativo
+expediente_alumno
+
+PALABRAS_CLAVE:
+servicios escolares
+tramites administrativos
+estatus administrativo
+expediente alumno
+seguimiento institucional
+no es comercial
+gestion administrativa
+
+
+Servicios Escolares es el área encargada de la gestión administrativa del alumno durante su permanencia en la institución.
+
+Su función principal es dar continuidad a los procesos del alumno una vez que existe un registro formal dentro del sistema.
+
+Servicios Escolares trabaja con información relacionada a:
+- Inscripciones
+- Trámites administrativos
+- Documentación institucional
+- Procesos posteriores al alta inicial
+
+A diferencia de Control Escolar, Servicios Escolares sí interactúa de forma continua con el expediente del alumno durante su trayectoria.
+
+Dentro del sistema, Servicios Escolares puede intervenir en:
+
+- Actualización de estatus administrativos del alumno.
+- Gestión de trámites posteriores a la inscripción.
+- Atención de incidencias reportadas en etapas posteriores.
+- Seguimiento de procesos internos relacionados con documentación.
+- Coordinación con otras áreas para resolver situaciones administrativas.
+
+Servicios Escolares no gestiona prospectos ni oportunidades comerciales.
+Su trabajo inicia cuando el alumno ya forma parte del sistema institucional.
+
+En Salesforce y sistemas relacionados, Servicios Escolares:
+- Consulta información generada previamente.
+- Da seguimiento a registros ya existentes.
+- Documenta incidencias o validaciones administrativas.
+- Apoya en la continuidad del expediente del alumno.
+
+Las interacciones de Servicios Escolares suelen quedar registradas mediante:
+- Cambios de estatus
+- Comentarios
+- Notas
+- Archivos adjuntos
+- Historial del sistema
+
+Servicios Escolares no define estrategias comerciales ni condiciones de venta.
+Su función es administrativa, operativa y de seguimiento institucional.

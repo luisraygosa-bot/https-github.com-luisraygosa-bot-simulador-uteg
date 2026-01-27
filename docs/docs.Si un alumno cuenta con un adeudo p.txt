@@ -1,0 +1,19 @@
+INTENCION_PRINCIPAL:
+adeudo_previo_alumno
+
+INTENCIONES_SECUNDARIAS:
+pagos
+adeudos
+cajas
+
+PALABRAS_CLAVE:
+adeudo previo
+alumno con adeudo
+pago se va a adeudo
+no aplica reembolso
+cajas
+convenio de pago
+direccion
+monto exacto
+
+Si un alumno cuenta con un adeudo previo y realiza el pago de inscripcion, el monto se carga automaticamente al adeudo existente y no aplica reembolso. Es necesario que el alumno se presente en cajas para conocer el monto exacto de su adeudo y, en caso de solicitar algun convenio, agendar una cita con direccion para la revision del caso.
