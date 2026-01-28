@@ -250,7 +250,15 @@ body{
 /* ========= MOTOR ========= */
 
 function normalizarTexto(texto){
-  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  return (texto || "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    // quita puntuación y símbolos, deja espacios
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 const stopwords=[
@@ -260,7 +268,7 @@ const stopwords=[
 
 function limpiarTexto(texto){
   return normalizarTexto(texto)
-    .split(" ")
+    .split(/\s+/)
     .filter(p=>p.length>2&&!stopwords.includes(p));
 }
 
@@ -3616,6 +3624,1467 @@ Usar el cupón correcto evita ajustes posteriores y asegura que el beneficio apl
 
 
 ];
+
+/* =========================================================
+   ✅ CAMPO LABORAL (NUEVO)
+   1) Pega aquí tu catálogo PROGRAMAS_CAMPO_LABORAL
+   2) NO rompe tu bot: solo añade intents extra al arreglo `intents`
+========================================================= */
+
+const PROGRAMAS_CAMPO_LABORAL = [
+  {
+    idBase: "derecho",
+    nombreVisible: "Derecho (Abogado/a)",
+    nombres: ["Derecho", "Abogado", "Abogada", "Licenciatura en Derecho", "Carrera de abogado"],
+    areas: [
+      { titulo: "Corporativo", detalle: "contratos, compliance, societario, gobierno corporativo" },
+      { titulo: "Fiscal", detalle: "defensa y planeación fiscal, auditorías, cumplimiento" },
+      { titulo: "Laboral", detalle: "relaciones obrero-patronales, conciliación, juicios" },
+      { titulo: "Penal", detalle: "litigio, sistema penal acusatorio, asesoría" },
+      { titulo: "Civil/Mercantil", detalle: "juicios, cobranzas, arrendamientos, mediación" }
+    ],
+    puestos: {
+      entrada: ["Pasante jurídico", "Auxiliar legal", "Abogado(a) junior en despacho"],
+      intermedio: ["Abogado(a) litigante", "Abogado(a) corporativo", "Especialista fiscal/laboral"],
+      senior: ["Coordinador(a) jurídico", "Gerencia legal", "Despacho propio / cartera de clientes"]
+    },
+    sueldos: { bajo: "~$7,000–$12,000", medio: "~$12,000–$25,000", alto: "~$25,000–$60,000+" },
+    factoresSube: ["Especializarte (fiscal/laboral/penal/corporativo)", "Resultados y negociación", "Cartera de clientes y reputación"]
+  },
+
+  {
+    idBase: "administracion_y_liderazgo_empresarial",
+    nombreVisible: "Administración y Liderazgo Empresarial",
+    nombres: ["Administración y Liderazgo Empresarial", "Administracion y liderazgo empresarial", "Administración liderazgo", "Liderazgo empresarial"],
+    areas: [
+      { titulo: "Gestión y operaciones", detalle: "procesos, productividad, ejecución, mejora continua" },
+      { titulo: "Dirección y liderazgo", detalle: "gestión de equipos, coaching, cultura, toma de decisiones" },
+      { titulo: "Planeación estratégica", detalle: "objetivos, indicadores, presupuesto, proyectos" },
+      { titulo: "Emprendimiento", detalle: "modelos de negocio, crecimiento, ventas, administración general" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar administrativo", "Analista de operaciones jr", "Asistente de gerencia"],
+      intermedio: ["Coordinador(a) administrativo", "Supervisor(a) de operaciones", "Líder de proyecto"],
+      senior: ["Gerente de operaciones", "Gerencia administrativa", "Dirección de área / emprendimiento"]
+    },
+    sueldos: { bajo: "~$9,000–$13,000", medio: "~$13,000–$28,000", alto: "~$28,000–$55,000+" },
+    factoresSube: ["KPIs y mejora de procesos", "Liderazgo y gestión de equipos", "Herramientas (ERP/Excel) + proyectos con impacto"]
+  },
+
+  {
+    idBase: "arquitectura",
+    nombreVisible: "Arquitectura",
+    nombres: ["Arquitectura", "Licenciatura en Arquitectura", "Arquitecto", "Arquitecta"],
+    areas: [
+      { titulo: "Diseño arquitectónico", detalle: "proyecto, conceptualización, planos, renders" },
+      { titulo: "Construcción y obra", detalle: "supervisión, costos, control de obra, seguridad" },
+      { titulo: "Urbanismo", detalle: "planeación urbana, normativa, movilidad, espacio público" },
+      { titulo: "Sustentabilidad", detalle: "eficiencia energética, materiales, diseño bioclimático" }
+    ],
+    puestos: {
+      entrada: ["Dibujante/Modelador", "Auxiliar de obra", "Arquitecto(a) jr en despacho"],
+      intermedio: ["Proyectista", "Residente de obra", "Coordinador(a) de proyecto"],
+      senior: ["Jefe(a) de proyecto", "Gerencia de construcción", "Despacho propio / desarrollos"]
+    },
+    sueldos: { bajo: "~$10,000–$16,000", medio: "~$16,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Portafolio + obras realizadas", "Costos/obra y normatividad", "BIM (Revit) + gestión de proyectos"]
+  },
+
+  {
+    idBase: "arquitectura_de_interiores_y_ambientacion",
+    nombreVisible: "Arquitectura de Interiores y Ambientación",
+    nombres: ["Arquitectura de Interiores y Ambientación", "Arquitectura de interiores", "Interiores y ambientación", "Diseño de interiores (arquitectura)"],
+    areas: [
+      { titulo: "Diseño residencial", detalle: "espacios habitacionales, distribución, iluminación, materiales" },
+      { titulo: "Comercial y corporativo", detalle: "retail, oficinas, experiencia de usuario, normativas" },
+      { titulo: "Visual merchandising", detalle: "exhibición, ambientación, identidad de marca" },
+      { titulo: "Project management", detalle: "presupuesto, proveedores, ejecución y supervisión" }
+    ],
+    puestos: {
+      entrada: ["Asistente de interiorismo", "Renderista/Modelador", "Auxiliar de proyecto"],
+      intermedio: ["Diseñador(a) de interiores", "Coordinador(a) de obra interior", "Especialista en acabados"],
+      senior: ["Director(a) de proyecto", "Gerente de diseño", "Estudio propio / cartera de clientes"]
+    },
+    sueldos: { bajo: "~$9,000–$15,000", medio: "~$15,000–$28,000", alto: "~$28,000–$60,000+" },
+    factoresSube: ["Portafolio + ejecución real", "Negociación con proveedores", "Renders/BIM + gestión de obra"]
+  },
+
+  {
+    idBase: "ciencias_forenses_criminalistica_y_criminologia",
+    nombreVisible: "Ciencias Forenses: Criminalística y Criminología",
+    nombres: ["Ciencias Forenses", "Ciencias Forenses: Criminalística y Criminología", "Forenses", "Criminalística y Criminología"],
+    areas: [
+      { titulo: "Procesamiento de escena", detalle: "cadena de custodia, fijación, recolección de indicios" },
+      { titulo: "Análisis forense", detalle: "documentoscopía, balística (apoyo), química forense (apoyo)" },
+      { titulo: "Criminología aplicada", detalle: "perfiles, prevención, análisis de conducta delictiva" },
+      { titulo: "Área legal/procedimental", detalle: "informes, comparecencias, integración de expediente" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar pericial", "Técnico(a) forense (apoyo)", "Analista de información delictiva jr"],
+      intermedio: ["Perito(a) / especialista (según normativa)", "Analista criminológico", "Coordinación operativa"],
+      senior: ["Coordinación pericial", "Consultoría", "Dirección de área / seguridad e investigación"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$26,000", alto: "~$26,000–$55,000+" },
+    factoresSube: ["Certificaciones y práctica real", "Dominio de cadena de custodia", "Especialización + experiencia en campo"]
+  },
+
+  {
+    idBase: "criminalistica",
+    nombreVisible: "Criminalística",
+    nombres: ["Criminalística", "Criminalistica", "Licenciatura en Criminalística", "Licenciatura en Criminalistica"],
+    areas: [
+      { titulo: "Escena del crimen", detalle: "fijación, recolección, preservación de indicios" },
+      { titulo: "Laboratorio (apoyo)", detalle: "análisis comparativo, informes, evidencia" },
+      { titulo: "Documentación e informes", detalle: "dictámenes, reportes técnicos, presentación de resultados" },
+      { titulo: "Cadena de custodia", detalle: "procedimiento, embalaje, trazabilidad" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar pericial", "Técnico(a) de campo", "Capturista/gestor(a) de evidencia"],
+      intermedio: ["Especialista en escena (según normativa)", "Analista de evidencia", "Coordinación de campo"],
+      senior: ["Coordinación pericial", "Consultoría", "Jefatura de área"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$26,000", alto: "~$26,000–$55,000+" },
+    factoresSube: ["Protocolos y práctica en campo", "Dictamen e informes sólidos", "Especialización técnica"]
+  },
+
+  {
+    idBase: "criminologia",
+    nombreVisible: "Criminología",
+    nombres: ["Criminología", "Criminologia", "Licenciatura en Criminología", "Licenciatura en Criminologia"],
+    areas: [
+      { titulo: "Prevención", detalle: "programas, diagnóstico, intervención comunitaria" },
+      { titulo: "Seguridad", detalle: "análisis de riesgo, protocolos, investigación interna" },
+      { titulo: "Penitenciario", detalle: "reinserción, evaluación, programas de tratamiento" },
+      { titulo: "Análisis delictivo", detalle: "patrones, mapas de incidencia, inteligencia" }
+    ],
+    puestos: {
+      entrada: ["Analista de riesgo jr", "Auxiliar en prevención", "Apoyo en reinserción/diagnóstico"],
+      intermedio: ["Criminólogo(a) en instituciones", "Analista delictivo", "Coordinador(a) de prevención"],
+      senior: ["Jefatura de seguridad", "Consultoría en riesgo", "Dirección de programas"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$26,000", alto: "~$26,000–$55,000+" },
+    factoresSube: ["Especialización (riesgo/penitenciario)", "Gestión de programas", "Resultados medibles en prevención"]
+  },
+
+  {
+    idBase: "cirujano_dentista",
+    nombreVisible: "Cirujano Dentista",
+    nombres: ["Cirujano Dentista", "Odontología", "Odontologia", "Dentista", "Licenciatura en Cirujano Dentista"],
+    areas: [
+      { titulo: "Odontología general", detalle: "diagnóstico, operatoria, prevención" },
+      { titulo: "Ortodoncia (ruta)", detalle: "alineación, aparatología, seguimiento" },
+      { titulo: "Endodoncia/Perio (ruta)", detalle: "tratamientos de conducto, encías, rehabilitación" },
+      { titulo: "Estética dental", detalle: "resinas, blanqueamientos, diseño de sonrisa" }
+    ],
+    puestos: {
+      entrada: ["Asistente clínico", "Odontólogo(a) general jr", "Pasante/auxiliar en clínica"],
+      intermedio: ["Odontólogo(a) general", "Enfoque en estética/rehabilitación", "Coordinación de clínica"],
+      senior: ["Especialista (ruta)", "Director(a) de clínica", "Consultorio propio"]
+    },
+    sueldos: { bajo: "~$10,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$90,000+" },
+    factoresSube: ["Cartera de pacientes", "Especialidad y certificaciones", "Habilidad clínica + reputación"]
+  },
+
+  {
+    idBase: "comercio_y_finanzas_internacionales",
+    nombreVisible: "Comercio y Finanzas Internacionales",
+    nombres: ["Comercio y Finanzas Internacionales", "Comercio internacional", "Finanzas internacionales", "Comercio y finanzas"],
+    areas: [
+      { titulo: "Comercio exterior", detalle: "importación/exportación, logística internacional, aduanas" },
+      { titulo: "Finanzas", detalle: "análisis, presupuestos, riesgos, tipo de cambio" },
+      { titulo: "Compras internacionales", detalle: "proveedores, negociación, costos, incoterms" },
+      { titulo: "Supply chain", detalle: "planeación, inventarios, distribución" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de comercio exterior", "Analista de logística jr", "Compras jr"],
+      intermedio: ["Ejecutivo(a) de importación/exportación", "Analista financiero", "Coordinador(a) de supply"],
+      senior: ["Gerencia de comercio exterior", "Gerencia financiera (ruta)", "Consultoría / agencia propia"]
+    },
+    sueldos: { bajo: "~$10,000–$16,000", medio: "~$16,000–$32,000", alto: "~$32,000–$70,000+" },
+    factoresSube: ["Inglés + negociación", "Incoterms + aduanas", "Resultados (ahorros/eficiencia)"]
+  },
+
+  {
+    idBase: "contaduria",
+    nombreVisible: "Contaduría",
+    nombres: ["Contaduría", "Contaduria", "Contador", "Contadora", "Licenciatura en Contaduría", "Licenciatura en Contaduria"],
+    areas: [
+      { titulo: "Contabilidad", detalle: "registros, cierres, estados financieros" },
+      { titulo: "Fiscal", detalle: "impuestos, cumplimiento, auditorías" },
+      { titulo: "Nóminas", detalle: "timbrado, incidencias, seguridad social" },
+      { titulo: "Auditoría", detalle: "control interno, revisiones" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar contable", "Asistente fiscal jr", "Capturista contable"],
+      intermedio: ["Contador(a) general", "Analista fiscal", "Auditor(a) jr"],
+      senior: ["Contraloría", "Gerencia contable/fiscal", "Despacho propio"]
+    },
+    sueldos: { bajo: "~$9,000–$13,000", medio: "~$13,000–$28,000", alto: "~$28,000–$65,000+" },
+    factoresSube: ["Especialización fiscal", "ERP/Excel avanzado", "Cierres y auditorías"]
+  },
+
+  {
+    idBase: "contaduria_publica",
+    nombreVisible: "Contaduría Pública",
+    nombres: ["Contaduría Pública", "Contaduria Publica", "Licenciatura en Contaduría Pública", "Licenciatura en Contaduria Publica"],
+    areas: [
+      { titulo: "Contabilidad financiera", detalle: "estados financieros, NIIF (ruta), análisis" },
+      { titulo: "Fiscal y cumplimiento", detalle: "impuestos, auditorías, defensa fiscal (ruta)" },
+      { titulo: "Auditoría", detalle: "revisión, control interno, riesgos" },
+      { titulo: "Consultoría", detalle: "mejora de procesos, costos, planeación" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar contable", "Auxiliar fiscal", "Auditor(a) jr"],
+      intermedio: ["Contador(a) general", "Auditor(a)", "Analista fiscal"],
+      senior: ["Contraloría", "Gerencia contable/fiscal", "Consultoría/Despacho propio"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Certificaciones y especialización", "Auditoría y control interno", "Clientes/portafolio y reputación"]
+  },
+
+  {
+    idBase: "cultura_fisica_y_deportes",
+    nombreVisible: "Cultura Física y Deportes",
+    nombres: ["Cultura Física y Deportes", "Entrenamiento deportivo", "Ciencias del deporte", "Educación física"],
+    areas: [
+      { titulo: "Entrenamiento", detalle: "planificación, fuerza/condición, rendimiento" },
+      { titulo: "Acondicionamiento y salud", detalle: "fitness, prevención, programas de salud" },
+      { titulo: "Gestión deportiva", detalle: "clubes, academias, eventos, administración" },
+      { titulo: "Docencia", detalle: "educación física, entrenamiento escolar (ruta)" }
+    ],
+    puestos: {
+      entrada: ["Instructor(a) de gimnasio", "Auxiliar de entrenamiento", "Coach jr"],
+      intermedio: ["Entrenador(a)", "Preparador(a) físico", "Coordinador(a) deportivo"],
+      senior: ["Director(a) deportivo", "Gerente de club", "Academia/consultoría propia"]
+    },
+    sueldos: { bajo: "~$8,000–$13,000", medio: "~$13,000–$25,000", alto: "~$25,000–$50,000+" },
+    factoresSube: ["Certificaciones + resultados", "Cartera de clientes", "Especialización (alto rendimiento/rehab)"]
+  },
+
+  {
+    idBase: "diseno_de_animacion",
+    nombreVisible: "Diseño de Animación",
+    nombres: ["Diseño de Animación", "Animación", "Animacion", "Licenciatura en Diseño de Animación"],
+    areas: [
+      { titulo: "Animación 2D/3D", detalle: "motion, personajes, rigs, animación" },
+      { titulo: "Postproducción", detalle: "edición, VFX (ruta), composición" },
+      { titulo: "Arte digital", detalle: "concept art, ilustración, storyboards" },
+      { titulo: "Contenido para marcas", detalle: "spots, social media, piezas animadas" }
+    ],
+    puestos: {
+      entrada: ["Animador(a) jr", "Editor(a) jr", "Diseñador(a) motion jr"],
+      intermedio: ["Animador(a) 2D/3D", "Motion designer", "Artista de composición"],
+      senior: ["Lead de animación", "Director(a) creativo", "Estudio/servicios propios"]
+    },
+    sueldos: { bajo: "~$10,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["Portafolio (reel) fuerte", "Dominio de software + pipeline", "Clientes/proyectos grandes"]
+  },
+
+  {
+    idBase: "diseno_de_interiores_y_ambientacion",
+    nombreVisible: "Diseño de Interiores y Ambientación",
+    nombres: ["Diseño de Interiores y Ambientación", "Diseño de interiores", "Interiorismo", "Ambientación"],
+    areas: [
+      { titulo: "Residencial", detalle: "espacios, iluminación, materiales, mobiliario" },
+      { titulo: "Comercial", detalle: "retail, restaurantes, oficinas, experiencia de marca" },
+      { titulo: "Decoración y styling", detalle: "ambientación, tendencias, curaduría" },
+      { titulo: "Gestión de proyecto", detalle: "presupuesto, proveedores, supervisión" }
+    ],
+    puestos: {
+      entrada: ["Asistente de interiorismo", "Renderista/Modelador", "Auxiliar de proyecto"],
+      intermedio: ["Diseñador(a) de interiores", "Coordinador(a) de proyecto", "Especialista en acabados"],
+      senior: ["Director(a) de proyecto", "Gerencia de diseño", "Estudio propio"]
+    },
+    sueldos: { bajo: "~$9,000–$15,000", medio: "~$15,000–$28,000", alto: "~$28,000–$60,000+" },
+    factoresSube: ["Portafolio + obra ejecutada", "Negociación con proveedores", "Renders/BIM + gestión"]
+  },
+
+  {
+    idBase: "diseno_de_modas",
+    nombreVisible: "Diseño de Modas",
+    nombres: ["Diseño de Modas", "Moda", "Fashion design", "Licenciatura en Diseño de Modas"],
+    areas: [
+      { titulo: "Diseño y colección", detalle: "concepto, patronaje (ruta), confección, fittings" },
+      { titulo: "Styling y producción", detalle: "editorial, campañas, dirección de arte" },
+      { titulo: "Moda comercial", detalle: "producto, tendencias, retail, e-commerce" },
+      { titulo: "Marca propia", detalle: "emprendimiento, proveedores, ventas" }
+    ],
+    puestos: {
+      entrada: ["Asistente de diseño", "Auxiliar de producción", "Patronista jr (ruta)"],
+      intermedio: ["Diseñador(a) de producto", "Stylist", "Coordinador(a) de producción"],
+      senior: ["Director(a) creativo", "Brand manager (ruta)", "Marca/atelier propio"]
+    },
+    sueldos: { bajo: "~$8,000–$14,000", medio: "~$14,000–$28,000", alto: "~$28,000–$60,000+" },
+    factoresSube: ["Portafolio + colecciones", "Confección/patronaje o styling pro", "Marca propia + ventas"]
+  },
+
+  {
+    idBase: "diseno_grafico",
+    nombreVisible: "Diseño Gráfico",
+    nombres: ["Diseño Gráfico", "Diseno grafico", "Diseño para la Comunicación Gráfica", "Comunicación gráfica", "Graphic design"],
+    areas: [
+      { titulo: "Branding", detalle: "identidad, logos, manuales, aplicaciones" },
+      { titulo: "Diseño digital", detalle: "social media, UI básica, banners, web" },
+      { titulo: "Editorial", detalle: "maquetación, revistas, libros, impresión" },
+      { titulo: "Publicidad", detalle: "campañas, piezas creativas, storytelling visual" }
+    ],
+    puestos: {
+      entrada: ["Diseñador(a) jr", "Auxiliar de diseño", "Arte finalista jr"],
+      intermedio: ["Diseñador(a) gráfico", "Diseñador(a) digital", "Coordinador(a) creativo"],
+      senior: ["Director(a) de arte", "Lead de diseño", "Estudio/servicios propios"]
+    },
+    sueldos: { bajo: "~$9,000–$15,000", medio: "~$15,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Portafolio + estilo", "Marketing/digital (ads, UI)", "Clientes y proyectos grandes"]
+  },
+
+  {
+    idBase: "enfermeria",
+    nombreVisible: "Enfermería",
+    nombres: ["Enfermería", "Enfermeria", "Licenciatura en Enfermería", "Enfermero", "Enfermera"],
+    areas: [
+      { titulo: "Hospitalaria", detalle: "atención directa, procedimientos, cuidados" },
+      { titulo: "Comunitaria", detalle: "promoción de salud, campañas, prevención" },
+      { titulo: "Quirófano/urgencias (ruta)", detalle: "técnicas, protocolos, apoyo clínico" },
+      { titulo: "Administración en salud", detalle: "gestión, calidad, supervisión" }
+    ],
+    puestos: {
+      entrada: ["Enfermero(a) general", "Auxiliar de enfermería", "Enfermero(a) en clínica"],
+      intermedio: ["Enfermero(a) especialista (ruta)", "Coordinación de turno", "Enfermería en urgencias"],
+      senior: ["Jefatura de enfermería", "Gestión hospitalaria (ruta)", "Docencia/consultoría"]
+    },
+    sueldos: { bajo: "~$10,000–$16,000", medio: "~$16,000–$28,000", alto: "~$28,000–$55,000+" },
+    factoresSube: ["Especialidad y experiencia", "Hospital/sector y turnos", "Certificaciones + liderazgo"]
+  },
+
+  {
+    idBase: "gastronomia",
+    nombreVisible: "Gastronomía",
+    nombres: ["Gastronomía", "Gastronomia", "Chef", "Cocina profesional", "Licenciatura en Gastronomía"],
+    areas: [
+      { titulo: "Cocina", detalle: "producción, técnicas, estandarización, mise en place" },
+      { titulo: "Repostería", detalle: "panadería, pastelería, postres" },
+      { titulo: "Catering/eventos", detalle: "banquetes, logística, operación" },
+      { titulo: "Desarrollo de producto", detalle: "recetas, costeo, innovación" }
+    ],
+    puestos: {
+      entrada: ["Cocinero(a) A/B", "Auxiliar de cocina", "Repostero(a) jr"],
+      intermedio: ["Chef de partida", "Sous chef", "Encargado(a) de producción"],
+      senior: ["Chef ejecutivo", "Gerente de alimentos y bebidas (ruta)", "Negocio propio"]
+    },
+    sueldos: { bajo: "~$8,000–$14,000", medio: "~$14,000–$25,000", alto: "~$25,000–$60,000+" },
+    factoresSube: ["Experiencia real en cocina", "Costeo y control", "Marca personal + negocio propio"]
+  },
+
+  {
+    idBase: "gastronomia_y_gestion_restaurantera",
+    nombreVisible: "Gastronomía y Gestión Restaurantera",
+    nombres: ["Gastronomía y Gestión Restaurantera", "Gestión restaurantera", "Administración de restaurantes", "Restaurant management"],
+    areas: [
+      { titulo: "Operación de restaurante", detalle: "servicio, cocina, estándares, calidad" },
+      { titulo: "Costos e inventarios", detalle: "escandallos, compras, mermas, proveedores" },
+      { titulo: "Administración", detalle: "personal, horarios, ventas, KPIs" },
+      { titulo: "Experiencia del cliente", detalle: "servicio, reputación, fidelización" }
+    ],
+    puestos: {
+      entrada: ["Supervisor(a) de piso jr", "Auxiliar de operación", "Encargado(a) de inventarios"],
+      intermedio: ["Gerente de turno", "Coordinador(a) de operación", "Compras/Costos"],
+      senior: ["Gerente general", "Director(a) de operación", "Restaurante propio"]
+    },
+    sueldos: { bajo: "~$9,000–$15,000", medio: "~$15,000–$28,000", alto: "~$28,000–$60,000+" },
+    factoresSube: ["Control de costos + mermas", "Liderazgo de equipos", "Ventas y experiencia del cliente"]
+  },
+
+  {
+    idBase: "gestion_de_recursos_humanos",
+    nombreVisible: "Gestión de Recursos Humanos",
+    nombres: ["Gestión de Recursos Humanos", "Recursos Humanos", "RH", "Capital humano", "Human resources"],
+    areas: [
+      { titulo: "Reclutamiento", detalle: "atracción, entrevistas, onboarding" },
+      { titulo: "Capacitación y DO", detalle: "formación, clima, cultura, desempeño" },
+      { titulo: "Compensaciones", detalle: "nómina (ruta), beneficios, tabuladores" },
+      { titulo: "Relaciones laborales", detalle: "incidencias, políticas, conciliación" }
+    ],
+    puestos: {
+      entrada: ["Reclutador(a) jr", "Auxiliar de RH", "Analista de capacitación jr"],
+      intermedio: ["Generalista de RH", "Coordinador(a) de DO", "Analista C&B (ruta)"],
+      senior: ["Gerencia de RH", "Business Partner", "Dirección de talento"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$28,000", alto: "~$28,000–$60,000+" },
+    factoresSube: ["Indicadores de talento (rotación, desempeño)", "Liderazgo y cultura", "Especialización (DO/C&B)"]
+  },
+
+  {
+    idBase: "gestion_de_ventas_y_comercio",
+    nombreVisible: "Gestión de Ventas y Comercio",
+    nombres: ["Gestión de Ventas y Comercio", "Ventas", "Comercio", "Sales management", "Gestión comercial"],
+    areas: [
+      { titulo: "Ventas", detalle: "prospectación, cierre, seguimiento, CRM" },
+      { titulo: "Trade/retail", detalle: "canales, exhibición, promociones, sell-out" },
+      { titulo: "Estrategia comercial", detalle: "metas, forecast, KPIs, pipelines" },
+      { titulo: "Atención y fidelización", detalle: "customer success (ruta), postventa, retención" }
+    ],
+    puestos: {
+      entrada: ["Ejecutivo(a) de ventas jr", "Asesor(a) comercial", "Inside sales"],
+      intermedio: ["Ejecutivo(a) senior", "Key account (ruta)", "Coordinador(a) comercial"],
+      senior: ["Gerencia comercial", "Dirección de ventas", "Negocio propio / cartera"]
+    },
+    sueldos: { bajo: "~$9,000–$15,000", medio: "~$15,000–$35,000", alto: "~$35,000–$90,000+" },
+    factoresSube: ["Comisiones y desempeño", "Cartera y cuentas clave", "Negociación + estrategia"]
+  },
+
+  {
+    idBase: "gestion_deportiva",
+    nombreVisible: "Gestión Deportiva",
+    nombres: ["Gestión Deportiva", "Gestion deportiva", "Administración deportiva", "Sports management"],
+    areas: [
+      { titulo: "Administración deportiva", detalle: "clubes, academias, planeación, presupuestos" },
+      { titulo: "Eventos", detalle: "torneos, logística, patrocinios, operación" },
+      { titulo: "Marketing deportivo", detalle: "marca, redes, activaciones, comunidad" },
+      { titulo: "Facilities", detalle: "instalaciones, mantenimiento, servicio al usuario" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de eventos", "Asistente administrativo", "Coordinador(a) de academias jr"],
+      intermedio: ["Coordinador(a) deportivo", "Gestor(a) de eventos", "Marketing deportivo jr"],
+      senior: ["Gerente deportivo", "Director(a) de operaciones", "Academia/empresa propia"]
+    },
+    sueldos: { bajo: "~$8,000–$13,000", medio: "~$13,000–$25,000", alto: "~$25,000–$50,000+" },
+    factoresSube: ["Eventos exitosos + patrocinios", "Gestión de presupuesto", "Red de contactos"]
+  },
+
+  {
+    idBase: "ingenieria_industrial_en_produccion",
+    nombreVisible: "Ingeniería Industrial en Producción",
+    nombres: ["Ingeniería Industrial en Producción", "Industrial en producción", "Producción industrial", "Ingenieria industrial en produccion"],
+    areas: [
+      { titulo: "Producción", detalle: "planeación, líneas, tiempos, balanceo" },
+      { titulo: "Calidad", detalle: "auditorías, ISO (ruta), mejora continua" },
+      { titulo: "Lean/Procesos", detalle: "kaizen, desperdicios, estandarización" },
+      { titulo: "Logística interna", detalle: "inventarios, almacén, flujo de materiales" }
+    ],
+    puestos: {
+      entrada: ["Ingeniero(a) de procesos jr", "Supervisor(a) de línea jr", "Analista de calidad jr"],
+      intermedio: ["Ingeniero(a) de manufactura", "Coordinador(a) de producción", "Ingeniero(a) lean"],
+      senior: ["Jefatura de producción", "Gerencia de planta (ruta)", "Mejora continua líder"]
+    },
+    sueldos: { bajo: "~$12,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["Proyectos lean con ahorro", "Certificaciones (ISO/Lean)", "Liderazgo en planta"]
+  },
+
+  {
+    idBase: "ingenieria_civil",
+    nombreVisible: "Ingeniería Civil",
+    nombres: ["Ingeniería Civil", "Ingenieria civil", "Civil", "Ing civil"],
+    areas: [
+      { titulo: "Estructuras", detalle: "cálculo, diseño, supervisión" },
+      { titulo: "Construcción", detalle: "obra, costos, seguridad, control" },
+      { titulo: "Vías y transporte", detalle: "carreteras, pavimentos, movilidad" },
+      { titulo: "Hidráulica", detalle: "agua potable, drenaje, obras hidráulicas" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de obra", "Residente jr", "Dibujante/Modelador"],
+      intermedio: ["Residente de obra", "Supervisor(a)", "Coordinador(a) de costos/estimaciones"],
+      senior: ["Jefe(a) de obra", "Gerencia de proyectos", "Constructora/consultoría propia"]
+    },
+    sueldos: { bajo: "~$12,000–$18,000", medio: "~$18,000–$38,000", alto: "~$38,000–$90,000+" },
+    factoresSube: ["Experiencia en obra + seguridad", "Costos/estimaciones", "Proyectos grandes + liderazgo"]
+  },
+
+  {
+    idBase: "ingenieria_en_ciencia_de_datos",
+    nombreVisible: "Ingeniería en Ciencia de Datos",
+    nombres: ["Ingeniería en Ciencia de Datos", "Ciencia de Datos", "Data Science", "Data Scientist", "Ingenieria en ciencia de datos"],
+    areas: [
+      { titulo: "Analítica / BI", detalle: "KPIs, dashboards, insights" },
+      { titulo: "Machine Learning", detalle: "modelos predictivos y automatización" },
+      { titulo: "Datos en negocio", detalle: "marketing, finanzas, logística, producto" },
+      { titulo: "Ingeniería de datos (ruta)", detalle: "pipelines, calidad, cloud" }
+    ],
+    puestos: {
+      entrada: ["Analista de datos jr", "BI jr", "Data scientist jr"],
+      intermedio: ["Data scientist", "Analista senior", "ML engineer (ruta)"],
+      senior: ["Senior data scientist", "Tech lead", "Head/Manager de datos"]
+    },
+    sueldos: { bajo: "~$20,000–$30,000", medio: "~$30,000–$55,000", alto: "~$55,000–$100,000+" },
+    factoresSube: ["Inglés + cloud", "Modelos en producción", "Proyectos con impacto medible"]
+  },
+
+  {
+    idBase: "ingenieria_en_computacion",
+    nombreVisible: "Ingeniería en Computación",
+    nombres: ["Ingeniería en Computación", "Ingenieria en computacion", "Computación", "Computer engineering"],
+    areas: [
+      { titulo: "Software", detalle: "desarrollo, testing, arquitectura (ruta)" },
+      { titulo: "Sistemas", detalle: "infra, redes básicas, soporte, administración" },
+      { titulo: "Ciberseguridad (ruta)", detalle: "hardening, monitoreo, respuesta" },
+      { titulo: "Cloud/DevOps (ruta)", detalle: "deploy, CI/CD, contenedores" }
+    ],
+    puestos: {
+      entrada: ["Soporte TI", "Dev jr", "QA jr"],
+      intermedio: ["Dev fullstack", "Sysadmin (ruta)", "DevOps jr (ruta)"],
+      senior: ["Arquitecto(a) de software (ruta)", "Lead", "Gerencia TI"]
+    },
+    sueldos: { bajo: "~$12,000–$20,000", medio: "~$20,000–$45,000", alto: "~$45,000–$100,000+" },
+    factoresSube: ["Portafolio + proyectos", "Inglés + cloud", "Especialización (security/devops)"]
+  },
+
+  {
+    idBase: "ingenieria_en_comunicaciones_y_electronica",
+    nombreVisible: "Ingeniería en Comunicaciones y Electrónica",
+    nombres: ["Ingeniería en Comunicaciones y Electrónica", "Comunicaciones y electrónica", "Telecom", "Electronica"],
+    areas: [
+      { titulo: "Telecomunicaciones", detalle: "redes, RF (ruta), enlaces, infraestructura" },
+      { titulo: "Electrónica", detalle: "circuitos, instrumentación, mantenimiento" },
+      { titulo: "Automatización (ruta)", detalle: "sensores, control, integración" },
+      { titulo: "Soporte técnico", detalle: "instalación, diagnóstico, campo" }
+    ],
+    puestos: {
+      entrada: ["Técnico(a) de campo", "Auxiliar de telecom", "Soporte de redes jr"],
+      intermedio: ["Ingeniero(a) de telecom", "Ingeniero(a) de mantenimiento", "Supervisor(a) de instalaciones"],
+      senior: ["Jefatura de telecom", "Gerencia técnica", "Integrador/consultoría propia"]
+    },
+    sueldos: { bajo: "~$12,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["Certificaciones (redes/telecom)", "Proyectos grandes", "Experiencia en campo + liderazgo"]
+  },
+
+  {
+    idBase: "ingenieria_en_desarrollo_de_software",
+    nombreVisible: "Ingeniería en Desarrollo de Software",
+    nombres: ["Ingeniería en Desarrollo de Software", "Desarrollo de Software", "Software", "Ingenieria en desarrollo de software"],
+    areas: [
+      { titulo: "Desarrollo web", detalle: "frontend, backend, APIs" },
+      { titulo: "Móvil", detalle: "apps, integración, despliegue" },
+      { titulo: "QA/Testing", detalle: "pruebas, automatización, calidad" },
+      { titulo: "DevOps (ruta)", detalle: "CI/CD, cloud, despliegues" }
+    ],
+    puestos: {
+      entrada: ["Dev jr", "QA jr", "Soporte dev jr"],
+      intermedio: ["Dev fullstack", "QA automation", "DevOps jr (ruta)"],
+      senior: ["Tech lead", "Arquitecto(a)", "Engineering manager"]
+    },
+    sueldos: { bajo: "~$15,000–$25,000", medio: "~$25,000–$55,000", alto: "~$55,000–$120,000+" },
+    factoresSube: ["Portafolio + experiencia real", "Inglés", "Especialización (cloud, mobile, backend)"]
+  },
+
+  {
+    idBase: "ingenieria_en_logistica",
+    nombreVisible: "Ingeniería en Logística",
+    nombres: ["Ingeniería en Logística", "Logística", "Supply chain", "Ingenieria en logistica"],
+    areas: [
+      { titulo: "Almacenes", detalle: "inventarios, layout, picking, control" },
+      { titulo: "Transporte", detalle: "rutas, costos, última milla, KPI" },
+      { titulo: "Planeación", detalle: "demanda, abastecimiento, S&OP (ruta)" },
+      { titulo: "Comercio exterior (ruta)", detalle: "aduanas, import/export" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de logística", "Analista de inventarios jr", "Planeación jr"],
+      intermedio: ["Coordinador(a) de almacén", "Analista de transporte", "Planner"],
+      senior: ["Gerencia de logística", "Supply chain manager", "Dirección de operaciones (ruta)"]
+    },
+    sueldos: { bajo: "~$12,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["KPIs y ahorros", "Sistemas (WMS/ERP)", "Inglés + cadena de suministro"]
+  },
+
+  {
+    idBase: "ingenieria_en_mecatronica",
+    nombreVisible: "Ingeniería en Mecatrónica",
+    nombres: ["Ingeniería en Mecatrónica", "Mecatrónica", "Mecatronica", "Automatización"],
+    areas: [
+      { titulo: "Automatización", detalle: "PLC (ruta), sensores, control, integración" },
+      { titulo: "Mantenimiento industrial", detalle: "diagnóstico, correctivo, preventivo" },
+      { titulo: "Robótica (ruta)", detalle: "celdas, programación, puesta a punto" },
+      { titulo: "Diseño", detalle: "CAD, prototipos, mejoras de maquinaria" }
+    ],
+    puestos: {
+      entrada: ["Técnico(a) de mantenimiento", "Ingeniero(a) jr", "Auxiliar de automatización"],
+      intermedio: ["Ingeniero(a) de automatización", "Programador(a) PLC (ruta)", "Supervisor(a) de mantenimiento"],
+      senior: ["Jefatura de mantenimiento", "Gerencia de ingeniería", "Integrador/servicios propios"]
+    },
+    sueldos: { bajo: "~$12,000–$20,000", medio: "~$20,000–$40,000", alto: "~$40,000–$90,000+" },
+    factoresSube: ["PLC/robótica + certificaciones", "Experiencia en planta", "Proyectos de alto impacto"]
+  },
+
+  {
+    idBase: "ingenieria_en_programacion_de_videojuegos",
+    nombreVisible: "Ingeniería en Programación de Videojuegos",
+    nombres: ["Ingeniería en Programación de Videojuegos", "Programación de videojuegos", "Game development", "Videojuegos"],
+    areas: [
+      { titulo: "Gameplay", detalle: "mecánicas, scripting, sistemas" },
+      { titulo: "Unity/Unreal", detalle: "motores, optimización, builds" },
+      { titulo: "Backend (ruta)", detalle: "servicios, multiplayer, bases de datos" },
+      { titulo: "QA/Producción", detalle: "testing, bugs, pipelines, coordinación" }
+    ],
+    puestos: {
+      entrada: ["Programador(a) jr", "QA tester", "Desarrollador(a) Unity jr"],
+      intermedio: ["Gameplay programmer", "Tools programmer", "Backend dev (ruta)"],
+      senior: ["Lead programmer", "Technical director", "Estudio/indie propio"]
+    },
+    sueldos: { bajo: "~$12,000–$22,000", medio: "~$22,000–$45,000", alto: "~$45,000–$100,000+" },
+    factoresSube: ["Portafolio (juegos publicados)", "Inglés", "Especialización (multiplayer/engine)"]
+  },
+
+  {
+    idBase: "ingenieria_en_sistemas",
+    nombreVisible: "Ingeniería en Sistemas",
+    nombres: ["Ingeniería en Sistemas", "Ingenieria en sistemas", "Sistemas", "TI", "Ingeniería en Sistemas Computacionales"],
+    areas: [
+      { titulo: "Desarrollo", detalle: "apps, web, APIs, bases de datos" },
+      { titulo: "Infraestructura", detalle: "servidores, redes, soporte, administración" },
+      { titulo: "Ciberseguridad (ruta)", detalle: "monitoreo, hardening, respuesta" },
+      { titulo: "Cloud/DevOps (ruta)", detalle: "deploy, CI/CD, contenedores" }
+    ],
+    puestos: {
+      entrada: ["Soporte TI", "Dev jr", "Analista de sistemas jr"],
+      intermedio: ["Dev fullstack", "Sysadmin (ruta)", "Analista de seguridad (ruta)"],
+      senior: ["Arquitecto(a)", "Tech lead", "Gerencia TI"]
+    },
+    sueldos: { bajo: "~$12,000–$20,000", medio: "~$20,000–$45,000", alto: "~$45,000–$100,000+" },
+    factoresSube: ["Inglés + certificaciones", "Proyectos reales", "Especialización (cloud/security)"]
+  },
+
+  {
+    idBase: "ingenieria_industrial",
+    nombreVisible: "Ingeniería Industrial",
+    nombres: ["Ingeniería Industrial", "Ingenieria industrial", "Industrial"],
+    areas: [
+      { titulo: "Procesos", detalle: "mejora continua, tiempos y movimientos, estandarización" },
+      { titulo: "Calidad", detalle: "ISO (ruta), auditorías, control" },
+      { titulo: "Logística", detalle: "inventarios, almacenes, supply chain" },
+      { titulo: "Planeación", detalle: "producción, capacidad, demanda" }
+    ],
+    puestos: {
+      entrada: ["Ingeniero(a) de procesos jr", "Analista de calidad jr", "Planner jr"],
+      intermedio: ["Ingeniero(a) lean", "Coordinador(a) de calidad", "Supervisor(a) de producción"],
+      senior: ["Gerencia de operaciones", "Gerencia de planta (ruta)", "Dirección industrial"]
+    },
+    sueldos: { bajo: "~$12,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["Lean + proyectos de ahorro", "Certificaciones", "Liderazgo en operación"]
+  },
+
+  {
+    idBase: "mercadotecnia",
+    nombreVisible: "Mercadotecnia",
+    nombres: ["Mercadotecnia", "Marketing", "Licenciatura en Mercadotecnia", "Merca"],
+    areas: [
+      { titulo: "Marketing digital", detalle: "ads, funnels, SEO/SEM, analytics" },
+      { titulo: "Branding", detalle: "posicionamiento, campañas, comunicación" },
+      { titulo: "Investigación", detalle: "mercado, consumidor, insights" },
+      { titulo: "Trade/ventas (ruta)", detalle: "retail, promociones, canal" }
+    ],
+    puestos: {
+      entrada: ["Community manager jr", "Asistente de marketing", "Analista jr"],
+      intermedio: ["Especialista digital", "Brand executive", "Coordinador(a) de marketing"],
+      senior: ["Marketing manager", "Growth lead", "Dirección de marketing / agencia propia"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Resultados medibles (leads/ventas)", "Certificaciones (ads/analytics)", "Estrategia + liderazgo"]
+  },
+
+  {
+    idBase: "negocios_digitales",
+    nombreVisible: "Negocios Digitales",
+    nombres: ["Negocios Digitales", "E-commerce", "Digital business", "Emprendimiento digital"],
+    areas: [
+      { titulo: "E-commerce", detalle: "tiendas, marketplaces, conversión, operación" },
+      { titulo: "Marketing performance", detalle: "ads, funnels, CRM, automatización" },
+      { titulo: "Producto digital", detalle: "UX básica, roadmap, métricas" },
+      { titulo: "Analítica", detalle: "KPIs, cohortes, growth" }
+    ],
+    puestos: {
+      entrada: ["Asistente e-commerce", "Analista digital jr", "Operación marketplace"],
+      intermedio: ["Especialista e-commerce", "Growth jr", "Product analyst (ruta)"],
+      senior: ["E-commerce manager", "Growth lead", "Emprendimiento propio"]
+    },
+    sueldos: { bajo: "~$10,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["Resultados (ventas/conversión)", "Herramientas (ads, CRM, analytics)", "Estrategia y ejecución"]
+  },
+
+  {
+    idBase: "negocios_internacionales",
+    nombreVisible: "Negocios Internacionales",
+    nombres: ["Negocios Internacionales", "International business", "Comercio internacional (negocios)", "Licenciatura en Negocios Internacionales"],
+    areas: [
+      { titulo: "Comercio exterior", detalle: "import/export, aduanas, documentación" },
+      { titulo: "Compras y sourcing", detalle: "proveedores, negociación, costos" },
+      { titulo: "Logística", detalle: "supply chain, distribución, transporte" },
+      { titulo: "Gestión comercial", detalle: "ventas B2B, cuentas, expansión" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de comercio exterior", "Compras jr", "Logística jr"],
+      intermedio: ["Ejecutivo(a) import/export", "Key account (ruta)", "Coordinador(a) de supply"],
+      senior: ["Gerencia de comercio exterior", "Gerencia comercial", "Consultoría / empresa propia"]
+    },
+    sueldos: { bajo: "~$10,000–$16,000", medio: "~$16,000–$32,000", alto: "~$32,000–$70,000+" },
+    factoresSube: ["Inglés + negociación", "Experiencia en aduanas/logística", "Resultados (ahorros/crecimiento)"]
+  },
+
+  {
+    idBase: "nutricion",
+    nombreVisible: "Nutrición",
+    nombres: ["Nutrición", "Nutricion", "Nutriólogo", "Nutriologo", "Licenciatura en Nutrición"],
+    areas: [
+      { titulo: "Clínica", detalle: "consultas, planes, evaluación, seguimiento" },
+      { titulo: "Deportiva", detalle: "rendimiento, composición corporal, suplementación (ruta)" },
+      { titulo: "Comunitaria", detalle: "programas, educación, prevención" },
+      { titulo: "Servicios de alimentos", detalle: "comedores, menú, inocuidad (ruta)" }
+    ],
+    puestos: {
+      entrada: ["Asistente en consultorio", "Auxiliar de nutrición", "Educación nutricional jr"],
+      intermedio: ["Nutriólogo(a) clínico", "Nutrición deportiva (ruta)", "Coordinación de comedor"],
+      senior: ["Consultorio propio", "Coordinación/gerencia", "Especialista con cartera"]
+    },
+    sueldos: { bajo: "~$8,000–$13,000", medio: "~$13,000–$25,000", alto: "~$25,000–$50,000+" },
+    factoresSube: ["Especialidad", "Cartera y reputación", "Resultados y seguimiento"]
+  },
+
+  {
+    idBase: "pedagogia",
+    nombreVisible: "Pedagogía",
+    nombres: ["Pedagogía", "Pedagogia", "Licenciatura en Pedagogía", "Educación (pedagogía)"],
+    areas: [
+      { titulo: "Docencia", detalle: "planeación didáctica, evaluación, aula" },
+      { titulo: "Diseño instruccional", detalle: "cursos, e-learning, contenidos" },
+      { titulo: "Gestión escolar", detalle: "coordinación, control académico, procesos" },
+      { titulo: "Orientación", detalle: "acompañamiento, intervención, tutorías" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar educativo", "Asistente académico", "Docente jr (ruta)"],
+      intermedio: ["Coordinador(a) académico", "Diseñador(a) instruccional", "Orientador(a)"],
+      senior: ["Dirección escolar", "Consultoría educativa", "Gestión institucional"]
+    },
+    sueldos: { bajo: "~$8,000–$13,000", medio: "~$13,000–$25,000", alto: "~$25,000–$50,000+" },
+    factoresSube: ["Especialización (docencia/diseño)", "Experiencia + resultados", "Liderazgo y gestión"]
+  },
+
+  {
+    idBase: "psicologia",
+    nombreVisible: "Psicología",
+    nombres: ["Psicología", "Psicologia", "Psicólogo", "Psicologo", "Psicóloga", "Psicologa", "Licenciatura en Psicología"],
+    areas: [
+      { titulo: "Clínica", detalle: "terapia, evaluación, intervención" },
+      { titulo: "Organizacional", detalle: "RH, reclutamiento, capacitación" },
+      { titulo: "Educativa", detalle: "orientación e intervención escolar" },
+      { titulo: "Comunitaria", detalle: "programas y prevención" }
+    ],
+    puestos: {
+      entrada: ["Aplicación de pruebas", "Reclutador(a) jr", "Apoyo educativo"],
+      intermedio: ["Psicólogo(a) clínico", "Psicólogo(a) organizacional", "Orientador(a)"],
+      senior: ["Coordinación", "Consultoría", "Terapia con cartera propia"]
+    },
+    sueldos: { bajo: "~$7,000–$12,000", medio: "~$12,000–$25,000", alto: "~$25,000–$50,000+" },
+    factoresSube: ["Especialidad", "Certificaciones", "Cartera y reputación"]
+  },
+
+  {
+    idBase: "publicidad",
+    nombreVisible: "Publicidad",
+    nombres: ["Publicidad", "Licenciatura en Publicidad", "Advertising", "Publicidad y medios (alias)"],
+    areas: [
+      { titulo: "Creatividad", detalle: "concepto, copy, dirección de arte" },
+      { titulo: "Medios", detalle: "planificación, pauta, performance (ruta)" },
+      { titulo: "Producción", detalle: "shooting, post, piezas para campañas" },
+      { titulo: "Cuentas", detalle: "brief, cliente, coordinación y entrega" }
+    ],
+    puestos: {
+      entrada: ["Asistente creativo", "Ejecutivo(a) de cuenta jr", "Planner jr"],
+      intermedio: ["Copy/arte", "Ejecutivo(a) de cuenta", "Media buyer (ruta)"],
+      senior: ["Director(a) creativo", "Gerencia de cuentas", "Agencia propia"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Portafolio + campañas", "Resultados (performance)", "Clientes y liderazgo"]
+  },
+
+  {
+    idBase: "quimico_farmaceutico_biologo",
+    nombreVisible: "Químico Farmacéutico Biólogo (QFB)",
+    nombres: ["Químico Farmacéutico Biólogo", "QFB", "Quimico Farmaceutico Biologo", "Farmacia (ruta)", "Laboratorio clínico (ruta)"],
+    areas: [
+      { titulo: "Industria farmacéutica", detalle: "calidad, formulación (ruta), producción, normas" },
+      { titulo: "Laboratorio clínico", detalle: "análisis, microbiología (ruta), control de calidad" },
+      { titulo: "Regulatorio", detalle: "COFEPRIS (ruta), expedientes, cumplimiento" },
+      { titulo: "Investigación", detalle: "desarrollo, validación, documentación" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de laboratorio", "Analista de calidad jr", "Técnico(a) de muestras"],
+      intermedio: ["Analista de laboratorio", "Especialista de calidad", "Asuntos regulatorios jr (ruta)"],
+      senior: ["Jefatura de laboratorio", "Gerencia de calidad", "Dirección técnica (ruta)"]
+    },
+    sueldos: { bajo: "~$12,000–$18,000", medio: "~$18,000–$35,000", alto: "~$35,000–$80,000+" },
+    factoresSube: ["Normativa + calidad", "Experiencia en industria", "Especialización (micro/regulatorio)"]
+  },
+
+  {
+    idBase: "relaciones_internacionales",
+    nombreVisible: "Relaciones Internacionales",
+    nombres: ["Relaciones Internacionales", "Relaciones internacionales", "International relations", "RI"],
+    areas: [
+      { titulo: "Diplomacia y gobierno", detalle: "análisis, cooperación, gestión pública (ruta)" },
+      { titulo: "ONG/Cooperación", detalle: "proyectos, incidencia, programas" },
+      { titulo: "Comercio y política internacional", detalle: "análisis, consultoría, riesgo país" },
+      { titulo: "Investigación", detalle: "think tanks, análisis político, reportes" }
+    ],
+    puestos: {
+      entrada: ["Analista jr", "Auxiliar de proyectos", "Asistente en relaciones institucionales"],
+      intermedio: ["Coordinador(a) de proyectos", "Analista senior", "Gestor(a) de cooperación"],
+      senior: ["Consultoría", "Dirección de asuntos públicos", "Coordinación regional"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$28,000", alto: "~$28,000–$60,000+" },
+    factoresSube: ["Inglés + idiomas", "Análisis y redacción", "Red de contactos + experiencia"]
+  },
+
+  {
+    idBase: "trabajo_social",
+    nombreVisible: "Trabajo Social",
+    nombres: ["Trabajo Social", "Trabajador social", "Trabajadora social", "Social work"],
+    areas: [
+      { titulo: "Comunitaria", detalle: "programas sociales, intervención, prevención" },
+      { titulo: "Institucional", detalle: "hospitales, escuelas, gobierno, gestión de casos" },
+      { titulo: "ONG", detalle: "proyectos, vinculación, atención" },
+      { titulo: "Desarrollo social", detalle: "diagnóstico, seguimiento, indicadores" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de intervención", "Gestor(a) de casos jr", "Promotor(a) social"],
+      intermedio: ["Trabajador(a) social", "Coordinador(a) de programa", "Vinculación institucional"],
+      senior: ["Dirección de programa", "Consultoría social", "Gestión regional"]
+    },
+    sueldos: { bajo: "~$8,000–$12,000", medio: "~$12,000–$22,000", alto: "~$22,000–$45,000+" },
+    factoresSube: ["Gestión de programas", "Resultados y seguimiento", "Especialización (salud/educación)"]
+  },
+
+  {
+    idBase: "turismo",
+    nombreVisible: "Turismo",
+    nombres: ["Turismo", "Licenciatura en Turismo", "Administración turística", "Travel management"],
+    areas: [
+      { titulo: "Agencias y operadores", detalle: "itinerarios, ventas, reservas, atención" },
+      { titulo: "Hotelería", detalle: "front desk, operaciones, experiencia" },
+      { titulo: "Eventos", detalle: "congresos, bodas, logística, proveedores" },
+      { titulo: "Turismo sostenible", detalle: "proyectos, comunidad, experiencias" }
+    ],
+    puestos: {
+      entrada: ["Agente de viajes jr", "Recepcionista", "Auxiliar de eventos"],
+      intermedio: ["Coordinador(a) de grupos", "Ejecutivo(a) de eventos", "Supervisor(a) hotelero"],
+      senior: ["Gerencia hotelera (ruta)", "Operador(a) turístico", "Empresa propia"]
+    },
+    sueldos: { bajo: "~$8,000–$13,000", medio: "~$13,000–$25,000", alto: "~$25,000–$55,000+" },
+    factoresSube: ["Idiomas", "Ventas y servicio", "Red de proveedores + experiencia"]
+  },
+
+  {
+    idBase: "comunicacion",
+    nombreVisible: "Comunicación",
+    nombres: ["Comunicación", "Licenciatura en Comunicación", "Ciencias de la comunicación", "Comunicación y medios"],
+    areas: [
+      { titulo: "Medios y contenido", detalle: "redacción, guion, producción, podcast/video" },
+      { titulo: "Comunicación corporativa", detalle: "PR, crisis, interna, vocería (ruta)" },
+      { titulo: "Digital/social", detalle: "contenido, community, estrategia" },
+      { titulo: "Audiovisual", detalle: "grabación, edición, postproducción" }
+    ],
+    puestos: {
+      entrada: ["Creador(a) de contenido jr", "Asistente de comunicación", "Editor(a) jr"],
+      intermedio: ["Productor(a)", "Coordinador(a) de comunicación", "PR executive (ruta)"],
+      senior: ["Director(a) de comunicación", "Head de contenidos", "Agencia/consultoría propia"]
+    },
+    sueldos: { bajo: "~$9,000–$14,000", medio: "~$14,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Portafolio + resultados", "Storytelling y estrategia", "Clientes/proyectos grandes"]
+  },
+
+  {
+    idBase: "direccion_de_hoteles",
+    nombreVisible: "Dirección de Hoteles",
+    nombres: ["Dirección de Hoteles", "Direccion de hoteles", "Hotel management", "Administración hotelera"],
+    areas: [
+      { titulo: "Operaciones hoteleras", detalle: "front desk, housekeeping, estándares, calidad" },
+      { titulo: "Ventas y revenue", detalle: "tarifas, ocupación, canales, alianzas" },
+      { titulo: "Alimentos y bebidas (ruta)", detalle: "restaurante, banquetes, operación" },
+      { titulo: "Gestión de personal", detalle: "turnos, capacitación, servicio" }
+    ],
+    puestos: {
+      entrada: ["Recepcionista", "Supervisor(a) jr", "Auxiliar administrativo"],
+      intermedio: ["Jefe(a) de recepción", "Coordinador(a) de eventos", "Revenue assistant (ruta)"],
+      senior: ["Gerencia hotelera", "Director(a) de operaciones", "Hotel/empresa propia"]
+    },
+    sueldos: { bajo: "~$9,000–$15,000", medio: "~$15,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Idiomas + servicio", "KPIs (ocupación/revenue)", "Liderazgo y operación"]
+  },
+
+  {
+    idBase: "ingenieria_agropecuaria",
+    nombreVisible: "Ingeniería Agropecuaria",
+    nombres: ["Ingeniería Agropecuaria", "Ingenieria agropecuaria", "Agropecuaria", "Agronomía (alias)"],
+    areas: [
+      { titulo: "Producción agrícola", detalle: "cultivos, suelos, riego, productividad" },
+      { titulo: "Producción pecuaria", detalle: "manejo, nutrición (ruta), sanidad (ruta)" },
+      { titulo: "Agroindustria", detalle: "procesos, calidad, trazabilidad" },
+      { titulo: "Gestión rural", detalle: "proyectos, costos, sustentabilidad" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar técnico(a)", "Supervisor(a) de campo jr", "Asistente de producción"],
+      intermedio: ["Encargado(a) de producción", "Coordinador(a) de rancho/huerto", "Calidad agroindustrial"],
+      senior: ["Gerencia agroindustrial", "Consultoría", "Proyecto propio"]
+    },
+    sueldos: { bajo: "~$10,000–$16,000", medio: "~$16,000–$30,000", alto: "~$30,000–$70,000+" },
+    factoresSube: ["Productividad + resultados", "Gestión de costos", "Especialización técnica"]
+  },
+
+  {
+    idBase: "bachillerato_intensivo_semiescolarizado",
+    nombreVisible: "Bachillerato Intensivo Semiescolarizado",
+    nombres: ["Bachillerato Intensivo Semiescolarizado", "Bachillerato semiescolarizado", "Prepa semiescolarizada", "Bachillerato intensivo"],
+    areas: [
+      { titulo: "Continuidad académica", detalle: "preparación para licenciatura, hábitos de estudio" },
+      { titulo: "Empleabilidad", detalle: "competencias básicas, comunicación, habilidades digitales" },
+      { titulo: "Administrativo (ruta)", detalle: "asistencia, captura, soporte operativo" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar administrativo", "Recepcionista", "Atención a clientes"],
+      intermedio: ["Analista jr (áreas administrativas)", "Asistente de coordinación", "Ventas/servicio (ruta)"],
+      senior: ["Coordinación (ruta)", "Supervisión", "Emprendimiento"]
+    },
+    sueldos: { bajo: "~$8,000–$12,000", medio: "~$12,000–$20,000", alto: "~$20,000–$35,000+" },
+    factoresSube: ["Experiencia + cursos", "Habilidades digitales", "Certificaciones técnicas (según ruta)"]
+  },
+
+  // =========================
+  // MAESTRÍAS (sin repetidos)
+  // =========================
+
+  {
+    idBase: "maestria_en_alta_direccion",
+    nombreVisible: "Maestría en Alta Dirección",
+    nombres: ["Maestría en Alta Dirección", "Alta Dirección", "MBA (alias)", "Maestria alta direccion"],
+    areas: [
+      { titulo: "Dirección estratégica", detalle: "planeación, ejecución, KPIs, gobierno corporativo" },
+      { titulo: "Finanzas directivas", detalle: "presupuesto, riesgos, inversión, rentabilidad" },
+      { titulo: "Liderazgo", detalle: "gestión de equipos, cultura, cambio organizacional" }
+    ],
+    puestos: {
+      entrada: ["Coordinador(a) de área", "Líder de proyecto", "Supervisor(a) senior"],
+      intermedio: ["Gerente de área", "Gerente de operaciones", "Gerente comercial/administrativo"],
+      senior: ["Director(a) de unidad", "Dirección general (ruta)", "Consultoría/empresa propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$50,000", alto: "~$50,000–$120,000+" },
+    factoresSube: ["Experiencia directiva", "Resultados y KPIs", "Gestión del cambio + liderazgo"]
+  },
+
+  {
+    idBase: "maestria_en_derecho_fiscal",
+    nombreVisible: "Maestría en Derecho Fiscal",
+    nombres: ["Maestría en Derecho Fiscal", "Derecho fiscal", "Maestria derecho fiscal"],
+    areas: [
+      { titulo: "Defensa fiscal", detalle: "recursos, litigio, controversias" },
+      { titulo: "Planeación fiscal", detalle: "estrategias, cumplimiento, optimización legal" },
+      { titulo: "Cumplimiento", detalle: "auditorías, dictámenes, prevención de riesgos" }
+    ],
+    puestos: {
+      entrada: ["Abogado(a) fiscal jr", "Analista de cumplimiento", "Auxiliar en despacho fiscal"],
+      intermedio: ["Especialista fiscal", "Abogado(a) litigante fiscal", "Coordinación fiscal"],
+      senior: ["Gerencia fiscal", "Socio(a) en despacho", "Consultoría propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$55,000", alto: "~$55,000–$120,000+" },
+    factoresSube: ["Casos ganados + resultados", "Clientes/portafolio", "Actualización y especialización"]
+  },
+
+  {
+    idBase: "maestria_en_derecho_laboral",
+    nombreVisible: "Maestría en Derecho Laboral",
+    nombres: ["Maestría en Derecho Laboral", "Derecho laboral", "Maestria derecho laboral"],
+    areas: [
+      { titulo: "Relaciones laborales", detalle: "políticas, contratos, prevención de riesgos" },
+      { titulo: "Conciliación y litigio", detalle: "audiencias, juicios, estrategia" },
+      { titulo: "Cumplimiento", detalle: "normativa, inspecciones, documentación" }
+    ],
+    puestos: {
+      entrada: ["Abogado(a) laboral jr", "Analista de relaciones laborales", "Auxiliar jurídico laboral"],
+      intermedio: ["Especialista laboral", "Abogado(a) litigante", "Coordinación laboral"],
+      senior: ["Gerencia legal laboral", "Despacho propio", "Consultoría corporativa"]
+    },
+    sueldos: { bajo: "~$16,000–$26,000", medio: "~$26,000–$50,000", alto: "~$50,000–$110,000+" },
+    factoresSube: ["Negociación y resultados", "Clientes/empresa", "Experiencia en audiencias y casos"]
+  },
+
+  {
+    idBase: "maestria_en_desarrollo_organizacional",
+    nombreVisible: "Maestría en Desarrollo Organizacional",
+    nombres: ["Maestría en Desarrollo Organizacional", "Desarrollo Organizacional", "DO", "Maestria desarrollo organizacional"],
+    areas: [
+      { titulo: "Cultura y cambio", detalle: "transformación, comunicación, adopción" },
+      { titulo: "Talento", detalle: "desempeño, liderazgo, capacitación" },
+      { titulo: "Diagnóstico organizacional", detalle: "clima, procesos, intervención" }
+    ],
+    puestos: {
+      entrada: ["Analista de DO", "Capacitación jr", "HR generalista (ruta)"],
+      intermedio: ["Coordinación de DO", "HRBP (ruta)", "Consultor(a) interno"],
+      senior: ["Gerencia de talento/DO", "Dirección de RH (ruta)", "Consultoría propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$50,000", alto: "~$50,000–$110,000+" },
+    factoresSube: ["Proyectos de cambio exitosos", "Liderazgo", "Métricas de talento"]
+  },
+
+  {
+    idBase: "maestria_en_docencia",
+    nombreVisible: "Maestría en Docencia",
+    nombres: ["Maestría en Docencia", "Docencia", "Maestria docencia"],
+    areas: [
+      { titulo: "Didáctica", detalle: "estrategias, planeación, evaluación" },
+      { titulo: "Innovación educativa", detalle: "TIC, e-learning, diseño instruccional" },
+      { titulo: "Gestión académica", detalle: "coordinación, programas, calidad" }
+    ],
+    puestos: {
+      entrada: ["Docente", "Asesor(a) académico", "Diseñador(a) instruccional jr"],
+      intermedio: ["Coordinador(a) académico", "Docente líder", "Gestión de programas"],
+      senior: ["Dirección académica", "Consultoría educativa", "Gestión institucional"]
+    },
+    sueldos: { bajo: "~$14,000–$22,000", medio: "~$22,000–$40,000", alto: "~$40,000–$80,000+" },
+    factoresSube: ["Experiencia docente", "Innovación y resultados", "Gestión académica"]
+  },
+
+  {
+    idBase: "maestria_en_educacion",
+    nombreVisible: "Maestría en Educación",
+    nombres: ["Maestría en Educación", "Educación", "Maestria educacion"],
+    areas: [
+      { titulo: "Gestión educativa", detalle: "dirección, procesos, calidad" },
+      { titulo: "Diseño curricular", detalle: "programas, competencias, evaluación" },
+      { titulo: "Investigación", detalle: "proyectos, medición, mejora" }
+    ],
+    puestos: {
+      entrada: ["Docente", "Asesor(a) académico", "Analista educativo"],
+      intermedio: ["Coordinador(a) académico", "Diseñador(a) curricular", "Gestión escolar"],
+      senior: ["Dirección educativa", "Consultoría", "Gestión institucional"]
+    },
+    sueldos: { bajo: "~$14,000–$22,000", medio: "~$22,000–$40,000", alto: "~$40,000–$80,000+" },
+    factoresSube: ["Gestión + resultados", "Investigación aplicada", "Liderazgo"]
+  },
+
+  {
+    idBase: "maestria_en_gestion_ambiental",
+    nombreVisible: "Maestría en Gestión Ambiental",
+    nombres: ["Maestría en Gestión Ambiental", "Gestión ambiental", "Maestria gestion ambiental"],
+    areas: [
+      { titulo: "Cumplimiento ambiental", detalle: "normativa, auditorías, permisos" },
+      { titulo: "Sustentabilidad", detalle: "programas ESG (ruta), indicadores, reportes" },
+      { titulo: "Gestión de residuos", detalle: "manejo, reducción, procesos" }
+    ],
+    puestos: {
+      entrada: ["Analista ambiental", "Auxiliar de cumplimiento", "Técnico(a) HSE jr (ruta)"],
+      intermedio: ["Coordinador(a) ambiental", "Especialista HSE", "Consultor(a) ambiental"],
+      senior: ["Gerencia HSE/ambiental", "Dirección de sustentabilidad (ruta)", "Consultoría propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$50,000", alto: "~$50,000–$110,000+" },
+    factoresSube: ["Normativa + auditorías", "Proyectos de impacto", "Experiencia en industria"]
+  },
+
+  {
+    idBase: "maestria_en_gobierno_y_estrategia",
+    nombreVisible: "Maestría en Gobierno y Estrategia",
+    nombres: ["Maestría en Gobierno y Estrategia", "Gobierno y estrategia", "Maestria gobierno y estrategia"],
+    areas: [
+      { titulo: "Política pública", detalle: "diseño, implementación, evaluación" },
+      { titulo: "Estrategia", detalle: "planeación, indicadores, gestión" },
+      { titulo: "Análisis", detalle: "datos, investigación, reportes" }
+    ],
+    puestos: {
+      entrada: ["Analista de proyectos", "Asistente de gestión", "Auxiliar de investigación"],
+      intermedio: ["Coordinación de programas", "Consultor(a)", "Analista senior"],
+      senior: ["Dirección de programas", "Consultoría", "Gestión regional/nacional"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$50,000", alto: "~$50,000–$110,000+" },
+    factoresSube: ["Resultados en programas", "Red de contactos", "Capacidad analítica"]
+  },
+
+  {
+    idBase: "maestria_en_mercadotecnia_estrategica",
+    nombreVisible: "Maestría en Mercadotecnia Estratégica",
+    nombres: ["Maestría en Mercadotecnia Estratégica", "Mercadotecnia estratégica", "Maestria mercadotecnia estrategica"],
+    areas: [
+      { titulo: "Estrategia de marca", detalle: "posicionamiento, propuesta de valor" },
+      { titulo: "Performance", detalle: "growth, adquisición, retención, métricas" },
+      { titulo: "Investigación", detalle: "insights, segmentación, data-driven" }
+    ],
+    puestos: {
+      entrada: ["Especialista digital", "Brand jr", "Analista de marketing"],
+      intermedio: ["Marketing manager", "Growth lead (ruta)", "Brand manager"],
+      senior: ["Dirección de marketing", "Head of growth", "Consultoría/agencia propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$55,000", alto: "~$55,000–$120,000+" },
+    factoresSube: ["Resultados medibles", "Estrategia + ejecución", "Liderazgo"]
+  },
+
+  {
+    idBase: "maestria_en_planeacion_fiscal_corporativa",
+    nombreVisible: "Maestría en Planeación Fiscal Corporativa",
+    nombres: ["Maestría en Planeación Fiscal Corporativa", "Planeación fiscal corporativa", "Maestria planeacion fiscal"],
+    areas: [
+      { titulo: "Estrategia fiscal", detalle: "planeación, cumplimiento, riesgos" },
+      { titulo: "Corporativo", detalle: "estructuras, contratos, gobierno corporativo" },
+      { titulo: "Auditoría y defensa", detalle: "revisiones, controversias, dictámenes" }
+    ],
+    puestos: {
+      entrada: ["Analista fiscal", "Contador(a) fiscal jr", "Auxiliar en despacho"],
+      intermedio: ["Especialista fiscal corporativo", "Coordinación fiscal", "Consultor(a) fiscal"],
+      senior: ["Gerencia fiscal", "Socio(a) despacho", "Consultoría propia"]
+    },
+    sueldos: { bajo: "~$20,000–$30,000", medio: "~$30,000–$60,000", alto: "~$60,000–$140,000+" },
+    factoresSube: ["Clientes + resultados", "Actualización constante", "Experiencia corporativa"]
+  },
+
+  {
+    idBase: "maestria_en_seguridad_e_higiene_ocupacional",
+    nombreVisible: "Maestría en Seguridad e Higiene Ocupacional",
+    nombres: ["Maestría en Seguridad e Higiene Ocupacional", "Seguridad e higiene", "HSE", "Maestria seguridad e higiene"],
+    areas: [
+      { titulo: "Seguridad industrial", detalle: "riesgos, investigación de incidentes, prevención" },
+      { titulo: "Higiene", detalle: "exposición, mediciones, control" },
+      { titulo: "Cumplimiento", detalle: "normativa, auditorías, capacitación" }
+    ],
+    puestos: {
+      entrada: ["Técnico(a) HSE", "Auxiliar de seguridad", "Inspector(a) jr"],
+      intermedio: ["Coordinador(a) HSE", "Especialista en seguridad", "Supervisor(a) de seguridad"],
+      senior: ["Gerencia HSE", "Dirección EHS (ruta)", "Consultoría propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$50,000", alto: "~$50,000–$120,000+" },
+    factoresSube: ["Auditorías + cumplimiento", "Experiencia en industria", "Liderazgo y prevención"]
+  },
+
+  {
+    idBase: "maestria_en_sistema_penal_acusatorio",
+    nombreVisible: "Maestría en Sistema Penal Acusatorio",
+    nombres: ["Maestría en Sistema Penal Acusatorio", "Sistema penal acusatorio", "Maestria sistema penal"],
+    areas: [
+      { titulo: "Litigación oral", detalle: "audiencias, estrategia, argumentación" },
+      { titulo: "Procedimiento penal", detalle: "etapas, pruebas, teoría del caso" },
+      { titulo: "Defensa/asesoría", detalle: "carpetas, asesoría integral, derechos" }
+    ],
+    puestos: {
+      entrada: ["Abogado(a) penal jr", "Auxiliar penal", "Pasante litigante"],
+      intermedio: ["Litigante penal", "Asesor(a) jurídico", "Coordinación de casos"],
+      senior: ["Despacho penal", "Coordinación jurídica", "Consultoría y litigio estratégico"]
+    },
+    sueldos: { bajo: "~$16,000–$26,000", medio: "~$26,000–$55,000", alto: "~$55,000–$120,000+" },
+    factoresSube: ["Resultados en audiencias", "Reputación + cartera", "Especialización y práctica"]
+  },
+
+  {
+    idBase: "maestria_en_administracion_y_liderazgo",
+    nombreVisible: "Maestría en Administración y Liderazgo",
+    nombres: ["Maestría en Administración y Liderazgo", "Administración y liderazgo", "Maestria administracion y liderazgo"],
+    areas: [
+      { titulo: "Gestión", detalle: "planeación, KPIs, procesos, operación" },
+      { titulo: "Liderazgo", detalle: "equipos, cultura, comunicación, cambio" },
+      { titulo: "Estrategia", detalle: "proyectos, crecimiento, ejecución" }
+    ],
+    puestos: {
+      entrada: ["Supervisor(a) senior", "Líder de proyecto", "Coordinador(a)"],
+      intermedio: ["Gerente de área", "Gerente de operaciones", "Gerente administrativo"],
+      senior: ["Dirección de área", "Dirección general (ruta)", "Consultoría/empresa propia"]
+    },
+    sueldos: { bajo: "~$18,000–$28,000", medio: "~$28,000–$50,000", alto: "~$50,000–$120,000+" },
+    factoresSube: ["Resultados y KPIs", "Liderazgo real", "Gestión de cambio"]
+  },
+
+  {
+    idBase: "maestria_en_desarrollo_de_videojuegos",
+    nombreVisible: "Maestría en Desarrollo de Videojuegos",
+    nombres: ["Maestría en Desarrollo de Videojuegos", "Desarrollo de videojuegos (maestría)", "Maestria videojuegos"],
+    areas: [
+      { titulo: "Producción", detalle: "pipeline, gestión, entregables" },
+      { titulo: "Programación avanzada", detalle: "arquitectura, optimización, herramientas" },
+      { titulo: "Diseño/experiencia", detalle: "sistemas, balance, UX de juego" }
+    ],
+    puestos: {
+      entrada: ["Programador(a) mid", "QA lead jr", "Productor(a) jr"],
+      intermedio: ["Tech lead (ruta)", "Productor(a)", "Gameplay senior"],
+      senior: ["Director(a) técnico", "Head of production", "Estudio propio"]
+    },
+    sueldos: { bajo: "~$25,000–$40,000", medio: "~$40,000–$70,000", alto: "~$70,000–$150,000+" },
+    factoresSube: ["Juegos publicados", "Inglés", "Liderazgo + especialización"]
+  },
+
+  {
+    idBase: "maestria_en_enologia",
+    nombreVisible: "Maestría en Enología",
+    nombres: ["Maestría en Enología", "Enología", "Maestria enologia"],
+    areas: [
+      { titulo: "Producción", detalle: "fermentación, procesos, control" },
+      { titulo: "Calidad", detalle: "análisis, sensorial, estandarización" },
+      { titulo: "Negocio", detalle: "marca, comercialización, turismo enológico (ruta)" }
+    ],
+    puestos: {
+      entrada: ["Auxiliar de bodega", "Analista de calidad", "Asistente de producción"],
+      intermedio: ["Enólogo(a)", "Coordinador(a) de bodega", "Calidad senior"],
+      senior: ["Gerencia de producción", "Dirección técnica", "Proyecto propio"]
+    },
+    sueldos: { bajo: "~$20,000–$30,000", medio: "~$30,000–$55,000", alto: "~$55,000–$120,000+" },
+    factoresSube: ["Experiencia en bodega", "Calidad y consistencia", "Marca + comercialización"]
+  },
+
+  {
+    idBase: "maestria_en_inteligencia_artificial",
+    nombreVisible: "Maestría en Inteligencia Artificial",
+    nombres: ["Maestría en Inteligencia Artificial", "Inteligencia Artificial", "IA", "Maestria IA"],
+    areas: [
+      { titulo: "Machine Learning", detalle: "modelos, evaluación, despliegue" },
+      { titulo: "IA aplicada", detalle: "automatización, NLP (ruta), visión (ruta)" },
+      { titulo: "MLOps (ruta)", detalle: "producción, monitoreo, pipelines" }
+    ],
+    puestos: {
+      entrada: ["ML engineer jr", "Data scientist mid", "Analista avanzado"],
+      intermedio: ["ML engineer", "Applied scientist", "MLOps engineer (ruta)"],
+      senior: ["Senior/Lead ML", "Head de IA", "Consultoría especializada"]
+    },
+    sueldos: { bajo: "~$35,000–$55,000", medio: "~$55,000–$90,000", alto: "~$90,000–$180,000+" },
+    factoresSube: ["Modelos en producción", "Inglés + cloud", "Impacto medible"]
+  },
+
+  {
+    idBase: "maestria_en_proteccion_de_datos",
+    nombreVisible: "Maestría en Protección de Datos",
+    nombres: ["Maestría en Protección de Datos", "Protección de datos", "Privacidad", "Maestria proteccion de datos"],
+    areas: [
+      { titulo: "Cumplimiento", detalle: "políticas, avisos, gestión de riesgos" },
+      { titulo: "Gobierno de datos", detalle: "roles, clasificación, controles" },
+      { titulo: "Seguridad (ruta)", detalle: "controles, auditorías, respuesta" }
+    ],
+    puestos: {
+      entrada: ["Analista de compliance", "Auxiliar de privacidad", "GRC jr (ruta)"],
+      intermedio: ["Especialista privacidad", "Data protection officer (ruta)", "Auditor(a) de cumplimiento"],
+      senior: ["Gerencia de compliance", "Head de privacidad", "Consultoría propia"]
+    },
+    sueldos: { bajo: "~$25,000–$40,000", medio: "~$40,000–$70,000", alto: "~$70,000–$150,000+" },
+    factoresSube: ["Certificaciones", "Experiencia en auditorías", "Gestión de riesgos + liderazgo"]
+  },
+
+  {
+    idBase: "maestria_en_derecho_aduanero",
+    nombreVisible: "Maestría en Derecho Aduanero",
+    nombres: ["Maestría en Derecho Aduanero", "Derecho aduanero", "Maestria derecho aduanero"],
+    areas: [
+      { titulo: "Aduanas", detalle: "regulación, pedimentos, cumplimiento" },
+      { titulo: "Comercio exterior", detalle: "import/export, tratados, clasificación" },
+      { titulo: "Defensa y controversias", detalle: "incidencias, sanciones, estrategia" }
+    ],
+    puestos: {
+      entrada: ["Analista aduanal", "Auxiliar jurídico aduanero", "Ejecutivo(a) jr comercio exterior"],
+      intermedio: ["Especialista aduanero", "Abogado(a) aduanero", "Coordinación de cumplimiento"],
+      senior: ["Gerencia de comercio exterior", "Consultoría aduanera", "Despacho propio"]
+    },
+    sueldos: { bajo: "~$20,000–$30,000", medio: "~$30,000–$60,000", alto: "~$60,000–$140,000+" },
+    factoresSube: ["Experiencia real en aduanas", "Clientes/empresas", "Actualización normativa"]
+  },
+
+  // =========================
+  // DOCTORADOS (sin repetidos)
+  // =========================
+
+  {
+    idBase: "doctorado_en_derecho",
+    nombreVisible: "Doctorado en Derecho",
+    nombres: ["Doctorado en Derecho", "PhD en Derecho (alias)", "Doctorado derecho"],
+    areas: [
+      { titulo: "Investigación", detalle: "líneas jurídicas, publicaciones, proyectos" },
+      { titulo: "Docencia", detalle: "cátedra, dirección de tesis, formación" },
+      { titulo: "Alta especialización", detalle: "consultoría, litigio estratégico (ruta)" }
+    ],
+    puestos: {
+      entrada: ["Docente-investigador(a) jr", "Asesor(a) académico", "Consultor(a) jr"],
+      intermedio: ["Investigador(a)", "Coordinador(a) académico", "Consultor(a) senior"],
+      senior: ["Director(a) académico", "Investigador(a) líder", "Consultoría/ litigio estratégico"]
+    },
+    sueldos: { bajo: "~$25,000–$40,000", medio: "~$40,000–$70,000", alto: "~$70,000–$150,000+" },
+    factoresSube: ["Publicaciones + prestigio", "Experiencia docente", "Especialización y red"]
+  },
+
+  {
+    idBase: "doctorado_en_humanidades",
+    nombreVisible: "Doctorado en Humanidades",
+    nombres: ["Doctorado en Humanidades", "Doctorado humanidades"],
+    areas: [
+      { titulo: "Investigación", detalle: "proyectos, análisis, publicaciones" },
+      { titulo: "Docencia", detalle: "educación superior, dirección académica" },
+      { titulo: "Gestión cultural (ruta)", detalle: "proyectos culturales, divulgación" }
+    ],
+    puestos: {
+      entrada: ["Docente-investigador(a) jr", "Asesor(a) académico", "Gestor(a) cultural jr (ruta)"],
+      intermedio: ["Investigador(a)", "Coordinación académica", "Consultor(a) en proyectos"],
+      senior: ["Dirección académica", "Investigación líder", "Consultoría/gestión cultural"]
+    },
+    sueldos: { bajo: "~$22,000–$35,000", medio: "~$35,000–$60,000", alto: "~$60,000–$120,000+" },
+    factoresSube: ["Publicaciones", "Gestión de proyectos", "Red académica"]
+  },
+
+  {
+    idBase: "doctorado_en_planeacion_y_liderazgo_educativo",
+    nombreVisible: "Doctorado en Planeación y Liderazgo Educativo",
+    nombres: ["Doctorado en Planeación y Liderazgo Educativo", "Doctorado planeación educativa", "Liderazgo educativo (doctorado)"],
+    areas: [
+      { titulo: "Planeación", detalle: "estrategia educativa, indicadores, mejora" },
+      { titulo: "Liderazgo", detalle: "gestión de equipos, cultura, cambio" },
+      { titulo: "Investigación aplicada", detalle: "evaluación, impacto, calidad" }
+    ],
+    puestos: {
+      entrada: ["Coordinador(a) académico", "Gestor(a) educativo", "Docente líder"],
+      intermedio: ["Dirección de programa", "Gestión institucional", "Consultor(a) educativo"],
+      senior: ["Dirección académica", "Rectoría (ruta)", "Consultoría especializada"]
+    },
+    sueldos: { bajo: "~$28,000–$45,000", medio: "~$45,000–$80,000", alto: "~$80,000–$160,000+" },
+    factoresSube: ["Resultados institucionales", "Liderazgo", "Investigación aplicada"]
+  }
+];
+
+
+/* ---- util: slugify (si ya existe en tu código, NO pasa nada) ---- */
+if (typeof slugify !== "function") {
+  function slugify(texto){
+    return normalizarTexto(texto)
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 90);
+  }
+}
+
+/* ---- keywords de campo laboral en FORMATO COMPATIBLE con tu detector actual (tokens) ---- */
+function buildKeywordsCampoLaboral(nombres){
+  // ⚠️ Importante: NO metemos "campo" o "laboral" solos,
+  // porque eso hace que TODOS los programas empaten y el bot elija el primero.
+  // Aquí generamos keywords específicas del PROGRAMA + frases que incluyen el programa.
+
+  const base = new Set();
+  const lista = Array.isArray(nombres) ? nombres : [];
+
+  // Normaliza nombres y genera alias/tokens
+  const nombresNorm = lista
+    .map(x => normalizarTexto(x))
+    .filter(Boolean);
+
+  // Tokens de cada nombre (sin stopwords)
+  nombresNorm.forEach(n => {
+    base.add(n); // nombre completo
+    n.split(/\s+/).forEach(t => {
+      if(t && t.length > 2 && !stopwords.includes(t)) base.add(t);
+    });
+  });
+
+  // Aliases extra comunes
+  const joined = " " + nombresNorm.join(" ") + " ";
+  if(joined.includes(" mercadotecnia ") || joined.includes(" marketing ")){
+    ["mkt","market","marketing"].forEach(a => base.add(a));
+  }
+  if(joined.includes(" administracion ")){
+    ["admin","adm"].forEach(a => base.add(a));
+  }
+  if(joined.includes(" contaduria ") || joined.includes(" contador ")){
+    ["conta","contabilidad"].forEach(a => base.add(a));
+  }
+  if(joined.includes(" derecho ") || joined.includes(" abogado ")){
+    ["abogado","abogada","legal","juridico","jurídico"].forEach(a => base.add(normalizarTexto(a)));
+  }
+  if(joined.includes(" psicologia ") || joined.includes(" psicólogo ") || joined.includes(" psicologo ")){
+    ["psico","psicologo","psicologa"].forEach(a => base.add(normalizarTexto(a)));
+  }
+  if(joined.includes(" ciencia de datos ") || joined.includes(" data science ") || joined.includes(" datos ")){
+    ["data","datascience","cienciadedatos","analitica","analítica"].forEach(a => base.add(normalizarTexto(a)));
+  }
+
+  // Frases típicas (con programa), para que preguntas completas ganen con score alto
+  const aliasCortos = Array.from(base).filter(x => x && !x.includes(" "));
+  aliasCortos.forEach(a => {
+    base.add(`campo laboral ${a}`);
+    base.add(`campo laboral de ${a}`);
+    base.add(`salidas laborales ${a}`);
+    base.add(`areas de trabajo ${a}`);
+    base.add(`donde trabajar ${a}`);
+    base.add(`en que puedes trabajar ${a}`);
+  });
+
+  return Array.from(base).filter(Boolean);
+}
+
+/* ---- respuesta HTML sencilla (puedes enriquecerla) ---- */
+function buildResponseHTMLCampoLaboral(p){
+  const nombre = p.nombreVisible || p.idBase || "Programa";
+
+  // Áreas: puede venir como ["texto", ...] o [{titulo, detalle}, ...]
+  const areas = Array.isArray(p.areas) ? p.areas : [];
+  const areasHTML = areas.length
+    ? areas.map(a => {
+        if (typeof a === "string") {
+          return `• ${a}`;
+        }
+        if (a && typeof a === "object") {
+          const tit = a.titulo || a.area || a.nombre || "";
+          const det = a.detalle || a.descripcion || a.desc || "";
+          if (tit && det) return `• <b>${tit}:</b> ${det}`;
+          if (tit) return `• <b>${tit}</b>`;
+          if (det) return `• ${det}`;
+        }
+        return "";
+      }).filter(Boolean).join("<br>")
+    : "• (Información en proceso de integración)";
+
+  // Puestos: puede venir como ["texto", ...] o como objeto {entrada:[], intermedio:[], senior:[]}
+  let puestosHTML = "";
+  if (Array.isArray(p.puestos)) {
+    puestosHTML = p.puestos.map(x => `• ${x}`).join("<br>");
+  } else if (p.puestos && typeof p.puestos === "object") {
+    const orden = ["entrada","junior","intermedio","semiSenior","senior","gerencia","direccion","dirección"];
+    const keys = Object.keys(p.puestos);
+    const sorted = [
+      ...orden.filter(k => keys.includes(k)),
+      ...keys.filter(k => !orden.includes(k))
+    ];
+
+    puestosHTML = sorted.map(k => {
+      const lista = Array.isArray(p.puestos[k]) ? p.puestos[k] : [];
+      if(!lista.length) return "";
+      const titulo = k
+        .replace(/([A-Z])/g, " $1")
+        .replace(/^./, c => c.toUpperCase());
+      return `<b>${titulo}:</b><br>${lista.map(x => `• ${x}`).join("<br>")}`;
+    }).filter(Boolean).join("<br><br>");
+  } else {
+    puestosHTML = "• (Información en proceso de integración)";
+  }
+
+  // Factores para subir (opcional)
+  const factores = Array.isArray(p.factoresSube) ? p.factoresSube : [];
+  const factoresHTML = factores.length
+    ? factores.map(x => `• ${x}`).join("<br>")
+    : "";
+
+  return `
+    <b>📌 Campo laboral – ${nombre}</b><br><br>
+
+    <b>1) Áreas donde puedes trabajar</b><br>
+    ${areasHTML}<br><br>
+
+    <b>2) Puestos típicos (por nivel)</b><br>
+    ${puestosHTML}
+    ${factoresHTML ? `<br><br><b>3) ¿Qué te ayuda a subir más rápido?</b><br>${factoresHTML}` : ""}
+  `;
+}
+
+/* ---- (TU FUNCIÓN) buildIntentsCampoLaboral (la incrustamos) ---- */
+function buildIntentsCampoLaboral(programas){
+  return (programas || []).map(p => ({
+    id: `campo_laboral_${slugify(p.idBase || p.nombreVisible || "programa")}`,
+    keywords: buildKeywordsCampoLaboral(p.nombres || [p.nombreVisible || p.idBase || ""]),
+    response: buildResponseHTMLCampoLaboral(p)
+  }));
+}
+
+/* ---- ✅ INTEGRA CAMPO LABORAL SIN ROMPER NADA ---- */
+try{
+  if(Array.isArray(PROGRAMAS_CAMPO_LABORAL) && PROGRAMAS_CAMPO_LABORAL.length){
+    const nuevos = buildIntentsCampoLaboral(PROGRAMAS_CAMPO_LABORAL);
+    if(Array.isArray(nuevos) && nuevos.length){
+      intents.push(...nuevos);
+    }
+  }
+}catch(e){
+  console.warn("Campo laboral: no se pudo integrar (revisa el JSON).", e);
+}
+
+
  function respuestaHumana(texto){
   const aperturas = [
     "Claro 😊",
@@ -3647,22 +5116,83 @@ function detectarIntencion(texto){
     return "El asistente está en configuración. Intenta más tarde.";
   }
 
-  const palabrasUsuario=limpiarTexto(texto);
-  let mejor=null, scoreMax=0;
+  // Normalizamos una vez
+  const userNorm = normalizarTexto(texto);
+  const palabrasUsuario = limpiarTexto(texto); // tokens normalizados
 
-  intents.forEach(intent=>{
+  // ✅ Prioridad: Campo laboral
+  const esCampoLaboral =
+    userNorm.includes("campo laboral") ||
+    (palabrasUsuario.includes("campo") && palabrasUsuario.includes("laboral")) ||
+    userNorm.includes("salidas laborales") ||
+    userNorm.includes("en que puedo trabajar") ||
+    userNorm.includes("en que puedo desempe") || // por "desempeñarme"
+    userNorm.includes("trabajar");
+
+  // ✅ Prioridad: Precios
+  const esPrecio =
+    userNorm.includes("precio") ||
+    userNorm.includes("costo") ||
+    userNorm.includes("colegiatura") ||
+    userNorm.includes("mensualidad") ||
+    userNorm.includes("parcialidad") ||
+    userNorm.includes("inscripcion") ||
+    userNorm.includes("reinscripcion");
+
+  // Pool por prioridad (si existen esos intents)
+  let pool = intents;
+
+  if(esCampoLaboral){
+    const campoPool = intents.filter(x => String(x.id || "").startsWith("campo_laboral_"));
+    if(campoPool.length) pool = campoPool;
+  } else if(esPrecio){
+    const precioPool = intents.filter(x => String(x.id || "").startsWith("precio_"));
+    if(precioPool.length) pool = precioPool;
+  }
+
+  let mejor = null;
+  let scoreMax = 0;
+
+  pool.forEach(intent=>{
     let score=0;
-    intent.keywords.forEach(k=>{
-      const i=palabrasUsuario.indexOf(k);
-      if(i!==-1) score+=(i===0?1:i+1);
+    (intent.keywords || []).forEach(kRaw=>{
+      const k = normalizarTexto(kRaw);
+      if(!k) return;
+
+      // ✅ Frases: altísimo peso (normalmente "campo laboral de X")
+      if(k.includes(" ")){
+        if(userNorm.includes(k)) score += 60 + Math.min(k.length, 40);
+        return;
+      }
+
+      // ✅ Palabras: peso medio-alto; mientras más larga, más probable que sea "la carrera"
+      const i = palabrasUsuario.indexOf(k);
+      if(i !== -1){
+        score += 18 + Math.min(k.length, 12);
+      }else if(k.length >= 5 && userNorm.includes(k)){
+        // match parcial (por si se pegó a signos o algo)
+        score += 6;
+      }
     });
-    if(score>scoreMax){ scoreMax=score; mejor=intent; }
+    if(score > scoreMax){ scoreMax=score; mejor=intent; }
   });
 
-return mejor
-  ? respuestaHumana(mejor.response)
-  : respuestaHumana("Puedo ayudarte con inscripción, becas, periodos y requisitos.");
+  // Umbral mínimo
+  if(mejor && scoreMax > 0){
+    return respuestaHumana(mejor.response);
+  }
+
+  // Mensajes guía según intención detectada
+  if(esCampoLaboral){
+    return respuestaHumana("Dime el <b>nombre de la carrera</b> para darte su <b>campo laboral</b>. Ejemplo: <i>“Campo laboral de Mercadotecnia”</i>.");
+  }
+  if(esPrecio){
+    return respuestaHumana("Para darte el precio exacto, dime <b>campus</b> y <b>programa</b>. Ejemplo: <i>“Precio de Administración en Campus”</i>.");
+  }
+
+  return respuestaHumana("Puedo ayudarte con inscripción, becas, periodos, requisitos, precios y campo laboral.");
 }
+
 // ===== Indicador escribiendo =====
 let typingMsg = null;
 
