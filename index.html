@@ -1225,6 +1225,7 @@ Este procedimiento garantiza que el cambio se realice de manera correcta, manten
   id: "pago_transferencia_prohibido",
   keywords: [
     "transferencia",
+    "transferencias",
     "transferir",
     "pago",
     "pagar",
@@ -1248,7 +1249,6 @@ Este procedimiento garantiza que el cambio se realice de manera correcta, manten
     "adeudos",
     "abandono",
     "reactivar",
-    "baja",
     "interrumpio",
     "interrumpidos"
   ],
@@ -1595,6 +1595,15 @@ Para renovar cualquier beca se requiere reinscripción, carga de materias, histo
 • No se combinan con descuentos de ciclo completo ni pago por pago.<br>
 • El incumplimiento de las políticas ocasiona la cancelación definitiva de la beca.
 `
+},
+  {
+  id: "venta_compartida_contact_center",
+  keywords: [
+    "venta compartida",
+    "venta",
+    "compartida",
+  ],
+  response: "La venta compartida con CC (Contact Center) es un esquema de atención y cierre en el que el asesor comercial y el Contact Center colaboran sobre el mismo prospecto para lograr su inscripción.\n\nEn este modelo, ambas áreas participan de manera coordinada en el seguimiento del aspirante, ya sea en distintos momentos o de forma complementaria, con el objetivo de no perder oportunidades de venta y garantizar una atención continua.\n\nGeneralmente, el proceso funciona de la siguiente manera: el Contact Center realiza el primer contacto o un seguimiento inicial del prospecto; posteriormente, el asesor comercial puede reforzar la atención resolviendo dudas específicas, explicando a detalle el programa académico y acompañando al aspirante durante su proceso de inscripción.\n\nTanto el asesor como el CC pueden interactuar con el mismo registro del prospecto dentro del sistema, respetando el historial de contactos, el estatus y las gestiones previas. El cierre de la inscripción puede realizarse por cualquiera de las dos partes, dependiendo del momento y del canal por el cual el aspirante decida continuar.\n\nEl objetivo principal de la venta compartida es evitar que un prospecto se pierda por falta de seguimiento, aprovechar distintos canales de contacto como llamadas, mensajes o asesoría directa, y aumentar la tasa de conversión a inscripción.\n\nEs importante considerar que la venta compartida no duplica esfuerzos, sino que los complementa. Para que funcione correctamente, debe existir un registro claro de actividades, actualización constante del estatus del prospecto y comunicación efectiva entre el asesor y el Contact Center, evitando información duplicada o contradictoria.\n\nLa venta compartida con CC no sustituye el trabajo del asesor; por el contrario, es una herramienta de apoyo que asegura que el aspirante siempre tenga seguimiento y acompañamiento oportuno durante su proceso de decisión."
 },
   {
   id: "que_es_lottus_education",
@@ -3326,10 +3335,11 @@ Todos los insumos necesarios para tu programa se encuentran disponibles exclusiv
   keywords: [
     "precios uteg by ula",
     "costos",
+    "by",
+    "ula",
     "precios",
     "flex",
     "online",
-    "uane",
     "descuentos"
   ],
   response: `
@@ -3385,156 +3395,224 @@ Costo mensual fijo: $3,800.<br><br>
 No se paga inscripción. Las promociones y descuentos pueden actualizarse mensualmente y los porcentajes mayores aplican únicamente durante el primer cuatrimestre.
 `
 },
-    {
-  id: "salesforce_registro_uteg_flex_online_prospecto_oportunidad",
+  {
+  id: "registro_salesforce_uteg_flex_online",
   keywords: [
-    "salesforce",
     "registro",
+    "registrar",
+    "alta",
     "crear prospecto",
     "prospectos",
-    "prospecto",
-    "crear",
-    "flex",
-    "online",
     "lead",
+    "salesforce",
+    "uteg flex",
+    "flex",
+    "uteg online",
+    "online",
+    "ula semipresencial",
+    "ula online",
+    "datos personales",
+    "genero",
+    "estado civil",
+    "datos academicos",
+    "modalidad",
+    "campus",
+    "licenciatura",
+    "periodo",
+    "intake",
+    "marketing",
+    "origen",
+    "fuente",
+    "pasar a oportunidad",
+    "oportunidad",
+    "admisiones",
+    "ADMT",
+    "STYPE",
+    "RESD",
+    "standard",
+    "nuevo ingreso",
+    "nacional",
+    "equivalencia",
+    "turno",
+    "cupon",
+    "cupon flex",
+    "4x1",
+    "beca",
+    "titulacion",
+    "28 feb 2026"
   ],
-  response: `👋 Hola, soy el asistente virtual de UTEG. Te comparto el **procedimiento completo (Intent Largo)** para realizar un **registro en Salesforce** para **UTEG Flex (ULA Semipresencial)** y **UTEG Online (ULA Online)**, desde Prospecto hasta Oportunidad, con los puntos críticos a cuidar.
+  response: `
+<b>REGISTRO EN SALESFORCE (UTEG FLEX Y ONLINE)</b><br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ PARTE 1) REGISTRO EN PROSPECTOS (LEADS)
-━━━━━━━━━━━━━━━━━━━━
+Este proceso te guía para dar de alta un aspirante en Salesforce, desde <b>Prospectos</b> hasta <b>Oportunidad</b>, cuidando que quede correctamente configurado para <b>UTEG Flex</b> o <b>UTEG Online</b>.<br><br>
 
-✅ 1) Abrir el módulo de **Prospectos**
-1. Ingresa a Salesforce.
-2. Ve a **Prospectos (Leads)**.
-3. Da clic en **Nuevo** para iniciar el registro.
+<b>1) ABRIR PROSPECTOS</b><br>
+• Ingresa a Salesforce.<br>
+• Abre el módulo de <b>Prospectos</b>.<br>
+• Da clic en <b>Nuevo</b> para crear el registro.<br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ 2) Elegir el tipo correcto: **ULA SEMIPRESENCIAL** o **ULA ONLINE**
-━━━━━━━━━━━━━━━━━━━━
-En el alta del prospecto, selecciona la opción correspondiente:
+<b>2) SELECCIONAR ULA SEMIPRESENCIAL O ULA ONLINE</b><br>
+En el alta del prospecto elige la opción correcta:<br>
+• <b>ULA SEMIPRESENCIAL</b> → para <b>UTEG FLEX</b>.<br>
+• <b>ULA ONLINE</b> → para <b>UTEG ONLINE</b>.<br><br>
 
-- 🟦 **ULA SEMIPRESENCIAL** → cuando el aspirante se inscribirá a **UTEG Flex**.
-- 🟩 **ULA ONLINE** → cuando el aspirante se inscribirá a **UTEG Online**.
+<b>3) LLENAR DATOS PERSONALES (COMPLETO)</b><br>
+Captura los datos del aspirante y <b>NO omitas</b>:<br>
+• <b>Género</b><br>
+• <b>Estado civil</b><br><br>
 
-⚠️ Importante:
-Elegir correctamente desde el inicio evita errores de canalización, reportes y seguimiento.
+<b>4) LLENAR DATOS ACADÉMICOS</b><br>
+Completa los siguientes campos:<br>
+• <b>Modalidad</b><br>
+• <b>Campus</b><br>
+• <b>Nombre de la licenciatura</b><br>
+• <b>Periodo</b><br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ 3) Llenar **Datos Personales** (sin omitir campos clave)
-━━━━━━━━━━━━━━━━━━━━
-Captura los datos personales completos del aspirante (nombre, apellidos, contacto, etc.) y **NO excluyas**:
+<b>REGLA CLAVE DEL PERIODO</b><br>
+El <b>Periodo</b> debe ser el <b>INTAKE ACTIVO</b> del <b>mes al que se va a inscribir</b> el aspirante.<br>
+No lo dejes por default si el aspirante se va a inscribir a otro intake.<br><br>
 
-- 👤 **Género**
-- 💍 **Estado civil**
+<b>5) DATOS DE MARKETING (SEGÚN ORIGEN REAL)</b><br>
+En <b>Datos de Marketing</b> selecciona lo correcto conforme el aspirante haya llegado (medio/fuente/campaña/origen).<br><br>
 
-📌 Recomendación:
-Estos campos deben ir completos para evitar correcciones posteriores y asegurar consistencia en el expediente.
+<b>6) GUARDAR Y DAR SEGUIMIENTO NORMAL</b><br>
+Una vez creado el prospecto, el seguimiento se realiza de manera normal (contacto, avances, proceso, etc.).<br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ 4) Llenar **Datos Académicos** (obligatorios)
-━━━━━━━━━━━━━━━━━━━━
-En la sección académica captura:
+<b>7) AL PASAR A OPORTUNIDAD (CÓDIGOS DE ADMISIONES)</b><br>
+En la <b>Oportunidad</b>, llena estos campos de Admisiones:<br>
+• Admisiones - Selecciona código <b>ADMT</b>: <b>STANDARD</b><br>
+• Admisiones - Selecciona código <b>STYPE</b>: <b>NUEVO INGRESO</b><br>
+• Admisiones - Selecciona código <b>RESD</b>: <b>NACIONAL</b><br><br>
 
-- 🎓 **Modalidad**
-- 🏫 **Campus**
-- 📚 **Nombre de la Licenciatura**
-- 🗓️ **Periodo**
+Además, confirma y selecciona:<br>
+• <b>Tipo de estudiante</b>: <b>NUEVO INGRESO</b> o <b>EQUIVALENCIA</b><br>
+• <b>Turno</b> (según corresponda)<br><br>
 
-📌 Regla crítica del **Periodo**:
-El **Periodo** debe ser el **INTAKE ACTIVO** del **mes al que se va a inscribir** el aspirante.
+<b>TODO LO DEMÁS</b><br>
+Todo lo demás se llena igual que un <b>registro presencial</b>.<br><br>
 
-✅ Ejemplo práctico:
-- Si el aspirante se inscribe para el intake vigente del mes → selecciona el intake de ese mes.
-- Si se inscribe para el siguiente mes → selecciona el intake activo del mes correspondiente a su inscripción.
+<b>OJO CON LOS CUPONES</b><br>
+Revisa siempre que sea el cupón adecuado. Ejemplo de referencia:<br>
+<b>Intake 6 - UTEG FLEX LIC 4x1</b><br>
+• 86% en primer colegiatura<br>
+• 60% a partir de segunda colegiatura<br>
+• 40% beca de RI<br>
+• 100% titulación<br>
+<b>Vigencia:</b> 28 feb 2026<br><br>
 
-⚠️ Evitar:
-No dejar el periodo “por default” si el aspirante realmente se va a intake distinto.
+Usar el cupón correcto evita ajustes posteriores y asegura que el beneficio aplicado coincida con lo ofrecido al aspirante.<br>
+`
+},
+  {
+  id: "registro_salesforce_uteg_flex_online",
+  keywords: [
+    "registro",
+    "registrar",
+    "alta",
+    "crear prospecto",
+    "prospectos",
+    "lead",
+    "salesforce",
+    "uteg flex",
+    "flex",
+    "uteg online",
+    "online",
+    "ula semipresencial",
+    "ula online",
+    "datos personales",
+    "genero",
+    "estado civil",
+    "datos academicos",
+    "modalidad",
+    "campus",
+    "licenciatura",
+    "periodo",
+    "intake",
+    "marketing",
+    "origen",
+    "fuente",
+    "pasar a oportunidad",
+    "oportunidad",
+    "admisiones",
+    "ADMT",
+    "STYPE",
+    "RESD",
+    "standard",
+    "nuevo ingreso",
+    "nacional",
+    "equivalencia",
+    "turno",
+    "cupon",
+    "cupon flex",
+    "4x1",
+    "beca",
+    "titulacion",
+    "28 feb 2026"
+  ],
+  response: `
+<b>REGISTRO EN SALESFORCE (UTEG FLEX Y ONLINE)</b><br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ 5) Llenar **Datos de Marketing** (según el origen real)
-━━━━━━━━━━━━━━━━━━━━
-En “Marketing” selecciona los datos correctos conforme el prospecto haya llegado:
+Este proceso te guía para dar de alta un aspirante en Salesforce, desde <b>Prospectos</b> hasta <b>Oportunidad</b>, cuidando que quede correctamente configurado para <b>UTEG Flex</b> o <b>UTEG Online</b>.<br><br>
 
-- 📣 Medio / Fuente / Campaña / Origen (según los campos visibles en tu Salesforce)
+<b>1) ABRIR PROSPECTOS</b><br>
+• Ingresa a Salesforce.<br>
+• Abre el módulo de <b>Prospectos</b>.<br>
+• Da clic en <b>Nuevo</b> para crear el registro.<br><br>
 
-📌 Importante:
-Debe coincidir con el canal real (formulario web, redes, recomendación, llamada entrante, evento, etc.), porque esto impacta medición de campañas y efectividad.
+<b>2) SELECCIONAR ULA SEMIPRESENCIAL O ULA ONLINE</b><br>
+En el alta del prospecto elige la opción correcta:<br>
+• <b>ULA SEMIPRESENCIAL</b> → para <b>UTEG FLEX</b>.<br>
+• <b>ULA ONLINE</b> → para <b>UTEG ONLINE</b>.<br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ 6) Guardar y dar seguimiento normal
-━━━━━━━━━━━━━━━━━━━━
-1. Verifica que:
-   - Modalidad correcta (ULA Semipresencial o ULA Online)
-   - Datos personales completos (**Género y Estado civil incluidos**)
-   - Académicos completos (Modalidad, Campus, Licenciatura y Periodo/intake correcto)
-   - Marketing correcto
-2. Da clic en **Guardar**.
+<b>3) LLENAR DATOS PERSONALES (COMPLETO)</b><br>
+Captura los datos del aspirante y <b>NO omitas</b>:<br>
+• <b>Género</b><br>
+• <b>Estado civil</b><br><br>
 
-✅ A partir de aquí, se da seguimiento normal al prospecto (contacto, asesoría, avances, etc.).
+<b>4) LLENAR DATOS ACADÉMICOS</b><br>
+Completa los siguientes campos:<br>
+• <b>Modalidad</b><br>
+• <b>Campus</b><br>
+• <b>Nombre de la licenciatura</b><br>
+• <b>Periodo</b><br><br>
 
-━━━━━━━━━━━━━━━━━━━━
-✅ PARTE 2) AL PASAR A OPORTUNIDAD (OPPORTUNITY)
-━━━━━━━━━━━━━━━━━━━━
+<b>REGLA CLAVE DEL PERIODO</b><br>
+El <b>Periodo</b> debe ser el <b>INTAKE ACTIVO</b> del <b>mes al que se va a inscribir</b> el aspirante.<br>
+No lo dejes por default si el aspirante se va a inscribir a otro intake.<br><br>
 
-Cuando el prospecto avanza y se convierte/pasa a **Oportunidad**, se debe completar el apartado de **Admisiones** con códigos específicos.
+<b>5) DATOS DE MARKETING (SEGÚN ORIGEN REAL)</b><br>
+En <b>Datos de Marketing</b> selecciona lo correcto conforme el aspirante haya llegado (medio/fuente/campaña/origen).<br><br>
 
-✅ 1) Llenar campos de **Admisiones (Códigos)**
-Captura estos valores:
+<b>6) GUARDAR Y DAR SEGUIMIENTO NORMAL</b><br>
+Una vez creado el prospecto, el seguimiento se realiza de manera normal (contacto, avances, proceso, etc.).<br><br>
 
-- **Admisiones – Código ADMT:** `STANDARD`
-- **Admisiones – Código STYPE:** `NUEVO INGRESO`
-- **Admisiones – Código RESD:** `NACIONAL`
+<b>7) AL PASAR A OPORTUNIDAD (CÓDIGOS DE ADMISIONES)</b><br>
+En la <b>Oportunidad</b>, llena estos campos de Admisiones:<br>
+• Admisiones - Selecciona código <b>ADMT</b>: <b>STANDARD</b><br>
+• Admisiones - Selecciona código <b>STYPE</b>: <b>NUEVO INGRESO</b><br>
+• Admisiones - Selecciona código <b>RESD</b>: <b>NACIONAL</b><br><br>
 
-📌 Nota:
-Estos campos deben quedar correctamente porque forman parte del control institucional del tipo de admisión.
+Además, confirma y selecciona:<br>
+• <b>Tipo de estudiante</b>: <b>NUEVO INGRESO</b> o <b>EQUIVALENCIA</b><br>
+• <b>Turno</b> (según corresponda)<br><br>
 
-✅ 2) Confirmar **Tipo de estudiante** y **Turno**
-En la Oportunidad, confirma y selecciona según corresponda:
+<b>TODO LO DEMÁS</b><br>
+Todo lo demás se llena igual que un <b>registro presencial</b>.<br><br>
 
-- **Tipo de estudiante:**  
-  - `NUEVO INGRESO` o  
-  - `EQUIVALENCIA`
-- **Turno:** el que corresponda según oferta/registro del aspirante
+<b>OJO CON LOS CUPONES</b><br>
+Revisa siempre que sea el cupón adecuado. Ejemplo de referencia:<br>
+<b>Intake 6 - UTEG FLEX LIC 4x1</b><br>
+• 86% en primer colegiatura<br>
+• 60% a partir de segunda colegiatura<br>
+• 40% beca de RI<br>
+• 100% titulación<br>
+<b>Vigencia:</b> 28 feb 2026<br><br>
 
-⚠️ Importante:
-Aunque STYPE vaya como “NUEVO INGRESO” en el código, el campo “Tipo de estudiante” debe reflejar la realidad del aspirante (Nuevo Ingreso vs Equivalencia), según tu proceso interno.
-
-✅ 3) Todo lo demás se llena igual que un registro presencial
-A partir de aquí:
-- **TODO lo demás** en la oportunidad se trabaja **igual que un registro presencial** (captura restante, seguimiento, integración, etc.).
-- Mantén las mismas validaciones y cuidado en datos.
-
-━━━━━━━━━━━━━━━━━━━━
-⚠️ OJO CRÍTICO: CUPONES / PROMOCIONES (Flex y Online)
-━━━━━━━━━━━━━━━━━━━━
-
-Antes de finalizar o avanzar con la Oportunidad, revisa que el **cupón sea el adecuado**.
-
-✅ Cómo identificarlo:
-El cupón correcto debe venir identificado en un formato similar a:
-
-📌 `Intake 6 - UTEG FLEX LIC 4x1`  
-**86% en primer colegiatura + 60% a partir de segunda colegiatura + 40% beca de RI + 100% titulación**  
-🗓️ **Vigencia / fecha:** `28 feb 2026`
-
-⚠️ Reglas prácticas:
-- No aplicar cupones “parecidos” solo por coincidencia parcial.
-- Verifica siempre:
-  1) que el cupón corresponda a **Flex u Online** (según aplique),
-  2) que corresponda al **intake correcto**,
-  3) que la **vigencia** esté activa (en este caso, referencia: **28 feb 2026**),
-  4) que el beneficio coincida con lo ofrecido al aspirante.
-
-✅ Si el cupón no coincide exactamente, se debe corregir antes de avanzar para evitar ajustes posteriores.
-
-━━━━━━━━━━━━━━━━━━━━
-✅ CIERRE
-━━━━━━━━━━━━━━━━━━━━
-Con estos pasos, el registro queda correctamente creado desde Prospecto y correctamente configurado al pasar a Oportunidad para **UTEG Flex / Online**, cuidando especialmente **códigos de admisiones** y **cupón correcto**.
-
-Si quieres, también te lo puedo convertir a versión “checklist” para pegarlo en tu portal de capacitación.`
+Usar el cupón correcto evita ajustes posteriores y asegura que el beneficio aplicado coincida con lo ofrecido al aspirante.<br>
+`
 }
+
+
 
 
 ];
